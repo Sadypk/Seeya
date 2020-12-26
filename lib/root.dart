@@ -18,7 +18,6 @@ class _RootState extends State<Root> {
   List<Widget> _buildScreens = <Widget>[
     HomeScreen(),
     SearchScreen(),
-    SearchScreen(),
     MyOffersScreen(),
     ProfileScreen()
   ];

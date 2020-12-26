@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:seeya/features/home_screen/view/widgets/nearest_store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view/widgets/top_products_tile_widget.dart';
+import 'package:seeya/features/search_nearest_products_stores/view/search_nearest_products_stores.dart';
 import 'package:seeya/main_app/view/widgets/custom_text_from_field.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -33,7 +35,10 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Nearest Stores', style: TextStyle(fontWeight: FontWeight.bold),),
-              Text('View All', style: TextStyle(color: Colors.blue),),
+              InkWell(
+                onTap: (){Get.to(SearchNearestProductsStores());},
+                child: Text('View All', style: TextStyle(color: Colors.blue),)
+              ),
             ],
           ),
           SizedBox(height: 15,),
@@ -60,9 +65,9 @@ class HomeScreen extends StatelessWidget {
             RawMaterialButton(
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               // onPressed: widget.onTapViewAll,
-              child: Text(
-                'View All',
-                style: TextStyle(color: Colors.blue)
+              child: InkWell(
+                  onTap: (){Get.to(SearchNearestProductsStores());},
+                  child: Text('View All', style: TextStyle(color: Colors.blue),)
               ),
             )
           ],),
