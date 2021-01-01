@@ -23,6 +23,7 @@ class TopProductsTileWidget extends StatelessWidget {
         ]
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             height: 150,
@@ -31,7 +32,16 @@ class TopProductsTileWidget extends StatelessWidget {
               borderRadius: BorderRadius.only(topRight: Radius.circular(10), topLeft: Radius.circular(10)),
               child: Image.network(productModel.productImage, fit: BoxFit.cover,)),
           ),
-          Text(productModel.productName, style: TextStyle(),)
+          SizedBox(height: 3,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Text(productModel.productName??'',overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+          ),
+          SizedBox(height: 2,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Text(productModel.productDescription??'',overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.orange,fontStyle: FontStyle.italic, fontSize: 13),),
+          ),
         ],
       ),
     );

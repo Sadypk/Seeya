@@ -1,83 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:seeya/features/home_screen/view/widgets/nearest_store_tile_widget.dart';
+import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
+import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
+import 'package:seeya/features/store/view/all_stores_screen.dart';
+import 'package:seeya/features/home_screen/models/banner_model.dart';
+import 'package:seeya/features/home_screen/view/widgets/banner_card_widget.dart';
+import 'package:seeya/features/home_screen/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view/widgets/top_products_tile_widget.dart';
-import 'package:seeya/features/search_nearest_products_stores/view/search_nearest_products_stores.dart';
 import 'package:seeya/main_app/models/product_model.dart';
+import 'package:seeya/main_app/models/store_model.dart';
 import 'package:seeya/main_app/view/widgets/custom_text_from_field.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
+  final controller = PageController(initialPage: 0, viewportFraction: 0.9);
   @override
   Widget build(BuildContext context) {
-
-    var bannerWidget = Container(
-      height: 150,
-      decoration: BoxDecoration(
-        color: Colors.orange[200],
-        borderRadius: BorderRadius.circular(10)
+    List<BannerModel> bannerList = [
+      BannerModel(
+        title: 'Start shopping and get a \$10 Bonus',
+        bannerDescription: 'Select a store, then tap \"Shop\"\n\n' 'Swipe to learn more >',
+        bannerBackgroundImage: ''
       ),
-      child: Center(
-        child: Text('Banner'),
+      BannerModel(
+          title: 'Start shopping and get a \$10 Bonus',
+          bannerDescription:
+          "Select a store, then tap"
+          "Swipe to learn more >",
+          bannerBackgroundImage: ''
+      ),
+    ];
+    var bannerWidget = Container(
+      padding: EdgeInsets.only(bottom: 5),
+      height: 155,
+      // width: 200,
+      child: PageView.builder(
+        controller: controller,
+        itemCount: bannerList.length,
+        itemBuilder: (BuildContext context, int index){
+          return BannerCardWidget(bannerList[index]);
+        },
       ),
     );
 
+    var storeList1 = NearestStoreViewModel().storeList;
     var nearestStore = Container(
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(10)
-      ),
+      padding: EdgeInsets.all(5),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Nearest Stores', style: TextStyle(fontWeight: FontWeight.bold),),
+              Text('Online & in stores', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
               InkWell(
-                onTap: (){Get.to(SearchNearestProductsStores());},
-                child: Text('View All', style: TextStyle(color: Colors.blue),)
+                onTap: (){Get.to(AllStoresScreen());},
+                child: Text('See All', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),)
               ),
             ],
           ),
+          Text('Last-minute gifts with Double Cash Back', style: TextStyle(fontSize: 12, color: Colors.grey),),
           SizedBox(height: 15,),
-          NearestStoreTileWidget(),
-          SizedBox(height: 7,),
-          NearestStoreTileWidget(),
-          SizedBox(height: 7,),
-          NearestStoreTileWidget(),
+          StoreTileWidget(storeModel: storeList1[0],),
+          StoreTileWidget(storeModel: storeList1[1],),
+          StoreTileWidget(storeModel: storeList1[2],),
         ],
       ),
     );
 
-    List<ProductModel> productList1 = [
-      ProductModel(
-        productId: 21,
-        productImage: 'https://mcdonalds.com.au/sites/mcdonalds.com.au/files/Product-Details-BigMac-mobile-201904.jpg',
-        productName: 'Big Mac',
-        productPrice: 29.99,
-      ),
-      ProductModel(
-        productId: 22,
-        productImage: 'https://www.mcdonalds.com/content/dam/usa/nfl/nutrition/items/regular/desktop/t-mcdonalds-Fries-Small-Medium.jpg',
-        productName: 'McDonalds Fries',
-        productPrice: 9.99,
-      ),
-      ProductModel(
-        productId: 31,
-        productImage: 'https://recipefairy.com/wp-content/uploads/2020/07/kfc-chicken-500x375.jpg',
-        productName: 'Chicken Fry',
-        productPrice: 14.99,
-      ),
-      ProductModel(
-        productId: 32,
-        productImage: 'https://assets.newatlas.com/dims4/default/7c0af90/2147483647/strip/true/crop/1372x915+0+0/resize/1372x915!/quality/90/?url=http%3A%2F%2Fnewatlas-brightspot.s3.amazonaws.com%2Fb8%2F01%2F42fb621748ceb2a3c56f158d373f%2Fbucket-tenders-laying.jpeg',
-        productName: 'Chicken Nuggets',
-        productPrice: 12,
-      ),
-    ];
+
+    var productList1 = TopProductsViewModel().productList;
     var topProducts = Column(
       children: [
         Row(
@@ -93,7 +87,7 @@ class HomeScreen extends StatelessWidget {
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               // onPressed: widget.onTapViewAll,
               child: InkWell(
-                  onTap: (){Get.to(SearchNearestProductsStores());},
+                  onTap: (){Get.to(AllStoresScreen());},
                   child: Text('View All', style: TextStyle(color: Colors.blue),)
               ),
             )
@@ -167,7 +161,7 @@ class HomeScreen extends StatelessWidget {
               Expanded(child: ListView(
                 children: [
                   bannerWidget,
-                  SizedBox(height: 10,),
+                  Divider(height: 30,),
                   nearestStore,
                   SizedBox(height: 10,),
                   topProducts

@@ -34,6 +34,11 @@ dependencies:
 
   #UI/UX
   flutter_typeahead: ^1.8.8
+  bottom_drawer: ^0.0.2
+  flutter_feather_icons: ^1.0.3
+  font_awesome_flutter: ^8.11.0
+
+
 
 dev_dependencies:
   flutter_test:
