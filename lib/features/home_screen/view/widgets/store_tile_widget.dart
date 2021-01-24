@@ -66,39 +66,63 @@ class StoreTileWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                imageWidget,
-                SizedBox(width: 10,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
+                Row(
                   children: [
-                    Text(storeModel.storeName??'', style: TextStyle(fontWeight: FontWeight.bold),),
-                    SizedBox(height: 3,),
-                    Row(
+                    imageWidget,
+                    SizedBox(width: 10,),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        Container(
-                          margin: EdgeInsets.only(right: 2),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.red
-                          ),
-                          child: Icon(Icons.add, color: Colors.white, size: 12,),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                              children: <TextSpan>[
-                                TextSpan(text: storeModel.cashBackList[0].toString()+' Cash Back   ', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
-                                TextSpan(text: 'was '+storeModel.cashBackList[1].toString()+'%', style: TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold)),
-                              ]
-                          ),
+                        Text(storeModel.storeName??'', style: TextStyle(fontWeight: FontWeight.bold),),
+                        SizedBox(height: 3,),
+                        Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(right: 2),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.red
+                              ),
+                              child: Icon(Icons.add, color: Colors.white, size: 12,),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                  children: <TextSpan>[
+                                    TextSpan(text: storeModel.cashBackList[0].toString()+' Cash Back   ', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                                    TextSpan(text: 'was '+storeModel.cashBackList[1].toString()+'%', style: TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold)),
+                                  ]
+                              ),
+                            )
+                          ],
                         )
                       ],
                     )
                   ],
+                ),
+                Container(
+                  height: 30,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    color: Colors.white70,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(width: 1, color: Colors.white30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey[300],
+                        offset: Offset(1,1),
+                        blurRadius: 1,
+                        spreadRadius: 1
+                      )
+                    ]
+                  ),
+                  child: Center(
+                    child: Text('Claim', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.blueGrey),),
+                  ),
                 )
               ],
             ),

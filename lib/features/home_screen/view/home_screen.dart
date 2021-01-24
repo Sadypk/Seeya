@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
 import 'package:seeya/features/store/view/all_stores_screen.dart';
@@ -142,21 +143,30 @@ class HomeScreen extends StatelessWidget {
     );
 
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        actions: [
+          IconButton(icon: Icon(FeatherIcons.user), onPressed: null),
+          IconButton(icon: Icon(FeatherIcons.messageCircle), onPressed: null),
+          IconButton(icon: Icon(Icons.shopping_bag_outlined), onPressed: null),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
           child: Column(
             children: [
-              Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: searchBox,
-                  ),
-                  IconButton(icon: Icon(Icons.message, color: Colors.grey,), onPressed: (){})
-                ],
-              ),
+              // Row(
+              //   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   mainAxisSize: MainAxisSize.max,
+              //   children: [
+              //     Expanded(
+              //       child: searchBox,
+              //     ),
+              //     IconButton(icon: Icon(Icons.message, color: Colors.grey,), onPressed: (){})
+              //   ],
+              // ),
               SizedBox(height: 10,),
               Expanded(child: ListView(
                 children: [

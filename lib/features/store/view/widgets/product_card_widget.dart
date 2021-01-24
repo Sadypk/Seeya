@@ -9,7 +9,9 @@ class ProductCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var cartList = CartViewModel().cartItems;
+    Get.put(CartViewModel());
+    CartViewModel vm = Get.find();
+    // var cartList = vm.cartItems;
     return Obx((){
       return Container(
         margin: EdgeInsets.symmetric(horizontal: 5),
@@ -51,16 +53,18 @@ class ProductCardWidget extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(cartList.length.toString(), style: TextStyle(color: Colors.red, fontSize: 12),),
+                          Text('In Store', style: TextStyle(color: Colors.red, fontSize: 12),),
                           SizedBox(height: 2,),
                           Text(productModel.cashBack.toString()+' back', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)
                         ],
                       ),
-                      IconButton(icon: Icon(cartList.contains(productModel)?Icons.remove_circle_outline_rounded:Icons.add_circle_outline_rounded, color: Colors.red,), onPressed: (){
-                        if(cartList.contains(cartList)){
-                          cartList.removeWhere((x) => x.productId == productModel.productId);
+                      IconButton(icon: Icon(vm.cartItems.contains(productModel)?Icons.remove_circle_outline_rounded:Icons.add_circle_outline_rounded, color: Colors.red,), onPressed: (){
+                        if(vm.cartItems.contains(productModel)){
+                          print('1');
+                          vm.cartItems.removeWhere((x) => x.productId == productModel.productId);
                         }else{
-                          cartList.add(productModel);
+                          print('2');
+                          vm.cartItems.add(productModel);
                         }
                       })
                     ],
