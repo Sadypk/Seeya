@@ -8,6 +8,7 @@ import 'package:seeya/features/search_screen/view/search_screen.dart';
 import 'package:seeya/home.dart';
 import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:get/get.dart';
+import 'package:seeya/main_app/util/size_config.dart';
 
 class Root extends StatefulWidget {
   @override
@@ -16,15 +17,21 @@ class Root extends StatefulWidget {
 
 class _RootState extends State<Root> {
   var isLoggedIn = true;
+  GetSizeConfig getSizeConfig = Get.find();
   @override
   void initState() {
     // TODO: implement initState
+    initiateSize();
     Future.delayed(Duration(seconds: isLoggedIn?1:2)).then((value){
       isLoggedIn?
       Get.to(Home()):
       Get.to(PhoneVerificationScreen());
     });
     super.initState();
+  }
+
+  initiateSize() {
+    getSizeConfig.setSize(Get.height / 1000, Get.width / 1000);
   }
   @override
   Widget build(BuildContext context) {
