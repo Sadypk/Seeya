@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:seeya/features/store/models/store_model.dart';
+import 'package:seeya/features/store/view/store_screen.dart';
 import 'package:seeya/features/store/view_model/cart_view_model.dart';
 import 'package:seeya/main_app/models/product_model.dart';
 
 class ProductCardWidget extends StatelessWidget {
   final ProductModel productModel;
-  ProductCardWidget({this.productModel});
+  final bool goToStoreScreen;
+  ProductCardWidget({this.productModel, this.goToStoreScreen=false});
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +62,15 @@ class ProductCardWidget extends StatelessWidget {
                         ],
                       ),
                       IconButton(icon: Icon(vm.cartItems.contains(productModel)?Icons.remove_circle_outline_rounded:Icons.add_circle_outline_rounded, color: Colors.red,), onPressed: (){
-                        if(vm.cartItems.contains(productModel)){
-                          print('1');
-                          vm.cartItems.removeWhere((x) => x.productId == productModel.productId);
+                        if(goToStoreScreen){
+                          vm.cartItems.clear();
+                          Get.to(StoreScreen(storeModel: StoreModel(storeName: 'Test')));
                         }else{
-                          print('2');
-                          vm.cartItems.add(productModel);
+                          if(vm.cartItems.contains(productModel)){
+                            vm.cartItems.removeWhere((x) => x.productId == productModel.productId);
+                          }else{
+                            vm.cartItems.add(productModel);
+                          }
                         }
                       })
                     ],

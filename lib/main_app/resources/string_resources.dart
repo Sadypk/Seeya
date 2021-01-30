@@ -9,6 +9,16 @@ class StringResources{
   //Select Store Screen
   static const String selectStoreAppbarText = 'Select Store';
   static const String skipButtonText = 'Skip';
+
+  //Redeem Balance Screen
+  static const String redeemBalanceAppbarTitleText = 'Redeem Balance';
+  static const String enterRedeemBalanceText = 'Enter Redeem Balance';
+  static const String storeRedeemSelectListText = 'Select store to redeem';
+
+  //Online Orders
+  static const String onlineOrdersAppbarTitleText = 'Online Orders';
+  static const String clickStoreToOrderText = 'Click any store to order online';
+
   
   
 

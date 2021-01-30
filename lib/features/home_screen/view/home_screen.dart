@@ -7,9 +7,9 @@ import 'package:seeya/features/store/view/all_stores_screen.dart';
 import 'package:seeya/features/home_screen/models/banner_model.dart';
 import 'package:seeya/features/home_screen/view/widgets/banner_card_widget.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
-import 'package:seeya/features/home_screen/view/widgets/top_products_tile_widget.dart';
+import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
 import 'package:seeya/main_app/models/product_model.dart';
-import 'package:seeya/main_app/models/store_model.dart';
+import 'package:seeya/features/store/models/store_model.dart';
 import 'package:seeya/main_app/view/widgets/custom_text_from_field.dart';
 import 'package:get/get.dart';
 
@@ -64,9 +64,9 @@ class HomeScreen extends StatelessWidget {
           ),
           Text('Last-minute gifts with Double Cash Back', style: TextStyle(fontSize: 12, color: Colors.grey),),
           SizedBox(height: 15,),
-          StoreTileWidget(storeModel: storeList1[0],),
-          StoreTileWidget(storeModel: storeList1[1],),
-          StoreTileWidget(storeModel: storeList1[2],),
+          StoreTileWidget(storeModel: storeList1[0], isClaimable: true,),
+          StoreTileWidget(storeModel: storeList1[1], isClaimable: true),
+          StoreTileWidget(storeModel: storeList1[2], isClaimable: true),
         ],
       ),
     );
@@ -101,7 +101,7 @@ class HomeScreen extends StatelessWidget {
             itemCount: productList1.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
-              return TopProductsTileWidget(productModel: productList1[index],);
+              return ProductsTileWidget(productModel: productList1[index], );
             },
           ),
         ),
@@ -141,7 +141,8 @@ class HomeScreen extends StatelessWidget {
                   Divider(height: 30,),
                   nearestStore,
                   SizedBox(height: 10,),
-                  topProducts
+                  topProducts,
+                  SizedBox(height: 25 ,),
                 ],
               ))
             ],

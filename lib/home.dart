@@ -2,6 +2,8 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:seeya/features/online_orders/view/online_orders_screen.dart';
+import 'package:seeya/features/redeem_balance/view/redeem_balance.dart';
 import 'package:seeya/features/scan_reciept/view/select_store_screen.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/util/size_config.dart';
@@ -104,7 +106,7 @@ class _HomeState extends State<Home> {
                             ListTile(
                               onTap: (){
                                 Get.back();
-                                // Get.to(SelectStoreScreen());
+                                Get.to(OnlineOrdersScreen());
                               },
                               title: Text('Order Online'),
                               leading: Icon(Icons.camera_alt),
@@ -112,7 +114,7 @@ class _HomeState extends State<Home> {
                             ListTile(
                               onTap: (){
                                 Get.back();
-                                // Get.to(SelectStoreScreen());
+                                Get.to(RedeemBalanceScreen());
                               },
                               title: Text('Redeem Cash'),
                               leading: Icon(Icons.attach_money_sharp),

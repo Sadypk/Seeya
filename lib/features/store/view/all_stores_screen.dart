@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/store/view/store_screen.dart';
-import 'package:seeya/main_app/models/store_model.dart';
+import 'package:seeya/features/store/models/store_model.dart';
 
 class AllStoresScreen extends StatefulWidget {
   @override

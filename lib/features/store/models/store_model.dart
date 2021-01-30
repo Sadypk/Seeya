@@ -9,6 +9,7 @@ class StoreModel{
   String storeLocation;
   List<int> cashBackList;
   List<ProductModel> productList;
+  double distance;
 
   StoreModel({
     this.productList,
@@ -16,6 +17,7 @@ class StoreModel{
     this.storeName,
     this.storeImage,
     this.storeLocation,
-    this.cashBackList
+    this.cashBackList,
+    this.distance
   });
 }

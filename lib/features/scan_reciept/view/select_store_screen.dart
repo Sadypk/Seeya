@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
+import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 
@@ -48,10 +50,12 @@ class _SelectStoreScreenState extends State<SelectStoreScreen> {
           ),
           SizedBox(width: 5,),
           Icon(Icons.search, size: 20, color: Colors.grey,),
-          SizedBox(width: 5,),
+          SizedBox(width: 10,),
         ],
       ),
     );
+
+    var storeList = NearestStoreViewModel().storeList;
 
     return Scaffold(
       appBar: AppBar(
@@ -63,9 +67,20 @@ class _SelectStoreScreenState extends State<SelectStoreScreen> {
       body: Container(
         padding: EdgeInsets.all(10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             searchBox,
-
+            Divider(height: 50,),
+            Text('Near me', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+            SizedBox(height: 10,),
+            Expanded(
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index){
+                    return StoreTileWidget(storeModel: storeList[index],);
+                  },
+                  itemCount: storeList.length,
+                )
+            )
           ],
         ),
       ),

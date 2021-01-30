@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:seeya/main_app/models/product_model.dart';
 
-class TopProductsTileWidget extends StatelessWidget {
+class ProductsTileWidget extends StatelessWidget {
   final ProductModel productModel;
-  TopProductsTileWidget({this.productModel});
+  ProductsTileWidget({this.productModel});
   @override
   Widget build(BuildContext context) {
     return Container(
