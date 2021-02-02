@@ -24,7 +24,7 @@ class _RootState extends State<Root> {
     initiateSize();
     Future.delayed(Duration(seconds: isLoggedIn?1:2)).then((value){
       isLoggedIn?
-      Get.to(Home()):
+      Get.offAll(Home()):
       Get.to(PhoneVerificationScreen());
     });
     super.initState();

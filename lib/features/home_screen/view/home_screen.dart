@@ -87,6 +87,7 @@ class HomeScreen extends StatelessWidget {
             RawMaterialButton(
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               // onPressed: widget.onTapViewAll,
+              onPressed: (){},
               child: InkWell(
                   onTap: (){Get.to(AllStoresScreen());},
                   child: Text('View All', style: TextStyle(color: Colors.blue),)
