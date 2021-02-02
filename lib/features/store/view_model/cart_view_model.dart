@@ -5,8 +5,13 @@ import 'package:seeya/main_app/models/product_model.dart';
 class CartViewModel extends GetxController{
   var cartItems = <ProductModel>[].obs;
   var cartManualItems = <ProductModel>[].obs;
-  var confirmCartItemsWithQuantity = <CartModel>[].obs;
+  var cartItemsWithQuantity = <CartModel>[].obs;
+  var cartManualItemsWithQuantity = <CartModel>[].obs;
 
+  confirmCart(){
+    cartItems.forEach((v) {cartItemsWithQuantity.add(CartModel(product: v));});
+    cartManualItems.forEach((v) {cartManualItemsWithQuantity.add(CartModel(product: v));});
+  }
 
   addItemsFromText(String s){
     List<ProductModel> list = [];

@@ -196,6 +196,7 @@ class _StoreScreenState extends State<StoreScreen> {
                   InkWell(
                     onTap: (){
                       if((vm.cartManualItems.length+vm.cartItems.length)>0){
+                        vm.confirmCart();
                         Get.to(ConfirmOrderScreen());
                       }
                     },
@@ -228,6 +229,7 @@ class _StoreScreenState extends State<StoreScreen> {
         height: _bodyHeight,
         padding: EdgeInsets.only(left: 10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               height: 50,

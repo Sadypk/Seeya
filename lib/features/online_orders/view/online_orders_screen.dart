@@ -25,23 +25,42 @@ class OnlineOrdersScreen extends StatelessWidget {
     );
 
 
+
+
+
     var productList = TopProductsViewModel().productList;
-    var productsTabBarView = Container(
-      padding: EdgeInsets.all(10),
-      child: GridView.builder(
-        itemCount: productList.length,
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: ((MediaQuery.of(context).size.width/2)/250),
-          // crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
-        itemBuilder: (BuildContext context, int index){
-          return ProductCardWidget(productModel: productList[index], goToStoreScreen:  true,);
-        },
+    var productsTabBarView = DefaultTabController(length: 3, child: Scaffold(
+      body: Column(
+        children: [
+          Container(
+            color: Colors.green,
+            child: TabBar(
+              tabs: [
+                Tab(text: 'All',),
+                Tab(text: 'Groceries',),
+                Tab(text: 'What\'s new',),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(10),
+            child: GridView.builder(
+              itemCount: productList.length,
+              shrinkWrap: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: ((MediaQuery.of(context).size.width/2)/250),
+                // crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemBuilder: (BuildContext context, int index){
+                return ProductCardWidget(productModel: productList[index], goToStoreScreen:  true,);
+              },
+            ),
+          )
+        ],
       ),
-    );
+    ));
 
     return DefaultTabController(
       length: 2,

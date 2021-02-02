@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
+import 'package:seeya/features/scan_reciept/view/purchased_products_screen.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:seeya/main_app/util/size_config.dart';
@@ -61,7 +62,9 @@ class _SelectStoreScreenState extends State<SelectStoreScreen> {
       appBar: AppBar(
         title: Text(StringResources.selectStoreAppbarText, style: TextStyle(color: Colors.black),),
         actions: [
-          FlatButton(onPressed: (){}, child: Text(StringResources.skipButtonText))
+          FlatButton(onPressed: (){
+            Get.to(PurchasedProductsScreen());
+          }, child: Text(StringResources.skipButtonText))
         ],
       ),
       body: Container(
