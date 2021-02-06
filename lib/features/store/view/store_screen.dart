@@ -21,8 +21,8 @@ class StoreScreen extends StatefulWidget{
 
 class _StoreScreenState extends State<StoreScreen> {
   //Bottom Drawer
-  double _headerHeight = 120.0;
-  double _bodyHeight = 160.0;
+  double _headerHeight = 200.0;
+  double _bodyHeight = 250.0;
   BottomDrawerController _controller = BottomDrawerController();
 
 
@@ -225,7 +225,7 @@ class _StoreScreenState extends State<StoreScreen> {
                 ],
               ),
               SizedBox(height: 10,),
-              enterCartItemsText
+              // enterCartItemsText
             ],
           ),
         ),
