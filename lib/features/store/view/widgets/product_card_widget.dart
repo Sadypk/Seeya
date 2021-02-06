@@ -7,16 +7,15 @@ import 'package:seeya/main_app/models/product_model.dart';
 
 class ProductCardWidget extends StatelessWidget {
   final ProductModel productModel;
-  final bool goToStoreScreen;
-  ProductCardWidget({this.productModel, this.goToStoreScreen=false});
+  final Function onTap;
+  final IconButton iconButton;
+  ProductCardWidget({this.productModel, this.onTap, this.iconButton});
 
   @override
   Widget build(BuildContext context) {
-    Get.put(CartViewModel());
-    CartViewModel vm = Get.find();
-    // var cartList = vm.cartItems;
-    return Obx((){
-      return Container(
+    return InkWell(
+      onTap: onTap,
+      child: Container(
         margin: EdgeInsets.symmetric(horizontal: 5),
         decoration: BoxDecoration(
             color: Colors.white,
@@ -34,55 +33,54 @@ class ProductCardWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: 150,
-              width: 200,
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(topRight: Radius.circular(8), topLeft: Radius.circular(8)),
-                child: Image.network(productModel.productImage, fit: BoxFit.cover,),
+            Flexible(
+              flex: 4,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(8), topLeft: Radius.circular(8)),
+                  image: DecorationImage(
+                    image: NetworkImage(productModel.productImage),
+                    fit: BoxFit.cover
+                  )
+                ),
               ),
             ),
             SizedBox(height: 2,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+            Flexible(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      flex: 2,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text('In Store', style: TextStyle(color: Colors.red, fontSize: 12),),
-                          SizedBox(height: 2,),
-                          Text(productModel.cashBack.toString()+' back', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('In Store', style: TextStyle(color: Colors.red, fontSize: 12),),
+                              SizedBox(height: 2,),
+                              Text(productModel.cashBack.toString()+' back', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)
+                            ],
+                          ),
+                          if(iconButton !=null)iconButton
                         ],
                       ),
-                      IconButton(icon: Icon(vm.cartItems.contains(productModel)?Icons.remove_circle_outline_rounded:Icons.add_circle_outline_rounded, color: Colors.red,), onPressed: (){
-                        if(goToStoreScreen){
-                          vm.cartItems.clear();
-                          Get.to(StoreScreen(storeModel: StoreModel(storeName: 'Test')));
-                        }else{
-                          if(vm.cartItems.contains(productModel)){
-                            vm.cartItems.removeWhere((x) => x.productId == productModel.productId);
-                          }else{
-                            vm.cartItems.add(productModel);
-                          }
-                        }
-                      })
-                    ],
-                  ),
-                  SizedBox(height: 5,),
-                  Text(productModel.productName, style: TextStyle(color: Colors.black54, fontSize: 13),),
-                ],
+                    ),
+                    SizedBox(height: 5,),
+                    Flexible(flex: 1,child: Text(productModel.productName, style: TextStyle(color: Colors.black54, fontSize: 13),)),
+                  ],
+                ),
               ),
             ),
           ],
         ),
-      );
-    });
+      ),
+    );
   }
 }

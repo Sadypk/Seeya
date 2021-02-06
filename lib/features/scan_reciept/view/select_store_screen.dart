@@ -1,7 +1,9 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/scan_reciept/view/purchased_products_screen.dart';
+import 'package:seeya/features/scan_reciept/view/scan_reciept_screen.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:seeya/main_app/util/size_config.dart';
@@ -16,8 +18,22 @@ class _SelectStoreScreenState extends State<SelectStoreScreen> {
   GetSizeConfig getSizeConfig = Get.find();
   h(double v){return getSizeConfig.height.value*v;}
   w(double v){return getSizeConfig.width.value*v;}
+  CameraDescription camera;
 
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    initCamera();
+    super.initState();
+  }
+
+  initCamera()async{
+    final cameras = await availableCameras();
+
+    // Get a specific camera from the list of available cameras.
+    camera = cameras.first;
+  }
   @override
   Widget build(BuildContext context) {
     var searchBox = Container(
@@ -79,7 +95,7 @@ class _SelectStoreScreenState extends State<SelectStoreScreen> {
             Expanded(
                 child: ListView.builder(
                   itemBuilder: (BuildContext context, int index){
-                    return StoreTileWidget(storeModel: storeList[index],);
+                    return StoreTileWidget(storeModel: storeList[index], onTap: (){Get.to(TakePictureScreen(camera: camera));},);
                   },
                   itemCount: storeList.length,
                 )

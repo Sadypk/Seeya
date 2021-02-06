@@ -5,7 +5,7 @@ class TopProductsViewModel extends GetxController{
   var productList = <ProductModel>[
     ProductModel(
         productId: 21,
-        productImage: 'https://mcdonalds.com.au/sites/mcdonalds.com.au/files/Product-Details-BigMac-mobile-201904.jpg',
+        productImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4cSrkIQQ_-PKBVwC0w6gxBiw9_cTGcjEOlw&usqp=CAU',
         productName: 'Big Mac',
         productPrice: 29.99,
         productDescription: '\$1.00 cash back',

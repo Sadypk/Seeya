@@ -1,4 +1,6 @@
+import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
@@ -18,7 +20,7 @@ class OnlineOrdersScreen extends StatelessWidget {
       padding: EdgeInsets.all(10),
       child: ListView.builder(
         itemBuilder: (BuildContext context, int index){
-          return StoreTileWidget(storeModel: storeList[index],);
+          return StoreTileWidget(storeModel: storeList[index], onTap: (){Get.to(StoreScreen(storeModel: storeList[index],));},);
         },
         itemCount: storeList.length,
       ),
@@ -29,19 +31,41 @@ class OnlineOrdersScreen extends StatelessWidget {
 
 
     var productList = TopProductsViewModel().productList;
-    var productsTabBarView = DefaultTabController(length: 3, child: Scaffold(
-      body: Column(
+    var productsTabBarView = DefaultTabController(
+        length: 5, child: Scaffold(
+        body: Column(
         children: [
-          Container(
-            color: Colors.green,
-            child: TabBar(
-              tabs: [
-                Tab(text: 'All',),
-                Tab(text: 'Groceries',),
-                Tab(text: 'What\'s new',),
-              ],
-            ),
+          SizedBox(height: 5,),
+          ButtonsTabBar(
+            backgroundColor: Colors.green,
+            unselectedBackgroundColor: Colors.grey[300],
+            unselectedLabelStyle: TextStyle(color: Colors.black),
+            labelStyle:
+            TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            tabs: [
+              Tab(
+                icon: FaIcon(FontAwesomeIcons.circle),
+                text: "All",
+              ),
+              Tab(
+                icon: FaIcon(FontAwesomeIcons.carrot),
+                text: "Vegetables",
+              ),
+              Tab(
+                icon: FaIcon(FontAwesomeIcons.pepperHot),
+                text: "Spices",
+              ),
+              Tab(
+                icon: FaIcon(FontAwesomeIcons.appleAlt),
+                text: "Fruits",
+              ),
+              Tab(
+                icon: FaIcon(FontAwesomeIcons.book),
+                text: "Books",
+              ),
+            ],
           ),
+          SizedBox(height: 5,),
           Container(
             padding: EdgeInsets.all(10),
             child: GridView.builder(
@@ -54,7 +78,15 @@ class OnlineOrdersScreen extends StatelessWidget {
                 mainAxisSpacing: 10,
               ),
               itemBuilder: (BuildContext context, int index){
-                return ProductCardWidget(productModel: productList[index], goToStoreScreen:  true,);
+                CartViewModel vm = Get.find();
+                return Obx((){
+                  return ProductCardWidget(
+                    productModel: productList[index],
+                    iconButton: IconButton(icon: Icon(vm.cartItems.contains(productList[index])?Icons.remove_circle_outline_rounded:Icons.add_circle_outline_rounded, color: Colors.red,), onPressed: (){
+                      Get.to(StoreScreen(storeModel: StoreModel(storeName: 'Test'),));
+                    }),
+                  );
+                });
               },
             ),
           )
@@ -68,7 +100,7 @@ class OnlineOrdersScreen extends StatelessWidget {
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: Colors.blue,
-          title: Text(StringResources.storeRedeemSelectListText),
+          title: Text(StringResources.onlineOrdersAppbarTitleText),
           bottom: TabBar(
             tabs: [
               Tab(text: 'Stores',),

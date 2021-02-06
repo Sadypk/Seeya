@@ -6,7 +6,8 @@ import 'package:seeya/features/store/models/store_model.dart';
 class StoreTileWidget extends StatelessWidget {
   final StoreModel storeModel;
   final bool isClaimable;
-  StoreTileWidget({this.storeModel, this.isClaimable = false});
+  final Function onTap;
+  StoreTileWidget({this.storeModel, this.isClaimable = false, this.onTap});
 
 
   @override
@@ -43,10 +44,10 @@ class StoreTileWidget extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.white,
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: Image.network(storeModel.storeImage, fit: BoxFit.cover,),
+            image: DecorationImage(
+              image: NetworkImage(storeModel.storeImage),
+              fit: BoxFit.cover
+            )
           ),
         ),
       ),
@@ -97,9 +98,7 @@ class StoreTileWidget extends StatelessWidget {
 
 
     return InkWell(
-      onTap: (){
-        Get.to(StoreScreen(storeModel: storeModel,));
-      },
+      onTap: onTap,
       child: Container(
         height: 110,
         // padding: EdgeInsets.all(10),

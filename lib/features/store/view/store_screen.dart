@@ -21,8 +21,8 @@ class StoreScreen extends StatefulWidget{
 
 class _StoreScreenState extends State<StoreScreen> {
   //Bottom Drawer
-  double _headerHeight = 60.0;
-  double _bodyHeight = 220.0;
+  double _headerHeight = 120.0;
+  double _bodyHeight = 160.0;
   BottomDrawerController _controller = BottomDrawerController();
 
 
@@ -34,12 +34,102 @@ class _StoreScreenState extends State<StoreScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
+    var productList1 = TopProductsViewModel().productList;
+    var allTab = Padding(
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      child: GridView.builder(
+        itemCount: productList1.length,
+        shrinkWrap: true,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: ((MediaQuery.of(context).size.width/2)/250),
+          // crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+        ),
+        itemBuilder: (BuildContext context, int index){
+          CartViewModel vm = Get.find();
+          return Obx((){
+            return ProductCardWidget(
+              productModel: productList1[index],
+              iconButton: IconButton(icon: Icon(vm.cartItems.contains(productList1[index])?Icons.remove_circle_outline_rounded:Icons.add_circle_outline_rounded, color: Colors.red,), onPressed: (){
+                if(vm.cartItems.contains(productList1[index])){
+                  vm.cartItems.removeWhere((x) => x.productId == productList1[index].productId);
+                }else{
+                  vm.cartItems.add(productList1[index]);
+                }
+              }),
+            );
+          });
+        },
+      ),
+    );
+
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+              color: Colors.black54
+          ),
+          title: Text(widget.storeModel.storeName, style: TextStyle(color: Colors.black54),),
+          actions: [
+            IconButton(icon: Icon(Icons.shopping_bag_outlined), onPressed: null),
+            IconButton(icon: Icon(Icons.favorite_border), onPressed: null),
+          ],
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          bottom: TabBar(
+            // labelColor: Colors.blue,
+            indicatorColor: Colors.green,
+            tabs: [
+              Tab(child: Text('All', style: TextStyle(color: Colors.black),),),
+              Tab(child: Text('Groceries',style: TextStyle(color: Colors.black),),),
+              Tab(child: Text('Fruits & Vegetables', style: TextStyle(color: Colors.black),),),
+            ],
+          ),
+        ),
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 110),
+              child: TabBarView(
+                children: [
+                  allTab,
+                  allTab,
+                  allTab,
+                ],
+              ),
+            ),
+            // Align(
+            //   alignment: Alignment.bottomCenter,
+            //   child: enterCartItemsText,
+            // ),
+            _buildBottomDrawer(context)
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBottomDrawer(BuildContext context) {
+    return BottomDrawer(
+      header: _buildBottomDrawerHead(context),
+      body: _buildBottomDrawerBody(context),
+      headerHeight: _headerHeight,
+      drawerHeight: _bodyHeight,
+      color: Colors.lightBlueAccent,
+      controller: _controller,
+    );
+  }
+
+  Widget _buildBottomDrawerHead(BuildContext context) {
     TextEditingController cartTextController = TextEditingController();
     var enterCartItemsText = Container(
       height: 50,
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(bottom: _headerHeight+10),
-      padding: EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,85 +189,6 @@ class _StoreScreenState extends State<StoreScreen> {
         ],
       ),
     );
-
-    var productList1 = TopProductsViewModel().productList;
-    var allTab = Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-      child: GridView.builder(
-        itemCount: productList1.length,
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: ((MediaQuery.of(context).size.width/2)/250),
-          // crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
-        itemBuilder: (BuildContext context, int index){
-          return ProductCardWidget(productModel: productList1[index]);
-        },
-      ),
-    );
-
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-              color: Colors.black54
-          ),
-          title: Text(widget.storeModel.storeName, style: TextStyle(color: Colors.black54),),
-          actions: [
-            IconButton(icon: Icon(Icons.shopping_bag_outlined), onPressed: null),
-            IconButton(icon: Icon(Icons.favorite_border), onPressed: null),
-          ],
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          bottom: TabBar(
-            // labelColor: Colors.blue,
-            indicatorColor: Colors.green,
-            tabs: [
-              Tab(child: Text('All', style: TextStyle(color: Colors.black),),),
-              Tab(child: Text('Groceries',style: TextStyle(color: Colors.black),),),
-              Tab(child: Text('Fruits & Vegetables', style: TextStyle(color: Colors.black),),),
-            ],
-          ),
-        ),
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 110),
-              child: TabBarView(
-                children: [
-                  allTab,
-                  allTab,
-                  allTab,
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: enterCartItemsText,
-            ),
-            _buildBottomDrawer(context)
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBottomDrawer(BuildContext context) {
-    return BottomDrawer(
-      header: _buildBottomDrawerHead(context),
-      body: _buildBottomDrawerBody(context),
-      headerHeight: _headerHeight,
-      drawerHeight: _bodyHeight,
-      color: Colors.lightBlueAccent,
-      controller: _controller,
-    );
-  }
-
-  Widget _buildBottomDrawerHead(BuildContext context) {
     CartViewModel vm = Get.find();
     return Obx((){
       return Container(
@@ -212,7 +223,9 @@ class _StoreScreenState extends State<StoreScreen> {
                     ),
                   )
                 ],
-              )
+              ),
+              SizedBox(height: 10,),
+              enterCartItemsText
             ],
           ),
         ),
@@ -221,101 +234,102 @@ class _StoreScreenState extends State<StoreScreen> {
   }
 
   Widget _buildBottomDrawerBody(BuildContext context) {
-    CartViewModel vm = Get.find();
+    // CartViewModel vm = Get.find();
 
-    return Obx((){
-      return Container(
-        width: double.infinity,
-        height: _bodyHeight,
-        padding: EdgeInsets.only(left: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              height: 50,
-              child: ListView.builder(
-                  itemCount: vm.cartManualItems.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index){
-                    return InkWell(
-                      onTap: (){
-                        vm.cartManualItems.removeWhere((x) => x.productName == vm.cartManualItems[index].productName);
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(right: 10, top: 10),
-                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          border: Border.all(color: Colors.grey[300]),
-                          borderRadius: BorderRadius.circular(5)
-                        ),
-                        child: Center(child: Row(
-                          children: [
-                            Text(vm.cartManualItems[index].productName, style: TextStyle(color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold),),
-                            SizedBox(width: 5,),
-                            FaIcon(FontAwesomeIcons.solidTimesCircle, color: Colors.red, size: 14,),
-                          ],
-                        )),
-                      ),
-                    );
-                  }
-              ),
-            ),
-            SizedBox(height: 5,),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: vm.cartItems.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index){
-                    return Container(
-                      height: 60,
-                      width: 60,
-                      margin: EdgeInsets.only(right: 10, top: 10),
-                      child: Stack(
-                        overflow: Overflow.visible,
-                        children: [
-                          Container(
-                            height: 60,
-                            width: 60,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(color: Colors.white, width: 1)
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
-                              child: Image.network(vm.cartItems[index].productImage, fit: BoxFit.cover,),
-                            ),
-                          ),
-                          Positioned(
-                            top: -5,
-                            right: -5,
-                            child: InkWell(
-                              onTap: (){
-                                // print('trying to remove');
-                                vm.cartItems.removeWhere((v) => v==vm.cartItems[index]);
-                              },
-                              child: Container(
-                                  height: 18,
-                                  width: 18,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.circle),
-                                  child: Center(
-                                    child: FaIcon(FontAwesomeIcons.solidTimesCircle, color: Colors.red, size: 14,),
-                                  )
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  }
-              ),
-            )
-          ],
-        ),
-      );
-    });
+    return Container(height: _bodyHeight,);
+    // return Obx((){
+    //   return Container(
+    //     width: double.infinity,
+    //     height: _bodyHeight,
+    //     padding: EdgeInsets.only(left: 10),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.center,
+    //       children: [
+    //         Container(
+    //           height: 50,
+    //           child: ListView.builder(
+    //               itemCount: vm.cartManualItems.length,
+    //               scrollDirection: Axis.horizontal,
+    //               itemBuilder: (BuildContext context, int index){
+    //                 return InkWell(
+    //                   onTap: (){
+    //                     vm.cartManualItems.removeWhere((x) => x.productName == vm.cartManualItems[index].productName);
+    //                   },
+    //                   child: Container(
+    //                     margin: EdgeInsets.only(right: 10, top: 10),
+    //                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+    //                     decoration: BoxDecoration(
+    //                       color: Colors.grey[100],
+    //                       border: Border.all(color: Colors.grey[300]),
+    //                       borderRadius: BorderRadius.circular(5)
+    //                     ),
+    //                     child: Center(child: Row(
+    //                       children: [
+    //                         Text(vm.cartManualItems[index].productName, style: TextStyle(color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold),),
+    //                         SizedBox(width: 5,),
+    //                         FaIcon(FontAwesomeIcons.solidTimesCircle, color: Colors.red, size: 14,),
+    //                       ],
+    //                     )),
+    //                   ),
+    //                 );
+    //               }
+    //           ),
+    //         ),
+    //         SizedBox(height: 5,),
+    //         Expanded(
+    //           child: ListView.builder(
+    //               itemCount: vm.cartItems.length,
+    //               scrollDirection: Axis.horizontal,
+    //               itemBuilder: (BuildContext context, int index){
+    //                 return Container(
+    //                   height: 60,
+    //                   width: 60,
+    //                   margin: EdgeInsets.only(right: 10, top: 10),
+    //                   child: Stack(
+    //                     overflow: Overflow.visible,
+    //                     children: [
+    //                       Container(
+    //                         height: 60,
+    //                         width: 60,
+    //                         decoration: BoxDecoration(
+    //                             borderRadius: BorderRadius.circular(5),
+    //                             border: Border.all(color: Colors.white, width: 1)
+    //                         ),
+    //                         child: ClipRRect(
+    //                           borderRadius: BorderRadius.circular(5),
+    //                           child: Image.network(vm.cartItems[index].productImage, fit: BoxFit.cover,),
+    //                         ),
+    //                       ),
+    //                       Positioned(
+    //                         top: -5,
+    //                         right: -5,
+    //                         child: InkWell(
+    //                           onTap: (){
+    //                             // print('trying to remove');
+    //                             vm.cartItems.removeWhere((v) => v==vm.cartItems[index]);
+    //                           },
+    //                           child: Container(
+    //                               height: 18,
+    //                               width: 18,
+    //                               decoration: BoxDecoration(
+    //                                   color: Colors.white,
+    //                                   shape: BoxShape.circle),
+    //                               child: Center(
+    //                                 child: FaIcon(FontAwesomeIcons.solidTimesCircle, color: Colors.red, size: 14,),
+    //                               )
+    //                           ),
+    //                         ),
+    //                       )
+    //                     ],
+    //                   ),
+    //                 );
+    //               }
+    //           ),
+    //         )
+    //       ],
+    //     ),
+    //   );
+    // });
   }
 }
 

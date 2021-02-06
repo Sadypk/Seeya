@@ -1,7 +1,12 @@
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
+import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
+import 'package:seeya/home.dart';
 import 'package:seeya/main.dart';
+import 'package:seeya/main_app/models/product_model.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 
 class PurchasedProductsScreen extends StatefulWidget {
@@ -18,80 +23,9 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     double h(double x){return getSizeConfig.height*x;}
     double w(double x){return getSizeConfig.width*x;}
 
-    /*double _headerHeight = h(550);
-    double _bodyHeight = h(1700);
-
-
-    Widget _buildBottomDrawerHead(BuildContext context){
-      return Container(
-        height: _headerHeight,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Purchased products',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: (){
-                      bottomDrawerIsOpen = !bottomDrawerIsOpen;
-                      if(bottomDrawerIsOpen){
-                        _controller.close();
-                      }else{
-                        _controller.open();
-                      }
-                    },
-                    child: Text(
-                      'See all',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Spacer()
-            ],
-          ),
-        ),
-      );
-    }
-
-    Widget _buildBottomDrawerBody(BuildContext context){
-      return Container(
-        height: _bodyHeight,
-        decoration: BoxDecoration(
-            color: Colors.blue
-        ),
-      );
-    }
-
-    Widget _buildBottomDrawer(BuildContext context) {
-      return BottomDrawer(
-        header: _buildBottomDrawerHead(context),
-        body: _buildBottomDrawerBody(context),
-        headerHeight: _headerHeight,
-        drawerHeight: _bodyHeight,
-        color: Colors.lightBlueAccent,
-        controller: _controller,
-        cornerRadius: 50,
-      );
-    }*/
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -101,16 +35,18 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
         ),
         backgroundColor: Colors.transparent,
       ),
-      body: Stack(
-        children: [
-          SizedBox(height: Get.height, width: Get.width),
-          Container(
-            height: h(1550),
-            color: Colors.orangeAccent,
-            child: Image.network('https://mcdonalds.com.au/sites/mcdonalds.com.au/files/Product-Details-BigMac-mobile-201904.jpg', fit: BoxFit.cover,),
-          ),
-          _buildBottomDrawer(),
-        ],
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            SizedBox(height: Get.height, width: Get.width),
+            Container(
+              height: h(1550),
+              color: Colors.orangeAccent,
+              child: Image.network('https://img.freepik.com/free-vector/realistic-receipt-template_23-2147938550.jpg?size=338&ext=jpg', fit: BoxFit.cover,),
+            ),
+            _buildBottomDrawer(),
+          ],
+        ),
       )
     );
   }
@@ -171,17 +107,78 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
               ),
             ),
             bottomDrawerIsOpen ? GridListWidget() : HorizontalListWidget(),
-            Container(
-              height: 80,
-              width: double.infinity,
-              color: Colors.pinkAccent,
-            )
+            SizedBox(height: 5,),
+            submitTextField,
+            SizedBox(height: 5,),
           ],
         ),
       ),
     ),
   );
 }
+
+var amountController = TextEditingController().obs;
+var canSubmit = false.obs;
+var submitTextField = Obx((){
+  return Container(
+    padding: EdgeInsets.only(left: 10),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Flexible(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey[300], width: 1),
+              boxShadow: [
+                BoxShadow(
+                    color: Color(0xff000000).withOpacity(0.2), blurRadius: 20),
+                BoxShadow(
+                    color: Color(0xfffafafa).withOpacity(0.2), blurRadius: 20),
+              ],
+            ),
+            child: TextFormField(
+              controller: amountController.value,
+              onChanged: (v){if(v.length>0) {
+                canSubmit.value = true;
+                }else{
+                canSubmit.value = false;
+                }
+              },
+              decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.cyan),
+                  ),
+                  hintText: 'Enter Bill Amount',
+                  hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)
+              ),
+            ),
+          ),
+        ),
+        FlatButton(
+            onPressed: canSubmit.value?(){
+              Get.offAll(Home());
+            }:(){},
+            child: Container(
+              height: 45,
+              width: 100,
+              decoration: BoxDecoration(
+                  color: canSubmit.value?Colors.blue:Colors.grey,
+                  borderRadius: BorderRadius.circular(3)
+              ),
+              child: Center(
+                child: Text('Submit', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),),
+              ),
+            ))
+      ],
+    ),
+  );
+});
 
 class HorizontalListWidget extends StatelessWidget {
   @override
@@ -192,9 +189,26 @@ class HorizontalListWidget extends StatelessWidget {
         padding: EdgeInsets.symmetric(
           horizontal: 10,
         ),
-        itemCount: 3,
+        itemCount: 6,
         scrollDirection: Axis.horizontal,
-        itemBuilder: (_, index) => ItemWidget(),
+        itemBuilder: (BuildContext context, int index){
+          var isSelected = false.obs;
+          return Obx((){
+            return ProductCardWidget(
+              productModel: ProductModel(
+                  productId: 31,
+                  productImage: 'https://recipefairy.com/wp-content/uploads/2020/07/kfc-chicken-500x375.jpg',
+                  productName: 'Chicken Fry',
+                  productPrice: 14.99,
+                  cashBack: 2
+              ),
+              iconButton: IconButton(
+                icon: Icon(!isSelected.value?Icons.add_circle_outline_rounded:FontAwesomeIcons.checkCircle, color: !isSelected.value?Colors.red:Colors.green, size: 22,),
+                onPressed: (){isSelected.value = !isSelected.value;},
+              ),
+            );
+          });
+        },
       ),
     );
   }
@@ -204,31 +218,37 @@ class GridListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: GridView.builder(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          /// number of child in a row
-          crossAxisCount: 2,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10
-        ),
-        itemCount: 20,
-        itemBuilder: (_, index) => ItemWidget(),
-      ),
-    );
-  }
-}
-
-class ItemWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
       child: Container(
-        width: 200,
-        height: 100,
-        color: Colors.red,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: GridView.builder(
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            /// number of child in a row
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10
+          ),
+          itemCount: 20,
+          itemBuilder: (BuildContext context, int index){
+            var isSelected = false.obs;
+            return Obx((){
+              return ProductCardWidget(
+                productModel: ProductModel(
+                    productId: 31,
+                    productImage: 'https://recipefairy.com/wp-content/uploads/2020/07/kfc-chicken-500x375.jpg',
+                    productName: 'Chicken Fry',
+                    productPrice: 14.99,
+                    cashBack: 2
+                ),
+                iconButton: IconButton(
+                  icon: Icon(!isSelected.value?Icons.add_circle_outline_rounded:FontAwesomeIcons.checkCircle, color: !isSelected.value?Colors.red:Colors.green, size: 22,),
+                  onPressed: (){isSelected.value = !isSelected.value;},
+                ),
+              );
+            });
+          },
+        ),
       ),
     );
   }

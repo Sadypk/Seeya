@@ -6,6 +6,7 @@ import 'package:seeya/features/home_screen/view_models/top_products_view_model.d
 import 'package:seeya/features/store/view/all_stores_screen.dart';
 import 'package:seeya/features/home_screen/models/banner_model.dart';
 import 'package:seeya/features/home_screen/view/widgets/banner_card_widget.dart';
+import 'package:seeya/features/store/view/store_screen.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
 import 'package:seeya/main_app/models/product_model.dart';
@@ -64,7 +65,7 @@ class HomeScreen extends StatelessWidget {
           ),
           Text('Last-minute gifts with Double Cash Back', style: TextStyle(fontSize: 12, color: Colors.grey),),
           SizedBox(height: 15,),
-          StoreTileWidget(storeModel: storeList1[0], isClaimable: true,),
+          StoreTileWidget(storeModel: storeList1[0], isClaimable: true, onTap: (){Get.to(StoreScreen(storeModel: storeList1[0],));},),
           StoreTileWidget(storeModel: storeList1[1], isClaimable: true),
           StoreTileWidget(storeModel: storeList1[2], isClaimable: true),
         ],
