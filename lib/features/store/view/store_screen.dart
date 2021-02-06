@@ -22,7 +22,7 @@ class StoreScreen extends StatefulWidget{
 class _StoreScreenState extends State<StoreScreen> {
   //Bottom Drawer
   double _headerHeight = 200.0;
-  double _bodyHeight = 250.0;
+  double _bodyHeight = 300.0;
   BottomDrawerController _controller = BottomDrawerController();
 
 
@@ -66,6 +66,7 @@ class _StoreScreenState extends State<StoreScreen> {
       ),
     );
 
+    CartViewModel vm = Get.find();
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -75,8 +76,15 @@ class _StoreScreenState extends State<StoreScreen> {
           ),
           title: Text(widget.storeModel.storeName, style: TextStyle(color: Colors.black54),),
           actions: [
-            IconButton(icon: Icon(Icons.shopping_bag_outlined), onPressed: null),
-            IconButton(icon: Icon(Icons.favorite_border), onPressed: null),
+            Obx((){
+              return IconButton(icon: Icon((vm.cartManualItems.length+vm.cartItems.length)>0?Icons.shopping_bag:Icons.shopping_bag_outlined, color: (vm.cartManualItems.length+vm.cartItems.length)>0?Colors.red:Colors.black54,), onPressed: (){
+                if((vm.cartManualItems.length+vm.cartItems.length)>0){
+                  vm.confirmCart();
+                  Get.to(ConfirmOrderScreen());
+                }
+              },);
+            }),
+            IconButton(icon: Icon(Icons.star_border), onPressed: null),
           ],
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -201,31 +209,62 @@ class _StoreScreenState extends State<StoreScreen> {
               Icon(Icons.drag_handle, color: Colors.white,),
               Row(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('Items added to cart: '+(vm.cartItems.length+vm.cartManualItems.length).toString(), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                  InkWell(
-                    onTap: (){
-                      if((vm.cartManualItems.length+vm.cartItems.length)>0){
-                        vm.confirmCart();
-                        Get.to(ConfirmOrderScreen());
-                      }
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Center(
-                        child: Text('Proceed', style: TextStyle(color: vm.cartItems.length==0?Colors.grey:Colors.lightBlueAccent, fontWeight: FontWeight.bold),),
-                      ),
-                    ),
-                  )
+                  // InkWell(
+                  //   onTap: (){
+                  //     if((vm.cartManualItems.length+vm.cartItems.length)>0){
+                  //       vm.confirmCart();
+                  //       Get.to(ConfirmOrderScreen());
+                  //     }
+                  //   },
+                  //   child: Container(
+                  //     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.white,
+                  //       borderRadius: BorderRadius.circular(50),
+                  //     ),
+                  //     child: Center(
+                  //       child: Text('Proceed', style: TextStyle(color: vm.cartItems.length==0?Colors.grey:Colors.lightBlueAccent, fontWeight: FontWeight.bold),),
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
               SizedBox(height: 10,),
-              // enterCartItemsText
+              enterCartItemsText,
+              SizedBox(height: 10,),
+              Container(
+                height: 50,
+                child: ListView.builder(
+                    itemCount: vm.cartManualItems.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index){
+                      return InkWell(
+                        onTap: (){
+                          vm.cartManualItems.removeWhere((x) => x.productName == vm.cartManualItems[index].productName);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(right: 10, top: 10),
+                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              border: Border.all(color: Colors.grey[300]),
+                              borderRadius: BorderRadius.circular(5)
+                          ),
+                          child: Center(child: Row(
+                            children: [
+                              Text(vm.cartManualItems[index].productName, style: TextStyle(color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold),),
+                              SizedBox(width: 5,),
+                              FaIcon(FontAwesomeIcons.solidTimesCircle, color: Colors.red, size: 14,),
+                            ],
+                          )),
+                        ),
+                      );
+                    }
+                ),
+              ),
             ],
           ),
         ),
@@ -234,102 +273,70 @@ class _StoreScreenState extends State<StoreScreen> {
   }
 
   Widget _buildBottomDrawerBody(BuildContext context) {
-    // CartViewModel vm = Get.find();
+    CartViewModel vm = Get.find();
 
-    return Container(height: _bodyHeight,);
-    // return Obx((){
-    //   return Container(
-    //     width: double.infinity,
-    //     height: _bodyHeight,
-    //     padding: EdgeInsets.only(left: 10),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.center,
-    //       children: [
-    //         Container(
-    //           height: 50,
-    //           child: ListView.builder(
-    //               itemCount: vm.cartManualItems.length,
-    //               scrollDirection: Axis.horizontal,
-    //               itemBuilder: (BuildContext context, int index){
-    //                 return InkWell(
-    //                   onTap: (){
-    //                     vm.cartManualItems.removeWhere((x) => x.productName == vm.cartManualItems[index].productName);
-    //                   },
-    //                   child: Container(
-    //                     margin: EdgeInsets.only(right: 10, top: 10),
-    //                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-    //                     decoration: BoxDecoration(
-    //                       color: Colors.grey[100],
-    //                       border: Border.all(color: Colors.grey[300]),
-    //                       borderRadius: BorderRadius.circular(5)
-    //                     ),
-    //                     child: Center(child: Row(
-    //                       children: [
-    //                         Text(vm.cartManualItems[index].productName, style: TextStyle(color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold),),
-    //                         SizedBox(width: 5,),
-    //                         FaIcon(FontAwesomeIcons.solidTimesCircle, color: Colors.red, size: 14,),
-    //                       ],
-    //                     )),
-    //                   ),
-    //                 );
-    //               }
-    //           ),
-    //         ),
-    //         SizedBox(height: 5,),
-    //         Expanded(
-    //           child: ListView.builder(
-    //               itemCount: vm.cartItems.length,
-    //               scrollDirection: Axis.horizontal,
-    //               itemBuilder: (BuildContext context, int index){
-    //                 return Container(
-    //                   height: 60,
-    //                   width: 60,
-    //                   margin: EdgeInsets.only(right: 10, top: 10),
-    //                   child: Stack(
-    //                     overflow: Overflow.visible,
-    //                     children: [
-    //                       Container(
-    //                         height: 60,
-    //                         width: 60,
-    //                         decoration: BoxDecoration(
-    //                             borderRadius: BorderRadius.circular(5),
-    //                             border: Border.all(color: Colors.white, width: 1)
-    //                         ),
-    //                         child: ClipRRect(
-    //                           borderRadius: BorderRadius.circular(5),
-    //                           child: Image.network(vm.cartItems[index].productImage, fit: BoxFit.cover,),
-    //                         ),
-    //                       ),
-    //                       Positioned(
-    //                         top: -5,
-    //                         right: -5,
-    //                         child: InkWell(
-    //                           onTap: (){
-    //                             // print('trying to remove');
-    //                             vm.cartItems.removeWhere((v) => v==vm.cartItems[index]);
-    //                           },
-    //                           child: Container(
-    //                               height: 18,
-    //                               width: 18,
-    //                               decoration: BoxDecoration(
-    //                                   color: Colors.white,
-    //                                   shape: BoxShape.circle),
-    //                               child: Center(
-    //                                 child: FaIcon(FontAwesomeIcons.solidTimesCircle, color: Colors.red, size: 14,),
-    //                               )
-    //                           ),
-    //                         ),
-    //                       )
-    //                     ],
-    //                   ),
-    //                 );
-    //               }
-    //           ),
-    //         )
-    //       ],
-    //     ),
-    //   );
-    // });
+    return Obx((){
+      return Container(
+        width: double.infinity,
+        height: _bodyHeight,
+        padding: EdgeInsets.only(left: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: ListView.builder(
+                  itemCount: vm.cartItems.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, int index){
+                    return Container(
+                      height: 60,
+                      width: 60,
+                      margin: EdgeInsets.only(right: 10, top: 10),
+                      child: Stack(
+                        overflow: Overflow.visible,
+                        children: [
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.white, width: 1)
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Image.network(vm.cartItems[index].productImage, fit: BoxFit.cover,),
+                            ),
+                          ),
+                          Positioned(
+                            top: -5,
+                            right: -5,
+                            child: InkWell(
+                              onTap: (){
+                                // print('trying to remove');
+                                vm.cartItems.removeWhere((v) => v==vm.cartItems[index]);
+                              },
+                              child: Container(
+                                  height: 18,
+                                  width: 18,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle),
+                                  child: Center(
+                                    child: FaIcon(FontAwesomeIcons.solidTimesCircle, color: Colors.red, size: 14,),
+                                  )
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:bottom_drawer/bottom_drawer.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,8 @@ import 'package:seeya/main_app/models/product_model.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 
 class PurchasedProductsScreen extends StatefulWidget {
+  // final XFile image;
+  // PurchasedProductsScreen({this.image});
   @override
   _PurchasedProductsScreenState createState() => _PurchasedProductsScreenState();
 }

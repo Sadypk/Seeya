@@ -35,6 +35,8 @@ dependencies:
   #device functionality
   camera: ^0.7.0+2
   path_provider: ^1.6.27
+  xfile: ^1.1.0
+
 
 
 

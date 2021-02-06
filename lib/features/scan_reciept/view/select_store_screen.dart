@@ -95,7 +95,7 @@ class _SelectStoreScreenState extends State<SelectStoreScreen> {
             Expanded(
                 child: ListView.builder(
                   itemBuilder: (BuildContext context, int index){
-                    return StoreTileWidget(storeModel: storeList[index], onTap: (){Get.to(TakePictureScreen(camera: camera));},);
+                    return StoreTileWidget(storeModel: storeList[index], onTap: (){Get.to(PurchasedProductsScreen());},);
                   },
                   itemCount: storeList.length,
                 )

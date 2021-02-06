@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
+import 'package:seeya/features/scan_reciept/view/purchased_products_screen.dart';
 
 
 // A screen that allows users to take a picture using a given camera.
@@ -93,7 +94,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(imagePath: path),
+                builder: (context) => PurchasedProductsScreen(),
               ),
             );
           } catch (e) {
