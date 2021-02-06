@@ -79,7 +79,8 @@ class _SelectStoreScreenState extends State<SelectStoreScreen> {
         title: Text(StringResources.selectStoreAppbarText, style: TextStyle(color: Colors.black),),
         actions: [
           FlatButton(onPressed: (){
-            Get.to(PurchasedProductsScreen());
+            // Get.to(PurchasedProductsScreen());
+            Get.to(TakePictureScreen());
           }, child: Text(StringResources.skipButtonText))
         ],
       ),
