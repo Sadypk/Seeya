@@ -113,55 +113,72 @@ class ConfirmOrderScreen extends StatelessWidget {
     }
 
     var check = false.obs;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Confirm Order', style: TextStyle(color: Colors.black87),),
-        actions: [
-          IconButton(icon: FaIcon(FontAwesomeIcons.comments, color: Colors.blue,), onPressed: (){})
-        ],
-      ),
-      body: Obx((){
-        return Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Checkbox(value: check.value, onChanged: (v){check.value = v;}),
-                      Text('Message me if any items is missed or replaced items.')
-                    ],
-                  ),
-                  SizedBox(height: 5,),
-                  if(vm.cartItemsWithQuantity.length!=0)Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: cartList(),
-                  ),
-                  SizedBox(height: 30,),
-                  if(vm.cartManualItemsWithQuantity.length!=0)Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: cartManualList(),
-                  ),
-                  SizedBox(height: 20,),
-                  FlatButton(onPressed: null, child: Container(
-                    height: 50,
-                    width: 100,
-                    decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(5)
-                    ),
-                    child: Center(
-                      child: Text('Submit', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                    ),
-                  ))
-                ],
-              ),
-            ),
-            _buildBottomDrawer(context)
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Confirm Order', style: TextStyle(color: Colors.black87),),
+          actions: [
+            IconButton(icon: FaIcon(FontAwesomeIcons.comments, color: Colors.blue,), onPressed: (){})
           ],
-        );
-      }),
+          bottom: TabBar(
+            tabs: [
+              Tab(child: Text('Your Items', style: TextStyle(color: Colors.deepPurple),),),
+              Tab(child: Text('Store Items', style: TextStyle(color: Colors.deepPurple)),),
+            ],
+          ),
+        ),
+        body: Obx((){
+          return Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Checkbox(value: check.value, onChanged: (v){check.value = v;}),
+                        Text('Message me if any items is missed or replaced items.')
+                      ],
+                    ),
+                    // SizedBox(height: 5,),
+                    // if(vm.cartItemsWithQuantity.length!=0)Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: cartList(),
+                    // ),
+                    // SizedBox(height: 30,),
+                    // if(vm.cartManualItemsWithQuantity.length!=0)Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: cartManualList(),
+                    // ),
+                    Expanded(
+                      child: TabBarView(children: [
+                        ListView(
+                          
+                        ),
+                        Container(),
+                      ]),
+                    ),
+                    FlatButton(onPressed: null, child: Container(
+                      height: 50,
+                      width: 100,
+                      margin: EdgeInsets.only(bottom: 60),
+                      decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(5)
+                      ),
+                      child: Center(
+                        child: Text('Submit', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                      ),
+                    ))
+                  ],
+                ),
+              ),
+              _buildBottomDrawer(context)
+            ],
+          );
+        }),
+      ),
     );
   }
 
