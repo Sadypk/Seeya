@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,15 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
 
   final Duration _duration = Duration(milliseconds: 400);
 
+  File image;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    image = Get.arguments;
+  }
+
   @override
   Widget build(BuildContext context) {
     double h(double x){return getSizeConfig.height*x;}
@@ -45,7 +56,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
             Container(
               height: h(1550),
               color: Colors.orangeAccent,
-              child: Image.network('https://img.freepik.com/free-vector/realistic-receipt-template_23-2147938550.jpg?size=338&ext=jpg', fit: BoxFit.cover,),
+              child: Image.file(image),
             ),
             _buildBottomDrawer(),
           ],
@@ -190,17 +201,18 @@ class HorizontalListWidget extends StatelessWidget {
       child: ListView.builder(
         shrinkWrap: true,
         padding: EdgeInsets.symmetric(
-          horizontal: 10,
+          horizontal: 20,
         ),
         itemCount: 6,
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index){
           var isSelected = false.obs;
-          return Obx((){
+          return new Obx((){
             return ProductCardWidget(
               productModel: ProductModel(
                   productId: 31,
-                  productImage: 'https://recipefairy.com/wp-content/uploads/2020/07/kfc-chicken-500x375.jpg',
+                  // productImage: 'https://recipefairy.com/wp-content/uploads/2020/07/kfc-chicken-500x375.jpg',
+                  productImage: 'https://5.imimg.com/data5/BL/BJ/MY-13659451/poultry-live-chicken-500x500.jpg',
                   productName: 'Chicken Fry',
                   productPrice: 14.99,
                   cashBack: 2
@@ -235,11 +247,12 @@ class GridListWidget extends StatelessWidget {
           itemCount: 20,
           itemBuilder: (BuildContext context, int index){
             var isSelected = false.obs;
-            return Obx((){
+            return new Obx((){
               return ProductCardWidget(
                 productModel: ProductModel(
                     productId: 31,
-                    productImage: 'https://recipefairy.com/wp-content/uploads/2020/07/kfc-chicken-500x375.jpg',
+                    // productImage: 'https://recipefairy.com/wp-content/uploads/2020/07/kfc-chicken-500x375.jpg',
+                    productImage: 'https://5.imimg.com/data5/BL/BJ/MY-13659451/poultry-live-chicken-500x500.jpg',
                     productName: 'Chicken Fry',
                     productPrice: 14.99,
                     cashBack: 2

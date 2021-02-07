@@ -142,7 +142,7 @@ class _RedeemBalanceScreenState extends State<RedeemBalanceScreen> {
                           builder: (context, _setState){
                             return CheckboxListTile(
                               value: check,
-                              tileColor: check?Colors.greenAccent[100]:Colors.white,
+                              activeColor: check?Colors.greenAccent[100]:Colors.white,
                               onChanged: (bool v){
                                   _setState((){check = v;
                                   if(v){

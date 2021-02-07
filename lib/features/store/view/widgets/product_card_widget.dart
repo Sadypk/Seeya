@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/store/models/store_model.dart';
@@ -34,14 +35,18 @@ class ProductCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Flexible(
-              flex: 4,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(8), topLeft: Radius.circular(8)),
-                  image: DecorationImage(
-                    image: NetworkImage(productModel.productImage),
-                    fit: BoxFit.cover
-                  )
+              flex: 3,
+              child: AspectRatio(
+                aspectRatio: 16/9,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.only(topRight: Radius.circular(8), topLeft: Radius.circular(8)),
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(productModel.productImage),
+                      fit: BoxFit.cover
+                    )
+                  ),
                 ),
               ),
             ),

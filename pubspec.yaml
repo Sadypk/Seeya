@@ -49,6 +49,9 @@ dependencies:
   buttons_tabbar: ^1.1.1
 
 
+  #image
+  image_picker: ^0.6.7+22
+  cached_network_image: ^2.5.0
 
 
 dev_dependencies:
