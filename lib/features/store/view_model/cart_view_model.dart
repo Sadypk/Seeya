@@ -9,6 +9,8 @@ class CartViewModel extends GetxController{
   var cartManualItemsWithQuantity = <CartModel>[].obs;
 
   confirmCart(){
+    cartManualItemsWithQuantity.clear();
+    cartItemsWithQuantity.clear();
     cartItems.forEach((v) {cartItemsWithQuantity.add(CartModel(product: v));});
     cartManualItems.forEach((v) {cartManualItemsWithQuantity.add(CartModel(product: v));});
   }

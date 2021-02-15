@@ -113,6 +113,56 @@ class ConfirmOrderScreen extends StatelessWidget {
     }
 
     var check = false.obs;
+    var editAddress = false.obs;
+    TextEditingController editAddressController = TextEditingController(text: 'Your address');
+    var editAddressTextField = Obx((){
+      return Container(
+        height: 50,
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Flexible(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey[300], width: 1),
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //       color: Color(0xff000000).withOpacity(0.2), blurRadius: 20),
+                  //   BoxShadow(
+                  //       color: Color(0xfffafafa).withOpacity(0.2), blurRadius: 20),
+                  // ],
+                ),
+                child: TextFormField(
+                  controller: editAddressController,
+                  decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      enabled: editAddress.value,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.cyan),
+                      ),
+                      // hintText: StringResources.enterRedeemBalanceText,
+                      hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 10,),
+            IconButton(icon: Icon(editAddress.value?Icons.done:Icons.edit, color: editAddress.value?Colors.green:Colors.grey,),onPressed: (){
+              // editAddress.value = !editAddress.value;
+            },),
+          ],
+        ),
+      );
+    });
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -128,56 +178,68 @@ class ConfirmOrderScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: Obx((){
-          return Stack(
-            children: [
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Checkbox(value: check.value, onChanged: (v){check.value = v;}),
-                        Text('Message me if any items is missed or replaced items.')
-                      ],
+        body: Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  editAddressTextField,
+                  Row(
+                    children: [
+                      Checkbox(value: check.value, onChanged: (v){check.value = v;}),
+                      Text('Message me if any items is missed or replaced items.')
+                    ],
+                  ),
+
+                  // SizedBox(height: 5,),
+                  // if(vm.cartItemsWithQuantity.length!=0)Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: cartList(),
+                  // ),
+                  // SizedBox(height: 30,),
+                  // if(vm.cartManualItemsWithQuantity.length!=0)Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: cartManualList(),
+                  // ),
+                  Expanded(
+                    child: TabBarView(children: [
+                      Obx((){
+                        return ListView.builder(
+                          itemBuilder: (BuildContext context, int index){
+                            return itemQuantityControllerTile(index, true);
+                          },
+                          itemCount: vm.cartManualItemsWithQuantity.length,
+                        );
+                      }),
+                      Obx((){
+                        return ListView.builder(
+                          itemBuilder: (BuildContext context, int index){
+                            return itemQuantityControllerTile(index, false);
+                          },
+                          itemCount: vm.cartItemsWithQuantity.length,
+                        );
+                      }),
+                    ]),
+                  ),
+                  FlatButton(onPressed: null, child: Container(
+                    height: 50,
+                    width: 100,
+                    margin: EdgeInsets.only(bottom: 60),
+                    decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(5)
                     ),
-                    // SizedBox(height: 5,),
-                    // if(vm.cartItemsWithQuantity.length!=0)Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: cartList(),
-                    // ),
-                    // SizedBox(height: 30,),
-                    // if(vm.cartManualItemsWithQuantity.length!=0)Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: cartManualList(),
-                    // ),
-                    Expanded(
-                      child: TabBarView(children: [
-                        ListView(
-                          
-                        ),
-                        Container(),
-                      ]),
+                    child: Center(
+                      child: Text('Submit', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                     ),
-                    FlatButton(onPressed: null, child: Container(
-                      height: 50,
-                      width: 100,
-                      margin: EdgeInsets.only(bottom: 60),
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(5)
-                      ),
-                      child: Center(
-                        child: Text('Submit', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                      ),
-                    ))
-                  ],
-                ),
+                  ))
+                ],
               ),
-              _buildBottomDrawer(context)
-            ],
-          );
-        }),
+            ),
+            _buildBottomDrawer(context)
+          ],
+        ),
       ),
     );
   }
@@ -250,6 +312,7 @@ class ConfirmOrderScreen extends StatelessWidget {
               CartViewModel vm = Get.find();
               if(cartTextController.text.trim().length != 0){
                 vm.addItemsFromText(cartTextController.text);
+                vm.confirmCart();
               }
               cartTextController.clear();
             },
