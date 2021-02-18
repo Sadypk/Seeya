@@ -76,7 +76,7 @@ class _SelectStoreScreenState extends State<SelectStoreScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(StringResources.selectStoreAppbarText, style: TextStyle(color: Colors.black),),
+        title: Text("Virat Nagar", style: TextStyle(color: Colors.black),),
         actions: [
           FlatButton(onPressed: (){
             // Get.to(PurchasedProductsScreen());
@@ -90,8 +90,10 @@ class _SelectStoreScreenState extends State<SelectStoreScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             searchBox,
-            Divider(height: 50,),
-            Text('Near me', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+            Divider(height: 25,),
+             Text('Earn whever you go!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
+            SizedBox(height: 5,),
+            Text('Just add your bill!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),),
             SizedBox(height: 10,),
             Expanded(
                 child: ListView.builder(

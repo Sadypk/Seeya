@@ -76,6 +76,7 @@ class _StoreScreenState extends State<StoreScreen> {
           ),
           title: Text(widget.storeModel.storeName, style: TextStyle(color: Colors.black54),),
           actions: [
+            IconButton(icon: Icon(Icons.camera_alt_outlined ), onPressed: null),
             Obx((){
               return IconButton(icon: Icon((vm.cartManualItems.length+vm.cartItems.length)>0?Icons.shopping_bag:Icons.shopping_bag_outlined, color: (vm.cartManualItems.length+vm.cartItems.length)>0?Colors.red:Colors.black54,), onPressed: (){
                 if((vm.cartManualItems.length+vm.cartItems.length)>0){
@@ -84,7 +85,6 @@ class _StoreScreenState extends State<StoreScreen> {
                 }
               },);
             }),
-            IconButton(icon: Icon(Icons.star_border), onPressed: null),
           ],
           backgroundColor: Colors.transparent,
           elevation: 0,

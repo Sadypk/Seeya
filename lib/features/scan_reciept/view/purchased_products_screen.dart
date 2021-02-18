@@ -41,27 +41,29 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
     double w(double x){return getSizeConfig.width*x;}
 
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.white
+    return SafeArea(
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.white
+          ),
+          backgroundColor: Colors.transparent,
         ),
-        backgroundColor: Colors.transparent,
+        body: SingleChildScrollView(
+          child: Stack(
+            children: [
+              SizedBox(height: Get.height, width: Get.width),
+              Container(
+                height: h(1550),
+                color: Colors.orangeAccent,
+                child: Image.file(image),
+              ),
+              _buildBottomDrawer(),
+            ],
+          ),
+        )
       ),
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            SizedBox(height: Get.height, width: Get.width),
-            Container(
-              height: h(1550),
-              color: Colors.orangeAccent,
-              child: Image.file(image),
-            ),
-            _buildBottomDrawer(),
-          ],
-        ),
-      )
     );
   }
 
