@@ -10,7 +10,8 @@ class ProductCardWidget extends StatelessWidget {
   final ProductModel productModel;
   final Function onTap;
   final IconButton iconButton;
-  ProductCardWidget({this.productModel, this.onTap, this.iconButton});
+  final Widget quantityController;
+  ProductCardWidget({this.productModel, this.onTap, this.iconButton, this.quantityController});
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +84,10 @@ class ProductCardWidget extends StatelessWidget {
                 ),
               ),
             ),
+            if(quantityController!=null)Flexible(
+                flex: 1,
+                child: quantityController
+            )
           ],
         ),
       ),

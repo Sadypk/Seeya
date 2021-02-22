@@ -13,7 +13,7 @@ class ConfirmOrderScreen extends StatelessWidget {
     CartViewModel vm = Get.find();
 
     itemQuantityControllerTile(int i, bool manual){
-      CartViewModel VM = Get.find();
+      CartViewModel vm = Get.find();
       return Obx((){
         return Container(
           height: 60,
@@ -25,17 +25,17 @@ class ConfirmOrderScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(manual?VM.cartManualItemsWithQuantity[i].product.productName:VM.cartItemsWithQuantity[i].product.productName),
+                  Text(manual?vm.cartManualItemsWithQuantity[i].product.productName:vm.cartItemsWithQuantity[i].product.productName),
                   Row(
                     children: [
                       InkWell(
                         onTap: (){
                           if(manual){
-                            VM.cartManualItemsWithQuantity[i].count--;
-                            print(VM.cartManualItemsWithQuantity[i].count);
+                            vm.cartManualItemsWithQuantity[i].count--;
+                            print(vm.cartManualItemsWithQuantity[i].count);
                           }else{
-                            VM.cartItemsWithQuantity[i].count--;
-                            print(VM.cartItemsWithQuantity[i].count);
+                            vm.cartItemsWithQuantity[i].count--;
+                            print(vm.cartItemsWithQuantity[i].count);
                           }
                         },
                         child: Container(
@@ -47,7 +47,7 @@ class ConfirmOrderScreen extends StatelessWidget {
                             // border: Border.all(width: 1, color: Colors.blue)
                           ),
                           child: Center(
-                            child: Icon(Icons.remove, color: (manual?VM.cartManualItemsWithQuantity[i].count:VM.cartItemsWithQuantity[i].count)>0?Colors.white:Colors.grey, size: 14,),
+                            child: Icon(Icons.remove, color: (manual?vm.cartManualItemsWithQuantity[i].count:vm.cartItemsWithQuantity[i].count)>0?Colors.white:Colors.grey, size: 14,),
                           ),
                         ),
                       ),
@@ -60,17 +60,17 @@ class ConfirmOrderScreen extends StatelessWidget {
                           // border: Border.all(width: 1, color: Colors.blue)
                         ),
                         child: Center(
-                          child: Text('${manual?VM.cartManualItemsWithQuantity[i] .count:VM.cartItemsWithQuantity[i].count}', style: TextStyle(color: Colors.white),),
+                          child: Text('${manual?vm.cartManualItemsWithQuantity[i] .count:vm.cartItemsWithQuantity[i].count}', style: TextStyle(color: Colors.white),),
                         ),
                       ),
                       InkWell(
                         onTap: (){
                           if(manual){
-                            VM.cartManualItemsWithQuantity[i].count++;
-                            print(VM.cartManualItemsWithQuantity[i].count);
+                            vm.cartManualItemsWithQuantity[i].count++;
+                            print(vm.cartManualItemsWithQuantity[i].count);
                           }else{
-                            VM.cartItemsWithQuantity[i].count++;
-                            print(VM.cartItemsWithQuantity[i].count);
+                            vm.cartItemsWithQuantity[i].count++;
+                            print(vm.cartItemsWithQuantity[i].count);
                           }
                         },
                         child: Container(
@@ -312,7 +312,7 @@ class ConfirmOrderScreen extends StatelessWidget {
               CartViewModel vm = Get.find();
               if(cartTextController.text.trim().length != 0){
                 vm.addItemsFromText(cartTextController.text);
-                vm.confirmCart();
+                // vm.confirmCart();
               }
               cartTextController.clear();
             },
