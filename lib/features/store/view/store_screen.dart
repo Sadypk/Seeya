@@ -23,16 +23,14 @@ class StoreScreen extends StatelessWidget {
     Get.put(CartViewModel());
     var productList1 = TopProductsViewModel().productList;
     CartViewModel vm = Get.find();
-    productList1.forEach((v) {
-      vm.storeProducts.add(CartModel(
-          product: v,
-          count: 0
-      ));
+    productList1.forEach((v){
+      vm.cartItemsWithQuantity.add(CartModel(product: v, count: 0));
     });
+
     var allTab = Padding(
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       child: GridView.builder(
-        itemCount: vm.storeProducts.length,
+        itemCount: productList1.length,
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -43,27 +41,30 @@ class StoreScreen extends StatelessWidget {
         itemBuilder: (BuildContext context, int index){
           return Obx((){
             return ProductCardWidget(
-              productModel: vm.storeProducts[index].product,
-              iconButton: IconButton(icon: Icon(vm.cartItems.contains(vm.storeProducts[index].product)?FontAwesomeIcons.checkCircle:Icons.add_circle_outline_rounded, color: vm.cartItems.contains(vm.storeProducts[index].product)?Colors.green:Colors.red,), onPressed: (){
-                if(!vm.cartItems.contains(vm.storeProducts[index].product)){
-                  vm.cartItems.add(vm.storeProducts[index].product);
+              productModel: productList1[index],
+              iconButton: IconButton(icon: Icon(vm.cartItems.contains(productList1[index])?FontAwesomeIcons.checkCircle:Icons.add_circle_outline_rounded, color: vm.cartItems.contains(productList1[index])?Colors.green:Colors.red,), onPressed: (){
+                vm.cartItemsWithQuantity.add(CartModel(
+                    count: 0),
+                );
+                if(!vm.cartItems.contains(productList1[index])){
+                  vm.cartItems.add(productList1[index]);
+                  vm.cartItemsWithQuantity[index].count++;
                 }
-                vm.storeProducts[index].count++;
-                vm.storeProducts.refresh();
                 // if(vm.cartItems.contains(productList1[index])){
                 //   vm.cartItems.removeWhere((x) => x.productId == productList1[index].productId);
                 // }else{
                 //   vm.cartItems.add(productList1[index]);
                 // }
               }),
-              quantityController: vm.cartItems.contains(vm.storeProducts[index].product)?Container(
+              quantityController: vm.cartItems.contains(productList1[index])?Container(
                 child: Row(
                   children: [
                     Flexible(
                       flex: 1,
                       child: InkWell(
                         onTap: (){
-                          if(vm.storeProducts[index].count>=1)vm.storeProducts[index].count--;
+                          vm.cartItemsWithQuantity[index].count--;
+                          vm.cartItemsWithQuantity.add(CartModel(count: 0));
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -85,7 +86,7 @@ class StoreScreen extends StatelessWidget {
                         ),
                         padding: EdgeInsets.all(5),
                         child: Center(
-                          child: Text(vm.storeProducts[index].count.toString(), style: TextStyle(color: Colors.white, fontSize: 12),),
+                          child: Text(vm.cartItemsWithQuantity[index].count.toString(), style: TextStyle(color: Colors.white, fontSize: 12),),
                         ),
                       ),
                     ),
@@ -93,8 +94,9 @@ class StoreScreen extends StatelessWidget {
                       flex: 1,
                       child: InkWell(
                         onTap: (){
-                          vm.storeProducts[index].count++;
-                          print(vm.storeProducts[index].count);
+                          vm.cartItemsWithQuantity[index].count++;
+                          print(vm.cartItemsWithQuantity[index].count);
+                          vm.cartItemsWithQuantity.add(CartModel(count: 0));
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -129,9 +131,15 @@ class StoreScreen extends StatelessWidget {
           actions: [
             IconButton(icon: Icon(Icons.camera_alt_outlined ), onPressed: null),
             Obx((){
-              return IconButton(icon: Icon((vm.cartManualItems.length+vm.cartItems.length)>0?Icons.shopping_bag:Icons.shopping_bag_outlined, color: (vm.cartManualItems.length+vm.cartItems.length)>0?Colors.red:Colors.black54,), onPressed: (){
-                if((vm.cartManualItems.length+vm.cartItems.length)>0){
+              var list = <CartModel>[].obs;
+              vm.cartItemsWithQuantity.forEach((v) {
+                if(v.product != null)list.add(v);
+              });
+              return IconButton(icon: Icon((vm.cartManualItemsWithQuantity.length+vm.cartItems.length)>0?Icons.shopping_bag:Icons.shopping_bag_outlined, color: (vm.cartManualItemsWithQuantity.length+vm.cartItems.length)>0?Colors.red:Colors.black54,), onPressed: (){
+                if((vm.cartManualItemsWithQuantity.length+vm.cartItems.length)>0){
                   // vm.confirmCart();
+                  vm.cartItemsWithQuantity.clear();
+                  vm.cartItemsWithQuantity.addAll(list);
                   Get.to(ConfirmOrderScreen());
                 }
               },);
@@ -183,7 +191,7 @@ class StoreScreen extends StatelessWidget {
       body: _buildBottomDrawerBody(context),
       headerHeight: _headerHeight,
       drawerHeight: _bodyHeight,
-      color: Colors.blueGrey,
+      color: Colors.grey,
       controller: _controller,
     );
   }
@@ -241,11 +249,11 @@ class StoreScreen extends StatelessWidget {
               width: 100,
               height: 50,
               decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Colors.yellow,
                   borderRadius: BorderRadius.circular(3)
               ),
               child: Center(
-                child: Text('Enter', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),),
+                child: Text('Add to cart', style: TextStyle(color: Colors.black54, fontSize: 14, fontWeight: FontWeight.bold),),
               ),
             ),
           )
@@ -266,7 +274,7 @@ class StoreScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Items added to cart: '+(vm.cartItems.length+vm.cartManualItems.length).toString(), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                  Text('Items added to cart: '+(vm.cartItems.length+vm.cartManualItemsWithQuantity.length).toString(), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                   // InkWell(
                   //   onTap: (){
                   //     if((vm.cartManualItems.length+vm.cartItems.length)>0){
@@ -293,12 +301,12 @@ class StoreScreen extends StatelessWidget {
               Container(
                 height: 50,
                 child: ListView.builder(
-                    itemCount: vm.cartManualItems.length,
+                    itemCount: vm.cartManualItemsWithQuantity.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index){
                       return InkWell(
                         onTap: (){
-                          vm.cartManualItems.removeWhere((x) => x.productName == vm.cartManualItems[index].productName);
+                          vm.cartManualItemsWithQuantity.removeWhere((x) => x.product == vm.cartManualItemsWithQuantity[index].product);
                         },
                         child: Container(
                           margin: EdgeInsets.only(right: 10, top: 10),
@@ -310,7 +318,7 @@ class StoreScreen extends StatelessWidget {
                           ),
                           child: Center(child: Row(
                             children: [
-                              Text(vm.cartManualItems[index].productName, style: TextStyle(color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold),),
+                              Text(vm.cartManualItemsWithQuantity[index].product.productName, style: TextStyle(color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold),),
                               SizedBox(width: 5,),
                               FaIcon(FontAwesomeIcons.solidTimesCircle, color: Colors.red, size: 14,),
                             ],
@@ -341,10 +349,10 @@ class StoreScreen extends StatelessWidget {
           Expanded(
             child: Obx((){
               return ListView.builder(
-                  itemCount: vm.storeProducts.length,
+                  itemCount: vm.cartItemsWithQuantity.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index){
-                    return vm.storeProducts[index].count>0?Container(
+                    return vm.cartItemsWithQuantity[index].count>0?Container(
                       height: 60,
                       width: 60,
                       margin: EdgeInsets.only(right: 10, top: 10),
@@ -360,7 +368,7 @@ class StoreScreen extends StatelessWidget {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(5),
-                              child: Image.network(vm.storeProducts[index].product.productImage, fit: BoxFit.cover,),
+                              child: Image.network(vm.cartItemsWithQuantity[index].product.productImage, fit: BoxFit.cover,),
                             ),
                           ),
                           Positioned(
@@ -373,7 +381,7 @@ class StoreScreen extends StatelessWidget {
                                     color: Colors.white,
                                     shape: BoxShape.circle),
                                 child: Center(
-                                  child: Text('${vm.storeProducts[index].count}', style: TextStyle(fontWeight:FontWeight.bold, color: Colors.red),),
+                                  child: Text('${vm.cartItemsWithQuantity[index].count}', style: TextStyle(fontWeight:FontWeight.bold, color: Colors.red),),
                                 )
                             ),
                           )

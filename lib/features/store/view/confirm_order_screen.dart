@@ -11,85 +11,83 @@ class ConfirmOrderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(CartViewModel());
     CartViewModel vm = Get.find();
+    // vm.cartItemsWithQuantity.removeWhere((v) => v.count == 0);
 
     itemQuantityControllerTile(int i, bool manual){
       CartViewModel vm = Get.find();
       return Obx((){
         return Container(
           height: 60,
-          margin: EdgeInsets.symmetric(vertical: 10),
-          child: Card(
-            elevation: 3,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(manual?vm.cartManualItemsWithQuantity[i].product.productName:vm.cartItemsWithQuantity[i].product.productName),
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: (){
-                          if(manual){
-                            vm.cartManualItemsWithQuantity[i].count--;
-                            print(vm.cartManualItemsWithQuantity[i].count);
-                          }else{
-                            vm.cartItemsWithQuantity[i].count--;
-                            print(vm.cartItemsWithQuantity[i].count);
-                          }
-                        },
-                        child: Container(
-                          width: 25,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
-                            color: Colors.lightBlueAccent,
-                            // border: Border.all(width: 1, color: Colors.blue)
-                          ),
-                          child: Center(
-                            child: Icon(Icons.remove, color: (manual?vm.cartManualItemsWithQuantity[i].count:vm.cartItemsWithQuantity[i].count)>0?Colors.white:Colors.grey, size: 14,),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 30,
+          margin: EdgeInsets.symmetric(vertical: 6),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(manual?vm.cartManualItemsWithQuantity[i].product.productName:vm.cartItemsWithQuantity[i].product.productName, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: (){
+                        if(manual){
+                          vm.cartManualItemsWithQuantity[i].count--;
+                          print(vm.cartManualItemsWithQuantity[i].count);
+                        }else{
+                          vm.cartItemsWithQuantity[i].count--;
+                          print(vm.cartItemsWithQuantity[i].count);
+                        }
+                      },
+                      child: Container(
+                        width: 25,
                         height: 30,
                         decoration: BoxDecoration(
-                          // borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
                           color: Colors.lightBlueAccent,
                           // border: Border.all(width: 1, color: Colors.blue)
                         ),
                         child: Center(
-                          child: Text('${manual?vm.cartManualItemsWithQuantity[i] .count:vm.cartItemsWithQuantity[i].count}', style: TextStyle(color: Colors.white),),
+                          child: Icon(Icons.remove, color: (manual?vm.cartManualItemsWithQuantity[i].count:vm.cartItemsWithQuantity[i].count)>0?Colors.white:Colors.grey, size: 14,),
                         ),
                       ),
-                      InkWell(
-                        onTap: (){
-                          if(manual){
-                            vm.cartManualItemsWithQuantity[i].count++;
-                            print(vm.cartManualItemsWithQuantity[i].count);
-                          }else{
-                            vm.cartItemsWithQuantity[i].count++;
-                            print(vm.cartItemsWithQuantity[i].count);
-                          }
-                        },
-                        child: Container(
-                          width: 25,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
-                            color: Colors.lightBlueAccent,
-                            // border: Border.all(width: 1, color: Colors.blue)
-                          ),
-                          child: Center(
-                            child: Icon(Icons.add, color: Colors.white, size: 14,),
-                          ),
+                    ),
+                    Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        // borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
+                        color: Colors.lightBlueAccent,
+                        // border: Border.all(width: 1, color: Colors.blue)
+                      ),
+                      child: Center(
+                        child: Text('${manual?vm.cartManualItemsWithQuantity[i] .count:vm.cartItemsWithQuantity[i].count}', style: TextStyle(color: Colors.white),),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: (){
+                        if(manual){
+                          vm.cartManualItemsWithQuantity[i].count++;
+                          print(vm.cartManualItemsWithQuantity[i].count);
+                        }else{
+                          vm.cartItemsWithQuantity[i].count++;
+                          print(vm.cartItemsWithQuantity[i].count);
+                        }
+                      },
+                      child: Container(
+                        width: 25,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
+                          color: Colors.lightBlueAccent,
+                          // border: Border.all(width: 1, color: Colors.blue)
                         ),
-                      )
-                    ],
-                  )
-                ],
-              ),
+                        child: Center(
+                          child: Icon(Icons.add, color: Colors.white, size: 14,),
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
             ),
           ),
         );
@@ -97,16 +95,16 @@ class ConfirmOrderScreen extends StatelessWidget {
     }
 
     List<Widget> cartList(){
-      List<Widget> list = [Text('Cart Items', style: TextStyle(fontWeight: FontWeight.bold))];
-      for(int i=0; i<vm.cartItems.length; i++){
-        list.add(itemQuantityControllerTile(i, false));
+      List<Widget> list = [];
+      for(int i=0; i<vm.cartItemsWithQuantity.length; i++){
+        if(vm.cartItemsWithQuantity[i].count>0)list.add(itemQuantityControllerTile(i, false));
       }
       return list;
     }
 
     List<Widget> cartManualList(){
-      List<Widget> list = [Text('Manual Items', style: TextStyle(fontWeight: FontWeight.bold),)];
-      for(int i=0; i<vm.cartManualItems.length; i++){
+      List<Widget> list = [];
+      for(int i=0; i<vm.cartManualItemsWithQuantity.length; i++){
         list.add(itemQuantityControllerTile(i, true));
       }
       return list;
@@ -124,31 +122,15 @@ class ConfirmOrderScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
+            Text('Deliver to: ', style: TextStyle(fontWeight: FontWeight.bold),),
             Flexible(
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey[300], width: 1),
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //       color: Color(0xff000000).withOpacity(0.2), blurRadius: 20),
-                  //   BoxShadow(
-                  //       color: Color(0xfffafafa).withOpacity(0.2), blurRadius: 20),
-                  // ],
-                ),
+                // height: 50,
                 child: TextFormField(
                   controller: editAddressController,
-                  decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
+                  decoration: InputDecoration.collapsed(
                       enabled: editAddress.value,
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.cyan),
-                      ),
                       // hintText: StringResources.enterRedeemBalanceText,
                       hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)
                   ),
@@ -156,27 +138,30 @@ class ConfirmOrderScreen extends StatelessWidget {
               ),
             ),
             SizedBox(width: 10,),
-            IconButton(icon: Icon(editAddress.value?Icons.done:Icons.edit, color: editAddress.value?Colors.green:Colors.grey,),onPressed: (){
-              // editAddress.value = !editAddress.value;
-            },),
+            Icon(editAddress.value?Icons.done:Icons.edit,size: 20, color: editAddress.value?Colors.green:Colors.grey,)
           ],
         ),
       );
     });
-    return DefaultTabController(
-      length: 2,
+    return WillPopScope(
+      onWillPop: ()async{
+        return false;
+      },
       child: Scaffold(
         appBar: AppBar(
           title: Text('Confirm Order', style: TextStyle(color: Colors.black87),),
           actions: [
-            IconButton(icon: FaIcon(FontAwesomeIcons.comments, color: Colors.blue,), onPressed: (){})
+            FlatButton(
+              color: Colors.cyanAccent,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(3),
+                    color: Colors.lightBlueAccent
+                  ),
+                  child: Text('Contact Store', style: TextStyle(color: Colors.white),)),
+            )
           ],
-          bottom: TabBar(
-            tabs: [
-              Tab(child: Text('Your Items', style: TextStyle(color: Colors.deepPurple),),),
-              Tab(child: Text('Store Items', style: TextStyle(color: Colors.deepPurple)),),
-            ],
-          ),
         ),
         body: Stack(
           children: [
@@ -184,13 +169,14 @@ class ConfirmOrderScreen extends StatelessWidget {
               padding: EdgeInsets.all(10),
               child: Column(
                 children: [
-                  editAddressTextField,
                   Row(
                     children: [
                       Checkbox(value: check.value, onChanged: (v){check.value = v;}),
                       Text('Message me if any items is missed or replaced items.')
                     ],
                   ),
+                  SizedBox(height: 10,),
+                  editAddressTextField,
 
                   // SizedBox(height: 5,),
                   // if(vm.cartItemsWithQuantity.length!=0)Column(
@@ -202,26 +188,17 @@ class ConfirmOrderScreen extends StatelessWidget {
                   //   crossAxisAlignment: CrossAxisAlignment.start,
                   //   children: cartManualList(),
                   // ),
-                  Expanded(
-                    child: TabBarView(children: [
-                      Obx((){
-                        return ListView.builder(
-                          itemBuilder: (BuildContext context, int index){
-                            return itemQuantityControllerTile(index, true);
-                          },
-                          itemCount: vm.cartManualItemsWithQuantity.length,
-                        );
-                      }),
-                      Obx((){
-                        return ListView.builder(
-                          itemBuilder: (BuildContext context, int index){
-                            return itemQuantityControllerTile(index, false);
-                          },
-                          itemCount: vm.cartItemsWithQuantity.length,
-                        );
-                      }),
-                    ]),
+                  SizedBox(height: 20,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: cartList(),
                   ),
+                  // if(vm.cartManualItemsWithQuantity.isNotEmpty)Divider(height: 20,),
+                  if(vm.cartManualItemsWithQuantity.isNotEmpty)Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: cartManualList(),
+                  ),
+                  SizedBox(height: 20,),
                   FlatButton(onPressed: null, child: Container(
                     height: 50,
                     width: 100,
@@ -244,8 +221,8 @@ class ConfirmOrderScreen extends StatelessWidget {
     );
   }
 
-  double _headerHeight = 50;
-  double _bodyHeight = 200;
+  double _headerHeight = 80;
+  double _bodyHeight = 80;
   BottomDrawerController _controller = BottomDrawerController();
 
   Widget _buildBottomDrawer(BuildContext context) {
@@ -254,19 +231,12 @@ class ConfirmOrderScreen extends StatelessWidget {
       body: _buildBottomDrawerBody(context),
       headerHeight: _headerHeight,
       drawerHeight: _bodyHeight,
-      color: Colors.lightBlueAccent,
+      color: Colors.grey,
       controller: _controller,
     );
   }
 
   Widget _buildBottomDrawerHead(BuildContext context) {
-    return Container(
-      height: _headerHeight,
-      child: Center(child: Icon(Icons.drag_handle, color: Colors.white,),),
-    );
-  }
-
-  Widget _buildBottomDrawerBody(BuildContext context){
     TextEditingController cartTextController = TextEditingController();
     var enterCartItemsText = Container(
       height: 50,
@@ -331,76 +301,25 @@ class ConfirmOrderScreen extends StatelessWidget {
         ],
       ),
     );
-    CartViewModel vm = Get.find();
+    return Container(
+      height: _headerHeight,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Icon(Icons.drag_handle, color: Colors.white,),
+            enterCartItemsText
+          ],
+        ),
+      )
+    );
+  }
+
+  Widget _buildBottomDrawerBody(BuildContext context){
     return Obx((){
       return Container(
         height: _bodyHeight,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Items added to cart: '+(vm.cartItems.length+vm.cartManualItems.length).toString(), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                  // InkWell(
-                  //   onTap: (){
-                  //     if((vm.cartManualItems.length+vm.cartItems.length)>0){
-                  //       vm.confirmCart();
-                  //       Get.to(ConfirmOrderScreen());
-                  //     }
-                  //   },
-                  //   child: Container(
-                  //     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.white,
-                  //       borderRadius: BorderRadius.circular(50),
-                  //     ),
-                  //     child: Center(
-                  //       child: Text('Proceed', style: TextStyle(color: vm.cartItems.length==0?Colors.grey:Colors.lightBlueAccent, fontWeight: FontWeight.bold),),
-                  //     ),
-                  //   ),
-                  // )
-                ],
-              ),
-              SizedBox(height: 10,),
-              enterCartItemsText,
-              SizedBox(height: 10,),
-              Container(
-                height: 50,
-                child: ListView.builder(
-                    itemCount: vm.cartManualItems.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index){
-                      return InkWell(
-                        onTap: (){
-                          vm.cartManualItems.removeWhere((x) => x.productName == vm.cartManualItems[index].productName);
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(right: 10, top: 10),
-                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              border: Border.all(color: Colors.grey[300]),
-                              borderRadius: BorderRadius.circular(5)
-                          ),
-                          child: Center(child: Row(
-                            children: [
-                              Text(vm.cartManualItems[index].productName, style: TextStyle(color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold),),
-                              SizedBox(width: 5,),
-                              FaIcon(FontAwesomeIcons.solidTimesCircle, color: Colors.red, size: 14,),
-                            ],
-                          )),
-                        ),
-                      );
-                    }
-                ),
-              ),
-            ],
-          ),
-        ),
       );
     });
   }

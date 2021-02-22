@@ -4,10 +4,10 @@ import 'package:seeya/main_app/models/product_model.dart';
 
 class CartViewModel extends GetxController{
   var cartItems = <ProductModel>[].obs;
-  var cartManualItems = <ProductModel>[].obs;
+  // var cartManualItems = <ProductModel>[].obs;
   var cartItemsWithQuantity = <CartModel>[].obs;
   var cartManualItemsWithQuantity = <CartModel>[].obs;
-  var storeProducts = <CartModel>[].obs;
+  // var storeProducts = <CartModel>[].obs;
 
   // confirmCart(){
   //   cartManualItemsWithQuantity.clear();
