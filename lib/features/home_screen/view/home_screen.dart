@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:seeya/features/chat/repository/streachatConfig.dart';
+import 'package:seeya/features/chat/view/chatScreen.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
 import 'package:seeya/features/store/view/all_stores_screen.dart';
@@ -13,6 +15,8 @@ import 'package:seeya/main_app/models/product_model.dart';
 import 'package:seeya/features/store/models/store_model.dart';
 import 'package:seeya/main_app/view/widgets/custom_text_from_field.dart';
 import 'package:get/get.dart';
+import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class HomeScreen extends StatelessWidget {
   final controller = PageController(initialPage: 0, viewportFraction: 0.9);
@@ -22,22 +26,24 @@ class HomeScreen extends StatelessWidget {
       BannerModel(
         title: 'Start shopping and get a \$10 Bonus',
         bannerDescription: 'Select a store, then tap \"Shop\"\n\n' 'Swipe to learn more >',
-        bannerBackgroundImage: ''
+        bannerBackgroundImage: 'https://image.freepik.com/free-vector/fashion-promotion-store-banner-gradient-modern-background-template_8306-296.jpg'
       ),
       BannerModel(
           title: 'Start shopping and get a \$10 Bonus',
           bannerDescription:
           "Select a store, then tap"
           "Swipe to learn more >",
-          bannerBackgroundImage: ''
+          bannerBackgroundImage: 'https://thumbs.dreamstime.com/z/bright-banner-page-online-shopping-store-template-modern-flat-webpage-design-concept-website-mobile-happy-girl-vector-136259459.jpg'
       ),
     ];
     var bannerWidget = Container(
       padding: EdgeInsets.only(bottom: 5),
       height: 155,
       // width: 200,
-      child: PageView.builder(
-        controller: controller,
+      child: ListView.builder(
+        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
         itemCount: bannerList.length,
         itemBuilder: (BuildContext context, int index){
           return BannerCardWidget(bannerList[index]);
@@ -116,9 +122,19 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.transparent,
         actions: [
-          IconButton(icon: Icon(FeatherIcons.user), onPressed: null),
-          IconButton(icon: Icon(FeatherIcons.messageCircle), onPressed: null),
-          IconButton(icon: Icon(Icons.shopping_bag_outlined), onPressed: null),
+          IconButton(icon: Icon(FeatherIcons.user, color: Colors.grey,), onPressed: (){}),
+          IconButton(icon: Icon(FeatherIcons.messageCircle, color: Colors.grey), onPressed: () async{
+
+            await SConfig.client.setUser(UserViewModel.user, SConfig.client.devToken('2'));
+            Get.to(ChatScreen());
+            /*if(UserViewModel.userStatus.value == UserStatus.LOGGED_IN){
+              Get.to(ChatScreen());
+            }else{
+              /// do what you want when user is not logged in
+              Get.snackbar('Nope', 'not logged in');
+            }*/
+          }),
+          IconButton(icon: Icon(Icons.shopping_bag_outlined, color: Colors.grey), onPressed: (){}),
         ],
       ),
       body: SafeArea(

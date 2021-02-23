@@ -38,7 +38,8 @@ dependencies:
   xfile: ^1.1.0
 
 
-
+  stream_chat_flutter: ^0.2.21
+  dio: ^3.0.10
 
   #UI/UX
   flutter_typeahead: ^1.8.8

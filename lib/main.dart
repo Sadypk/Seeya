@@ -2,7 +2,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seeya/root.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
+import 'features/chat/repository/streachatConfig.dart';
 import 'main_app/resources/app_const.dart';
 import 'main_app/util/size_config.dart';
 
@@ -40,6 +42,12 @@ class MyApp extends StatelessWidget {
               )
           )
       ),
+      builder: (context, child) {
+        return StreamChat(
+          client: SConfig.client,
+          child: child,
+        );
+      },
       home: Root(),
     );
   }
