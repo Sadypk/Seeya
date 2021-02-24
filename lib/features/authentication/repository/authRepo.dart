@@ -67,6 +67,19 @@ class AuthRepo{
             ),
             SConfig.client.devToken(UserViewModel.user.value.id)
         );
+        /// also need to update info if there is any
+        /// otherwise setUser will only set according to id,
+        /// it wont replace any info
+        await SConfig.client.updateUser(
+            User(
+              id: UserViewModel.user.value.id,
+              extraData: {
+                'name' : UserViewModel.user.value.firstName == '' && ' ' + UserViewModel.user.value.lastName == '' ? 'No Name' : UserViewModel.user.value.firstName + ' '+ UserViewModel.user.value.lastName,
+                'image' : UserViewModel.user.value.logo == null || UserViewModel.user.value.logo == '' ? 'https://bellfund.ca/wp-content/uploads/2018/03/demo-user.jpg' : UserViewModel.user.value.logo,
+                'userType' : 'customer'
+              }
+            )
+        );
       }
       return loginError;
     }catch(e){
