@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/store/view/store_screen.dart';
-import 'package:seeya/features/store/models/store_model.dart';
 
 class AllStoresScreen extends StatefulWidget {
   @override
@@ -81,11 +80,11 @@ class _AllStoresScreenState extends State<AllStoresScreen> {
                 },
                 child: Column(
                   children: [
-                    imageWidget(storeList[index].storeImage),
+                    // imageWidget(storeList[index].storeImage),
                     SizedBox(height: 5,),
-                    Text(storeList[index].cashBackList[0].toString(), style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),),
+                    // Text(storeList[index].cashBackList[0].toString(), style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),),
                     Text('Cash Back', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold)),
-                    Text('was '+storeList[index].cashBackList[1].toString()+'%', style: TextStyle(fontSize:12, color: Colors.green, fontWeight: FontWeight.bold)),
+                    // Text('was '+storeList[index].cashBackList[1].toString()+'%', style: TextStyle(fontSize:12, color: Colors.green, fontWeight: FontWeight.bold)),
                   ],
                 ),
               );

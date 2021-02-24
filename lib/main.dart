@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:seeya/root.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -8,8 +9,9 @@ import 'features/chat/repository/streachatConfig.dart';
 import 'main_app/resources/app_const.dart';
 import 'main_app/util/size_config.dart';
 
-void main() {
+main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
   runApp(MyApp());
 }
 

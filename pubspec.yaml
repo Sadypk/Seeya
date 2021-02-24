@@ -40,6 +40,12 @@ dependencies:
 
   stream_chat_flutter: ^0.2.21
   dio: ^3.0.10
+  lottie: ^0.7.0+1
+  get_storage: ^1.4.0
+  animated_text_kit: ^3.1.2
+  flutter_spinkit: ^4.1.2+1
+  loading_overlay: ^0.2.1
+  graphql_flutter: ^4.0.1
 
   #UI/UX
   flutter_typeahead: ^1.8.8
@@ -72,6 +78,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/lottie/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

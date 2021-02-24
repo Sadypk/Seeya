@@ -12,7 +12,6 @@ import 'package:seeya/features/store/view/store_screen.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
 import 'package:seeya/main_app/models/product_model.dart';
-import 'package:seeya/features/store/models/store_model.dart';
 import 'package:seeya/main_app/view/widgets/custom_text_from_field.dart';
 import 'package:get/get.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
@@ -71,9 +70,9 @@ class HomeScreen extends StatelessWidget {
           ),
           Text('Last-minute gifts with Double Cash Back', style: TextStyle(fontSize: 12, color: Colors.grey),),
           SizedBox(height: 15,),
-          StoreTileWidget(storeModel: storeList1[0], isClaimable: true, onTap: (){Get.to(StoreScreen(storeModel: storeList1[0],));},),
-          StoreTileWidget(storeModel: storeList1[1], isClaimable: true),
-          StoreTileWidget(storeModel: storeList1[2], isClaimable: true),
+          // StoreTileWidget(storeModel: storeList1[0], isClaimable: true, onTap: (){Get.to(StoreScreen(storeModel: storeList1[0],));},),
+          // StoreTileWidget(storeModel: storeList1[1], isClaimable: true),
+          // StoreTileWidget(storeModel: storeList1[2], isClaimable: true),
         ],
       ),
     );
@@ -124,15 +123,12 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(icon: Icon(FeatherIcons.user, color: Colors.grey,), onPressed: (){}),
           IconButton(icon: Icon(FeatherIcons.messageCircle, color: Colors.grey), onPressed: () async{
-
-            await SConfig.client.setUser(UserViewModel.user, SConfig.client.devToken('2'));
-            Get.to(ChatScreen());
-            /*if(UserViewModel.userStatus.value == UserStatus.LOGGED_IN){
-              Get.to(ChatScreen());
+            if(UserViewModel.userStatus.value == UserStatus.LOGGED_IN){
+              Get.to(()=>ChatScreen());
             }else{
               /// do what you want when user is not logged in
               Get.snackbar('Nope', 'not logged in');
-            }*/
+            }
           }),
           IconButton(icon: Icon(Icons.shopping_bag_outlined, color: Colors.grey), onPressed: (){}),
         ],

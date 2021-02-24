@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/store_screen.dart';
-import 'package:seeya/features/store/models/store_model.dart';
 
 class StoreTileWidget extends StatelessWidget {
   final StoreModel storeModel;
@@ -45,7 +45,7 @@ class StoreTileWidget extends StatelessWidget {
             shape: BoxShape.circle,
             color: Colors.white,
             image: DecorationImage(
-              image: NetworkImage(storeModel.storeImage),
+              image: NetworkImage(storeModel.logo),
               fit: BoxFit.cover
             )
           ),
@@ -75,7 +75,7 @@ class StoreTileWidget extends StatelessWidget {
     );
 
 
-    var cashBackText = storeModel.cashBackList.length>0?Row(
+    var cashBackText = /*storeModel.cashBackList.length>0*/ false?Row(
       children: [
         Container(
           margin: EdgeInsets.only(right: 2),
@@ -88,8 +88,8 @@ class StoreTileWidget extends StatelessWidget {
         RichText(
           text: TextSpan(
               children: <TextSpan>[
-                TextSpan(text: storeModel.cashBackList[0].toString()+' Cash Back   ', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
-                if(storeModel.cashBackList.length>1)TextSpan(text: 'was '+storeModel.cashBackList[1].toString()+'%', style: TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold)),
+                // TextSpan(text: storeModel.cashBackList[0].toString()+' Cash Back   ', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                // if(storeModel.cashBackList.length>1)TextSpan(text: 'was '+storeModel.cashBackList[1].toString()+'%', style: TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold)),
               ]
           ),
         )
@@ -124,10 +124,10 @@ class StoreTileWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(storeModel.storeName??'', style: TextStyle(fontWeight: FontWeight.bold),),
+                        // Text(storeModel.storeName??'', style: TextStyle(fontWeight: FontWeight.bold),),
                         SizedBox(height: 3,),
-                        if(storeModel.storeLocation!=null)Text(storeModel.storeLocation, style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Colors.blue),),
-                        if(storeModel.storeLocation!=null)SizedBox(height: 5,),
+                        // if(storeModel.storeLocation!=null)Text(storeModel.storeLocation, style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Colors.blue),),
+                        // if(storeModel.storeLocation!=null)SizedBox(height: 5,),
                         cashBackText
                       ],
                     )
@@ -138,7 +138,7 @@ class StoreTileWidget extends StatelessWidget {
                   children: [
                     if(isClaimable)claimButton,
                     if(isClaimable)SizedBox(height: 15,),
-                    if(storeModel.distance!=null)Text('${storeModel.distance.round()}km away', style: TextStyle(fontSize: 12, color: Colors.green),)
+                    // if(storeModel.distance!=null)Text('${storeModel.distance.round()}km away', style: TextStyle(fontSize: 12, color: Colors.green),)
                   ],
 
                 )

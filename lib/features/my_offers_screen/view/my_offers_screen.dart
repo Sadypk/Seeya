@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:seeya/features/my_offers_screen/repository/repo.dart';
 import 'package:seeya/features/my_offers_screen/view/widgets/my_stores_tile_widget.dart';
+import 'package:seeya/features/store/models/storeModel.dart';
 
 class MyOffersScreen extends StatelessWidget {
   @override
@@ -44,12 +47,27 @@ class MyOffersScreen extends StatelessWidget {
               SizedBox(height: 30,),
               Text('My Stores', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
               Divider(height: 20,thickness: 2, color: Colors.black,),
-              Expanded(
-                  child: ListView.builder(
-                    itemCount: 7,
-                    itemBuilder: (BuildContext context, int index){
-                     return MyStoreTileWidget();
-              }))
+              FutureBuilder(
+                future: MyOfferStoresRepo.getRestaurants(),
+                builder: (_, AsyncSnapshot<List<StoreModel>>snapshot){
+                  if(snapshot.hasData && snapshot.data != null){
+                    if(snapshot.data == null){
+                      return Text('something went wrong');
+                    }else if(snapshot.data.length == 0){
+                      return Text('no store found');
+                    }else{
+                      return Expanded(
+                        child: ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (BuildContext context, int index) => MyStoreTileWidget(store: snapshot.data[index],)
+                        )
+                      );
+                    }
+                  }else{
+                    return SpinKitWave(color: Theme.of(context).primaryColor);
+                  }
+                },
+              )
             ],
           ),
         ),

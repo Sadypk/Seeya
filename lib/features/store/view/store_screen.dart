@@ -4,11 +4,11 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
 import 'package:seeya/features/store/models/cart_model.dart';
+import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/confirm_order_screen.dart';
 import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 import 'package:seeya/features/store/view_model/cart_view_model.dart';
 import 'package:seeya/main_app/models/product_model.dart';
-import 'package:seeya/features/store/models/store_model.dart';
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:get/get.dart';
 
@@ -127,7 +127,7 @@ class StoreScreen extends StatelessWidget {
           iconTheme: IconThemeData(
               color: Colors.black54
           ),
-          title: Text(storeModel.storeName, style: TextStyle(color: Colors.black54),),
+          title: Text(storeModel.name, style: TextStyle(color: Colors.black54),),
           actions: [
             IconButton(icon: Icon(Icons.camera_alt_outlined ), onPressed: null),
             Obx((){

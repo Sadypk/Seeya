@@ -14,7 +14,6 @@ class _ChatScreenState extends State<ChatScreen> {
   DDModel selectedOption = DDModel.items[0];
   @override
   Widget build(BuildContext context) {
-    print(DDModel.items == null);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -69,7 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
             /// making sure the chats only the user is in is shown
             filter: {
               'members': {
-                '\$in': [UserViewModel.user.id]
+                '\$in': [UserViewModel.user.value.id]
               }
             },
             /// when there is no chat builds this

@@ -156,13 +156,13 @@ class _RedeemBalanceScreenState extends State<RedeemBalanceScreen> {
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      imageWidget(storeList[index].storeImage),
+                                      imageWidget(storeList[index].logo),
                                       SizedBox(width: 10,),
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(storeList[index].storeName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                                          storeList[index].storeLocation!=null?Text(storeList[index].storeLocation, style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Colors.blue),):SizedBox()
+                                          Text(storeList[index].name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                                          // storeList[index].storeLocation!=null?Text(storeList[index].storeLocation, style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Colors.blue),):SizedBox()
                                         ],
                                       )
                                     ],
@@ -170,7 +170,7 @@ class _RedeemBalanceScreenState extends State<RedeemBalanceScreen> {
                                   Column(
                                     children: [
                                       Text('120\$', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                                      storeList[index].distance!=null?Text('${storeList[index].distance.round()}km away', style: TextStyle(fontSize: 12, color: Colors.green),):SizedBox(),
+                                      // storeList[index].distance!=null?Text('${storeList[index].distance.round()}km away', style: TextStyle(fontSize: 12, color: Colors.green),):SizedBox(),
                                     ],
                                   )
 

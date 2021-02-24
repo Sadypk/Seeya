@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
-import 'package:seeya/features/store/models/store_model.dart';
+import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/store_screen.dart';
 import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
@@ -83,7 +83,7 @@ class OnlineOrdersScreen extends StatelessWidget {
                   return ProductCardWidget(
                     productModel: productList[index],
                     iconButton: IconButton(icon: Icon(vm.cartItems.contains(productList[index])?Icons.remove_circle_outline_rounded:Icons.add_circle_outline_rounded, color: Colors.red,), onPressed: (){
-                      Get.to(StoreScreen(storeModel: StoreModel(storeName: 'Test'),));
+                      Get.to(StoreScreen(storeModel: StoreModel(name: 'Test'),));
                     }),
                   );
                 });

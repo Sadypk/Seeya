@@ -1,9 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:seeya/features/store/models/store_model.dart';
-import 'package:seeya/features/store/view/store_screen.dart';
-import 'package:seeya/features/store/view_model/cart_view_model.dart';
 import 'package:seeya/main_app/models/product_model.dart';
 
 class ProductCardWidget extends StatelessWidget {
