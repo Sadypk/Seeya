@@ -4,6 +4,7 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 
 import '../model/ddModel.dart';
+import 'widgets/chatTileWidget.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -60,7 +61,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: ChannelsBloc(
           child: ChannelListView(
             pagination: PaginationParams(limit: 20),
@@ -78,7 +79,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
             /// custom channel preview
-            // channelPreviewBuilder: (_, channel) => ChatTileWidget(channel: channel),
+            channelPreviewBuilder: (_, channel) => ChatTileWidget(channel: channel),
             sort: [SortOption('last_message_at')],
           ),
         ),
