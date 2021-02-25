@@ -65,7 +65,7 @@ class AuthRepo{
             User(
               id: UserViewModel.user.value.id,
               extraData: {
-                'name' : UserViewModel.user.value.firstName == '' && ' ' + UserViewModel.user.value.lastName == '' ? 'No Name' : UserViewModel.user.value.firstName + ' '+ UserViewModel.user.value.lastName,
+                'name' : UserViewModel.user.value.firstName == '' && UserViewModel.user.value.lastName == '' ? 'John Doe' : UserViewModel.user.value.firstName + ' '+ UserViewModel.user.value.lastName,
                 'image' : UserViewModel.user.value.logo == null || UserViewModel.user.value.logo == '' ? 'https://bellfund.ca/wp-content/uploads/2018/03/demo-user.jpg' : UserViewModel.user.value.logo,
                 'userType' : 'customer'
               }
@@ -86,7 +86,7 @@ class AuthRepo{
               User(
                   id: UserViewModel.user.value.id,
                   extraData: {
-                    'name' : UserViewModel.user.value.firstName == '' && ' ' + UserViewModel.user.value.lastName == '' ? 'No Name' : UserViewModel.user.value.firstName + ' '+ UserViewModel.user.value.lastName,
+                    'name' : UserViewModel.user.value.firstName == '' && UserViewModel.user.value.lastName == '' ? 'John Doe' : UserViewModel.user.value.firstName + ' '+ UserViewModel.user.value.lastName,
                     'image' : UserViewModel.user.value.logo == null || UserViewModel.user.value.logo == '' ? 'https://bellfund.ca/wp-content/uploads/2018/03/demo-user.jpg' : UserViewModel.user.value.logo,
                     'userType' : 'customer'
                   }

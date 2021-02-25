@@ -4,7 +4,7 @@ class GqlConfig{
 
   static getClient([String token]){
     HttpLink link = HttpLink(
-      'http://13.234.115.133:3000/graphql',
+      'http://10.0.2.2:3000/graphql',
       defaultHeaders: <String, String>{
         'Authorization': 'Authorization $token',
       },
@@ -19,7 +19,7 @@ class GqlConfig{
 
   static getSocket (){
     WebSocketLink link = WebSocketLink(
-      'ws://13.234.115.133:3000/graphql',
+      'ws://10.0.2.2:3000/graphql',
       config: SocketClientConfig(
           autoReconnect: true,
           delayBetweenReconnectionAttempts: Duration(microseconds: 10),
