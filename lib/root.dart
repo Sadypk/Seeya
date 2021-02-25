@@ -15,7 +15,6 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> with TickerProviderStateMixin{
-  AnimationController animationController;
 
   bool error;
   @override
@@ -25,14 +24,7 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
     }else{
       super.initState();
       checkSession();
-      animationController = AnimationController(vsync: this);
     }
-  }
-
-  @override
-  void dispose() {
-    animationController?.dispose();
-    super.dispose();
   }
 
   checkSession() async{
@@ -50,10 +42,12 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
       }catch(e){
         print(e.toString());
         error = true;
+        Future.delayed(Duration(seconds: 2),()=>Get.to(()=>SignInScreen()));
       }
     }else{
       error = true;
       print('Session Unavailable');
+      Future.delayed(Duration(seconds: 2),()=>Get.to(()=>SignInScreen()));
     }
   }
   final GetSizeConfig sizeConfig = Get.find();
