@@ -39,6 +39,7 @@ class AuthRepo{
   static requestLogin(String mobile) async{
 
     try{
+      print('requestLogin > '+mobile);
 
       GraphQLClient client = GqlConfig.getClient();
       QueryResult result = await client.mutate(MutationOptions(
@@ -50,13 +51,17 @@ class AuthRepo{
 
       bool loginError = result.data['customerLoginOrSignUp']['error'];
 
+      print(loginError);
+
       if(loginError){
         Snack.top('Error', result.data['customerLoginOrSignUp']['msg']);
       }else{
         UserViewModel.setToken(result.data['customerLoginOrSignUp']['token']);
         UserViewModel.setUser(UserModel.fromJson(result.data['customerLoginOrSignUp']['data']));
         UserViewModel.changeUserStatus(UserStatus.LOGGED_IN);
-        await SConfig.client.setUser(
+        try{
+          print('set user');
+          await SConfig.client.setUser(
             User(
               id: UserViewModel.user.value.id,
               extraData: {
@@ -66,20 +71,33 @@ class AuthRepo{
               }
             ),
             SConfig.client.devToken(UserViewModel.user.value.id)
-        );
+          );
+        }catch(e){
+          print(e.toString());
+          print('stream set user failed');
+          return true;
+        }
         /// also need to update info if there is any
         /// otherwise setUser will only set according to id,
         /// it wont replace any info
-        await SConfig.client.updateUser(
-            User(
-              id: UserViewModel.user.value.id,
-              extraData: {
-                'name' : UserViewModel.user.value.firstName == '' && ' ' + UserViewModel.user.value.lastName == '' ? 'No Name' : UserViewModel.user.value.firstName + ' '+ UserViewModel.user.value.lastName,
-                'image' : UserViewModel.user.value.logo == null || UserViewModel.user.value.logo == '' ? 'https://bellfund.ca/wp-content/uploads/2018/03/demo-user.jpg' : UserViewModel.user.value.logo,
-                'userType' : 'customer'
-              }
-            )
-        );
+        try{
+          print('update user');
+          await SConfig.client.updateUser(
+              User(
+                  id: UserViewModel.user.value.id,
+                  extraData: {
+                    'name' : UserViewModel.user.value.firstName == '' && ' ' + UserViewModel.user.value.lastName == '' ? 'No Name' : UserViewModel.user.value.firstName + ' '+ UserViewModel.user.value.lastName,
+                    'image' : UserViewModel.user.value.logo == null || UserViewModel.user.value.logo == '' ? 'https://bellfund.ca/wp-content/uploads/2018/03/demo-user.jpg' : UserViewModel.user.value.logo,
+                    'userType' : 'customer'
+                  }
+              )
+          );
+        }catch(e){
+          print(e.toString());
+          print('stream update user failed');
+          return true;
+        }
+
       }
       return loginError;
     }catch(e){

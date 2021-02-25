@@ -26,23 +26,13 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
       super.initState();
       checkSession();
       animationController = AnimationController(vsync: this);
-      animationController.addListener(() {
-        if(animationController.isCompleted){
-          if(error){
-            Get.to(()=>SignInScreen());
-          }else{
-            Get.offAll(()=>Home());
-          }
-        }
-      },
-      );
     }
   }
 
   @override
   void dispose() {
-    super.dispose();
     animationController?.dispose();
+    super.dispose();
   }
 
   checkSession() async{
@@ -52,6 +42,11 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
       try{
         var data = GetStorage().read('userInfo');
         error = await AuthRepo.requestLogin(data['mobile']);
+        if(error){
+          Get.to(()=>SignInScreen());
+        }else{
+          Get.offAll(()=>Home());
+        }
       }catch(e){
         print(e.toString());
         error = true;
@@ -69,15 +64,7 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
       body: Center(
         child: Lottie.asset(
           'assets/lottie/splash.json',
-          controller: animationController,
-          onLoaded: (composition) {
-            /// this is must, as it loads its settings
-            /// from the asset file into the controller
-            animationController
-              ..duration = composition.duration
-              ..forward(); /// for continuous animation
-          },
-          )
+        )
       ),
     );
   }

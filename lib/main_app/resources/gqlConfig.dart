@@ -9,7 +9,10 @@ class GqlConfig{
         'Authorization': 'Authorization $token',
       },
     );
-    GraphQLClient cc = GraphQLClient(link: link, cache: GraphQLCache());
+    GraphQLClient cc = GraphQLClient(
+      link: link,
+      cache: GraphQLCache()
+    );
     return cc;
   }
 
