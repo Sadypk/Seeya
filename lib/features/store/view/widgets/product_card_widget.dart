@@ -32,7 +32,7 @@ class ProductCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Flexible(
-              flex: 3,
+              flex: 35,
               child: AspectRatio(
                 aspectRatio: 16/9,
                 child: Container(
@@ -49,7 +49,7 @@ class ProductCardWidget extends StatelessWidget {
             ),
             SizedBox(height: 2,),
             Flexible(
-              flex: 2,
+              flex: 25,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Column(
