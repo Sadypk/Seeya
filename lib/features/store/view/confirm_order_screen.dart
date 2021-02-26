@@ -138,7 +138,9 @@ class ConfirmOrderScreen extends StatelessWidget {
               ),
             ),
             SizedBox(width: 10,),
-            Icon(editAddress.value?Icons.done:Icons.edit,size: 20, color: editAddress.value?Colors.green:Colors.grey,)
+            InkWell(
+              onTap: (){},
+              child: Icon(editAddress.value?Icons.done:Icons.edit,size: 20, color: editAddress.value?Colors.green:Colors.grey,))
           ],
         ),
       );
@@ -317,11 +319,9 @@ class ConfirmOrderScreen extends StatelessWidget {
   }
 
   Widget _buildBottomDrawerBody(BuildContext context){
-    return Obx((){
-      return Container(
-        height: _bodyHeight,
-      );
-    });
+    return Container(
+      height: _bodyHeight,
+    );
   }
 
 }
