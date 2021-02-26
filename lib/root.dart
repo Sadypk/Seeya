@@ -15,7 +15,6 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> with TickerProviderStateMixin{
-  AnimationController animationController;
 
   bool error;
   @override
@@ -25,24 +24,7 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
     }else{
       super.initState();
       checkSession();
-      animationController = AnimationController(vsync: this);
-      animationController.addListener(() {
-        if(animationController.isCompleted){
-          if(error){
-            Get.to(()=>SignInScreen());
-          }else{
-            Get.offAll(()=>Home());
-          }
-        }
-      },
-      );
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    animationController?.dispose();
   }
 
   checkSession() async{
@@ -52,13 +34,20 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
       try{
         var data = GetStorage().read('userInfo');
         error = await AuthRepo.requestLogin(data['mobile']);
+        if(error){
+          Get.to(()=>SignInScreen());
+        }else{
+          Get.offAll(()=>Home());
+        }
       }catch(e){
         print(e.toString());
         error = true;
+        Future.delayed(Duration(seconds: 2),()=>Get.to(()=>SignInScreen()));
       }
     }else{
       error = true;
       print('Session Unavailable');
+      Future.delayed(Duration(seconds: 2),()=>Get.to(()=>SignInScreen()));
     }
   }
   final GetSizeConfig sizeConfig = Get.find();
@@ -69,15 +58,7 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
       body: Center(
         child: Lottie.asset(
           'assets/lottie/splash.json',
-          controller: animationController,
-          onLoaded: (composition) {
-            /// this is must, as it loads its settings
-            /// from the asset file into the controller
-            animationController
-              ..duration = composition.duration
-              ..forward(); /// for continuous animation
-          },
-          )
+        )
       ),
     );
   }
