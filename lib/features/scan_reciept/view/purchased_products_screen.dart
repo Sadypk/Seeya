@@ -1,26 +1,20 @@
 import 'dart:io';
 
 import 'package:bottom_drawer/bottom_drawer.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
 import 'package:seeya/features/scan_reciept/view_model/purchased_product_view_model.dart';
 import 'package:seeya/features/store/models/cart_model.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 import 'package:seeya/home.dart';
-import 'package:seeya/main.dart';
-import 'package:seeya/main_app/models/product_model.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 
 class PurchasedProductsScreen extends StatefulWidget {
   final StoreModel storeModel;
   PurchasedProductsScreen({this.storeModel});
-  // final XFile image;
-  // PurchasedProductsScreen({this.image});
   @override
   _PurchasedProductsScreenState createState() => _PurchasedProductsScreenState();
 }
@@ -32,7 +26,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
 
   final Duration _duration = Duration(milliseconds: 400);
 
-  File image;
+  List<File> images;
 
   PurchasedProductViewModel vm;
   @override
@@ -43,7 +37,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
     TopProductsViewModel topProductsViewModel = Get.find();
     topProductsViewModel.productList.forEach((v) { vm.purchasedList.add(CartModel(product: v, count: 0));});
     super.initState();
-    image = Get.arguments;
+    images = Get.arguments;
   }
 
   @override
@@ -52,29 +46,25 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
     double w(double x){return getSizeConfig.width*x;}
 
 
-    return SafeArea(
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.white
-          ),
-          backgroundColor: Colors.transparent,
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white
         ),
-        body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              SizedBox(height: Get.height, width: Get.width),
-              Container(
-                height: h(1550),
-                color: Colors.orangeAccent,
-                child: Image.file(image),
-              ),
-             if(widget.storeModel!=null) _buildBottomDrawer(),
-            ],
-          ),
-        )
+        backgroundColor: Colors.transparent,
       ),
+      body: Stack(
+        children: [
+          ListView.builder(
+            itemCount: images.length,
+            shrinkWrap: true,
+            itemBuilder: (_, index) => Image.file(images[index]),
+            // itemBuilder: (_, index) => AssetThumb(asset: assets[index],height: (Get.height * .7).toInt(), width: (Get.width).toInt()),
+          ),
+          if(widget.storeModel!=null) _buildBottomDrawer(),
+        ],
+      )
     );
   }
 
@@ -85,6 +75,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
   _buildBottomDrawer()=> AnimatedPositioned(
     duration: _duration,
     top: bottomDrawerIsOpen ? expandedGap : initialGap,
+    bottom: 0,
     left: 0,
     right: 0,
     child: GestureDetector(

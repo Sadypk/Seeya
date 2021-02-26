@@ -23,8 +23,8 @@ class CustomButton extends StatelessWidget {
       color: color?? Colors.black,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius??sizeConfigController.width*20)),
       child: Container(
-        height: height??sizeConfigController.height * 70,
-        width: width??sizeConfigController.width * 1000,
+        height: height??45,
+        width: width??Get.width,
         child: Center(
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -37,7 +37,7 @@ class CustomButton extends StatelessWidget {
               icon != null ? SizedBox(width: sizeConfigController.width * 25,) : Text(''),
               Text(
                 title,
-                style: TextStyle(fontSize: textSize??sizeConfigController.getPixels(20),color: Colors.white),
+                style: TextStyle(fontSize: textSize??20,color: Colors.white),
               ),
             ],
           ),
