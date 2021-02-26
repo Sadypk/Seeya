@@ -75,7 +75,7 @@ class StoreTileWidget extends StatelessWidget {
     );
 
 
-    var cashBackText = /*storeModel.cashBackList.length>0*/ false?Row(
+    var cashBackText = Row(
       children: [
         Container(
           margin: EdgeInsets.only(right: 2),
@@ -88,13 +88,13 @@ class StoreTileWidget extends StatelessWidget {
         RichText(
           text: TextSpan(
               children: <TextSpan>[
-                // TextSpan(text: storeModel.cashBackList[0].toString()+' Cash Back   ', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
-                // if(storeModel.cashBackList.length>1)TextSpan(text: 'was '+storeModel.cashBackList[1].toString()+'%', style: TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold)),
+                TextSpan(text: storeModel.promotionCashback.toString()+' Cash Back   ', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                if(storeModel.defaultCashback!=null)TextSpan(text: 'was '+storeModel.defaultCashback.toString()+'%', style: TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold)),
               ]
           ),
         )
       ],
-    ):SizedBox();
+    );
 
 
     return InkWell(
@@ -124,10 +124,10 @@ class StoreTileWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        // Text(storeModel.storeName??'', style: TextStyle(fontWeight: FontWeight.bold),),
+                        Text(storeModel.name??'', style: TextStyle(fontWeight: FontWeight.bold),),
                         SizedBox(height: 3,),
-                        // if(storeModel.storeLocation!=null)Text(storeModel.storeLocation, style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Colors.blue),),
-                        // if(storeModel.storeLocation!=null)SizedBox(height: 5,),
+                        if(storeModel.address.address!=null)Text(storeModel.address.address, style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Colors.blue),),
+                        if(storeModel.address.address!=null)SizedBox(height: 5,),
                         cashBackText
                       ],
                     )

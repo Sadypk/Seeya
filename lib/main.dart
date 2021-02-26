@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:seeya/home.dart';
 import 'package:seeya/root.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
           child: child,
         );
       },
-      home: Root(),
+      home: Home(),
     );
   }
 }

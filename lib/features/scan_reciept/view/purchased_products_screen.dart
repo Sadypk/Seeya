@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
+import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
+import 'package:seeya/features/scan_reciept/view_model/purchased_product_view_model.dart';
+import 'package:seeya/features/store/models/cart_model.dart';
+import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 import 'package:seeya/home.dart';
 import 'package:seeya/main.dart';
@@ -13,6 +17,8 @@ import 'package:seeya/main_app/models/product_model.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 
 class PurchasedProductsScreen extends StatefulWidget {
+  final StoreModel storeModel;
+  PurchasedProductsScreen({this.storeModel});
   // final XFile image;
   // PurchasedProductsScreen({this.image});
   @override
@@ -28,9 +34,14 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
 
   File image;
 
+  PurchasedProductViewModel vm;
   @override
   void initState() {
-    // TODO: implement initState
+    Get.put(PurchasedProductViewModel());
+    vm = Get.find();
+    Get.put(TopProductsViewModel());
+    TopProductsViewModel topProductsViewModel = Get.find();
+    topProductsViewModel.productList.forEach((v) { vm.purchasedList.add(CartModel(product: v, count: 0));});
     super.initState();
     image = Get.arguments;
   }
@@ -59,7 +70,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
                 color: Colors.orangeAccent,
                 child: Image.file(image),
               ),
-              _buildBottomDrawer(),
+             if(widget.storeModel!=null) _buildBottomDrawer(),
             ],
           ),
         )
@@ -67,7 +78,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
     );
   }
 
-  double initialGap = Get.height * .65;
+  double initialGap = Get.height * .55;
   double expandedGap = AppBar().preferredSize.height + Get.mediaQuery.padding.top;
   bool bottomDrawerIsOpen = false;
 
@@ -199,30 +210,86 @@ var submitTextField = Obx((){
 class HorizontalListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    PurchasedProductViewModel vm = Get.find();
     return Expanded(
       child: ListView.builder(
         shrinkWrap: true,
         padding: EdgeInsets.symmetric(
           horizontal: 20,
         ),
-        itemCount: 6,
+        itemCount: vm.purchasedList.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index){
           var isSelected = false.obs;
           return new Obx((){
             return ProductCardWidget(
-              productModel: ProductModel(
-                  productId: 31,
-                  // productImage: 'https://recipefairy.com/wp-content/uploads/2020/07/kfc-chicken-500x375.jpg',
-                  productImage: 'https://5.imimg.com/data5/BL/BJ/MY-13659451/poultry-live-chicken-500x500.jpg',
-                  productName: 'Chicken Fry',
-                  productPrice: 14.99,
-                  cashBack: 2
-              ),
+              productModel: vm.purchasedList[index].product,
               iconButton: IconButton(
                 icon: Icon(!isSelected.value?Icons.add_circle_outline_rounded:FontAwesomeIcons.checkCircle, color: !isSelected.value?Colors.red:Colors.green, size: 22,),
-                onPressed: (){isSelected.value = !isSelected.value;},
+                onPressed: (){
+                  isSelected.value = true;
+                  vm.purchasedList[index].count++;
+                },
               ),
+              quantityController: vm.purchasedList[index].count>0?Container(
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: InkWell(
+                        onTap: (){
+                          if(vm.purchasedList[index].count>1){
+                            vm.purchasedList[index].count--;
+                          }
+                          // vm.cartItemsWithQuantity.add(CartModel(count: 0));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(topLeft: Radius.circular(3), bottomLeft: Radius.circular(3))
+                          ),
+                          padding: EdgeInsets.all(5),
+                          child: Center(
+                            child: Icon(Icons.remove, color: Colors.white, size: 12,),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                        ),
+                        padding: EdgeInsets.all(5),
+                        child: Center(
+                          child: Text(vm.purchasedList[index].count.toString(), style: TextStyle(color: Colors.white, fontSize: 12),),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: InkWell(
+                        onTap: (){
+                          vm.purchasedList[index].count++;
+                          print(vm.purchasedList[index].count);
+                          // vm.cartItemsWithQuantity.add(CartModel(count: 0));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(topRight: Radius.circular(3), bottomRight: Radius.circular(3))
+                          ),
+                          padding: EdgeInsets.all(5),
+                          child: Center(
+                            child: Icon(Icons.add, color: Colors.white, size: 12,),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ):SizedBox(),
             );
           });
         },
@@ -234,6 +301,7 @@ class HorizontalListWidget extends StatelessWidget {
 class GridListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    PurchasedProductViewModel vm = Get.find();
     return Expanded(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -246,23 +314,78 @@ class GridListWidget extends StatelessWidget {
               mainAxisSpacing: 10,
               crossAxisSpacing: 10
           ),
-          itemCount: 20,
+          itemCount: vm.purchasedList.length,
           itemBuilder: (BuildContext context, int index){
             var isSelected = false.obs;
             return new Obx((){
               return ProductCardWidget(
-                productModel: ProductModel(
-                    productId: 31,
-                    // productImage: 'https://recipefairy.com/wp-content/uploads/2020/07/kfc-chicken-500x375.jpg',
-                    productImage: 'https://5.imimg.com/data5/BL/BJ/MY-13659451/poultry-live-chicken-500x500.jpg',
-                    productName: 'Chicken Fry',
-                    productPrice: 14.99,
-                    cashBack: 2
-                ),
+                productModel: vm.purchasedList[index].product,
                 iconButton: IconButton(
                   icon: Icon(!isSelected.value?Icons.add_circle_outline_rounded:FontAwesomeIcons.checkCircle, color: !isSelected.value?Colors.red:Colors.green, size: 22,),
-                  onPressed: (){isSelected.value = !isSelected.value;},
+                  onPressed: (){
+                    isSelected.value = true;
+                    vm.purchasedList[index].count++;
+                  },
                 ),
+                quantityController: vm.purchasedList[index].count>0?Container(
+                  child: Row(
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: InkWell(
+                          onTap: (){
+                            if(vm.purchasedList[index].count>1){
+                              vm.purchasedList[index].count--;
+                            }
+                            // vm.cartItemsWithQuantity.add(CartModel(count: 0));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.only(topLeft: Radius.circular(3), bottomLeft: Radius.circular(3))
+                            ),
+                            padding: EdgeInsets.all(5),
+                            child: Center(
+                              child: Icon(Icons.remove, color: Colors.white, size: 12,),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                          ),
+                          padding: EdgeInsets.all(5),
+                          child: Center(
+                            child: Text(vm.purchasedList[index].count.toString(), style: TextStyle(color: Colors.white, fontSize: 12),),
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: InkWell(
+                          onTap: (){
+                            vm.purchasedList[index].count++;
+                            print(vm.purchasedList[index].count);
+                            // vm.cartItemsWithQuantity.add(CartModel(count: 0));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.only(topRight: Radius.circular(3), bottomRight: Radius.circular(3))
+                            ),
+                            padding: EdgeInsets.all(5),
+                            child: Center(
+                              child: Icon(Icons.add, color: Colors.white, size: 12,),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ):SizedBox(),
               );
             });
           },

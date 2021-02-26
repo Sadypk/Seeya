@@ -80,7 +80,7 @@ class _SelectStoreScreenState extends State<SelectStoreScreen> {
         actions: [
           FlatButton(onPressed: (){
             // Get.to(PurchasedProductsScreen());
-            Get.to(TakePictureScreen());
+            Get.to(ScanReceiptScreen());
           }, child: Text(StringResources.skipButtonText))
         ],
       ),
@@ -91,14 +91,14 @@ class _SelectStoreScreenState extends State<SelectStoreScreen> {
           children: [
             searchBox,
             Divider(height: 25,),
-             Text('Earn whever you go!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
+             Text('Earn wherever you go!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
             SizedBox(height: 5,),
             Text('Just add your bill!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),),
             SizedBox(height: 10,),
             Expanded(
                 child: ListView.builder(
                   itemBuilder: (BuildContext context, int index){
-                    return StoreTileWidget(storeModel: storeList[index], onTap: (){Get.to(TakePictureScreen());},);
+                    return StoreTileWidget(storeModel: storeList[index], onTap: (){Get.to(ScanReceiptScreen(storeModel: storeList[index],));},);
                   },
                   itemCount: storeList.length,
                 )

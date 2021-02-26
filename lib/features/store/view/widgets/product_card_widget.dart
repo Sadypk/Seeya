@@ -80,9 +80,9 @@ class ProductCardWidget extends StatelessWidget {
                 ),
               ),
             ),
-            if(quantityController!=null)Flexible(
+            Flexible(
                 flex: 1,
-                child: quantityController
+                child: quantityController!=null?quantityController:SizedBox()
             )
           ],
         ),

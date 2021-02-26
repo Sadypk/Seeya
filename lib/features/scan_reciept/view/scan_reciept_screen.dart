@@ -8,16 +8,19 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
 import 'package:seeya/features/scan_reciept/view/purchased_products_screen.dart';
+import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/main_app/util/imagePicker.dart';
 
 
 // A screen that allows users to take a picture using a given camera.
-class TakePictureScreen extends StatefulWidget {
+class ScanReceiptScreen extends StatefulWidget {
+  final StoreModel storeModel;
+  ScanReceiptScreen({this.storeModel});
   @override
-  TakePictureScreenState createState() => TakePictureScreenState();
+  ScanReceiptScreenState createState() => ScanReceiptScreenState();
 }
 
-class TakePictureScreenState extends State<TakePictureScreen> {
+class ScanReceiptScreenState extends State<ScanReceiptScreen> {
   CameraController _controller;
   Future<void> _initializeControllerFuture;
   // XFile image;
@@ -29,7 +32,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     if(image == null){
       Get.back();
     }else{
-      Get.off(PurchasedProductsScreen(), arguments: image);
+      Get.off(PurchasedProductsScreen(storeModel: widget.storeModel,), arguments: image);
     }
   }
 
