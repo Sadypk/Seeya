@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
+import 'package:seeya/features/scan_reciept/view/scan_reciept_screen.dart';
 import 'package:seeya/features/store/models/cart_model.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/confirm_order_screen.dart';
@@ -129,7 +130,9 @@ class StoreScreen extends StatelessWidget {
           ),
           title: Text(storeModel.name, style: TextStyle(color: Colors.black54),),
           actions: [
-            IconButton(icon: Icon(Icons.camera_alt_outlined ), onPressed: null),
+            IconButton(icon: Icon(Icons.camera_alt_outlined ), onPressed: (){
+              Get.to(ScanReceiptScreen());
+            }),
             Obx((){
               var list = <CartModel>[].obs;
               vm.cartItemsWithQuantity.forEach((v) {

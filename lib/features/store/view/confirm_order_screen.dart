@@ -4,10 +4,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/store/models/cart_model.dart';
 import 'package:seeya/features/store/view_model/cart_view_model.dart';
+import 'package:seeya/home.dart';
 import 'package:seeya/main_app/models/product_model.dart';
 
 class ConfirmOrderScreen extends StatelessWidget {
-
+  var check = false.obs;
   static var editAddress = false.obs;
   var address = 'Virat Nagar'.obs;
   @override
@@ -121,8 +122,6 @@ class ConfirmOrderScreen extends StatelessWidget {
       return list;
     }
 
-    var check = false.obs;
-
     TextEditingController editAddressController = TextEditingController(text: address.value);
     var editAddressTextField = Obx((){
       return Container(
@@ -169,8 +168,45 @@ class ConfirmOrderScreen extends StatelessWidget {
         ),
       );
     });
+
+
+    _showExitDialog(context){
+      return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context){
+          return AlertDialog(
+            title: Text('Cancel order?'),
+            // content: SingleChildScrollView(
+            //   child: ListBody(
+            //     children: <Widget>[
+            //       Text('This is a demo alert dialog.'),
+            //       Text('Would you like to approve of this message?'),
+            //     ],
+            //   ),
+            // ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Yes'),
+                onPressed: () {
+                  vm.clearEmptyModels();
+                  Get.offAll(Home());
+                },
+              ),
+              TextButton(
+                child: Text('No'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        }
+      );
+    }
     return WillPopScope(
       onWillPop: ()async{
+        _showExitDialog(context);
         return false;
       },
       child: Scaffold(
@@ -197,7 +233,7 @@ class ConfirmOrderScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Checkbox(value: check.value, onChanged: (v){check.value = v;}),
+                      Obx((){return Checkbox(value: check.value, onChanged: (v){check.value = v;});}),
                       Expanded(child: Text('Message me if any items is missed or replaced items.'))
                     ],
                   ),
