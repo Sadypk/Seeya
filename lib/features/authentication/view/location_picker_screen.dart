@@ -6,8 +6,18 @@ class LocationPickerScreen extends StatefulWidget {
 }
 
 class _LocationPickerScreenState extends State<LocationPickerScreen> {
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Choose you location'
+        ),
+      ),
+      body: Container(
+
+      ),
+    );
   }
 }

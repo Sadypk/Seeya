@@ -5,13 +5,12 @@ import 'package:get/get.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:seeya/features/authentication/repository/authRepo.dart';
+import 'package:seeya/features/authentication/view/location_picker_screen.dart';
 import 'package:seeya/main_app/util/customButton.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/util/screenLoader.dart';
 import 'package:seeya/main_app/util/snack.dart';
-
-import '../../../home.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -158,7 +157,7 @@ class _SignInScreenState extends State<SignInScreen>
           RotateAnimatedTextKit(
               duration: Duration(seconds: 3),
               repeatForever: true,
-              text: ["OwnerApp"],
+              text: ["Custmoer"],
               textStyle: TextStyle(
                   fontSize: 32,
                   color: AppConst.themeBlue,
@@ -248,7 +247,7 @@ class _SignInScreenState extends State<SignInScreen>
             }else{
               GetStorage().write('userInfo', {'mobile' : mobile.text});
               GetStorage().write('backup', {'user' : mobile.text});
-              Get.offAll(()=>Home());
+              Get.offAll(()=>LocationPickerScreen());
             }
           }
         },
