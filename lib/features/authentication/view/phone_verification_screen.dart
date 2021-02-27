@@ -11,6 +11,8 @@ import 'package:seeya/main_app/util/size_config.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/util/screenLoader.dart';
 import 'package:seeya/main_app/util/snack.dart';
+import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
+
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -247,7 +249,11 @@ class _SignInScreenState extends State<SignInScreen>
             }else{
               GetStorage().write('userInfo', {'mobile' : mobile.text});
               GetStorage().write('backup', {'user' : mobile.text});
-              Get.offAll(()=>LocationPickerScreen());
+              if(UserViewModel.user.value.addresses.length > 0){
+                Get.offAll(()=>AddressListScreen());
+              }else{
+                Get.offAll(()=>LocationPickerScreen());
+              }
             }
           }
         },

@@ -19,7 +19,7 @@ class UserModel {
   String lastName;
   String mobile;
   String email;
-  List<Address> addresses;
+  List<AddressModel> addresses;
   double balance;
   String logo;
   String dateOfBirth;
@@ -31,7 +31,7 @@ class UserModel {
     lastName: json["last_name"] ?? '',
     mobile: json["mobile"],
     email: json["email"] ?? '',
-    addresses: json["addresses"] == null ? Address() : List<Address>.from(json["addresses"].map((x) => Address.fromJson(x))),
+    addresses: json["addresses"] == null ? AddressModel() : List<AddressModel>.from(json["addresses"].map((x) => AddressModel.fromJson(x))),
     balance: json["balance"] != null ? double.parse(json["balance"].toString()) : 0.0,
     logo: json["logo"] ?? '',
     dateOfBirth: json["date_of_birth"] ?? '',

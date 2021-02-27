@@ -16,7 +16,7 @@ class StoreModel {
   String name;
   String id;
   BusinessType businesstype;
-  Address address;
+  AddressModel address;
   String logo;
   double defaultCashback;
   double defaultWelcomeOffer;
@@ -27,7 +27,7 @@ class StoreModel {
     name: json["name"] == null ? 'null' : json["name"],
     id: json["_id"] == null ? 'null' : json["_id"],
     businesstype: json["businesstype"] == null ? BusinessType() : BusinessType.fromJson(json["businesstype"]),
-    address: json["address"] == null ? Address() : Address.fromJson(json["address"]),
+    address: json["address"] == null ? AddressModel() : AddressModel.fromJson(json["address"]),
     logo: json["logo"] ?? '',
     defaultCashback: json["default_cashback"] != null ?double.parse(json["default_cashback"].toString()) : 0.0,
     defaultWelcomeOffer: json["default_welcome_offer"] != null ?double.parse(json["default_welcome_offer"].toString()) : 0.0,

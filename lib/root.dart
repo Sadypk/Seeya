@@ -8,6 +8,9 @@ import 'package:seeya/home.dart';
 import 'package:get/get.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 import 'package:seeya/features/authentication/view/phone_verification_screen.dart';
+import 'package:seeya/features/authentication/view/location_picker_screen.dart';
+import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
+
 
 class Root extends StatefulWidget {
   @override
@@ -37,7 +40,12 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
         if(error){
           Get.to(()=>SignInScreen());
         }else{
-          Get.offAll(()=>Home());
+          // Get.offAll(()=>Home());
+          if(UserViewModel.user.value.addresses.length > 0){
+            Get.offAll(()=>AddressListScreen());
+          }else{
+            Get.offAll(()=>LocationPickerScreen());
+          }
         }
       }catch(e){
         print(e.toString());

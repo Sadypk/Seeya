@@ -7,7 +7,7 @@ class NearestStoreViewModel extends GetxController{
   var storeList = <StoreModel>[
     StoreModel(
       name: 'Adidas',
-      address: Address(
+      address: AddressModel(
         address: 'Virat Nagar'
       ),
       businesstype: BusinessType(

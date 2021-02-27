@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:seeya/main_app/resources/app_const.dart';
 
 class ImageHelper{
   static Future<File> pickImage(ImageSource source) async{
@@ -39,7 +40,7 @@ class ImageHelper{
           ],
           androidUiSettings: AndroidUiSettings(
               toolbarTitle: 'Cropper',
-              toolbarColor: Colors.deepOrange,
+              toolbarColor: AppConst.blue,
               toolbarWidgetColor: Colors.white,
               initAspectRatio: CropAspectRatioPreset.original,
               lockAspectRatio: false),

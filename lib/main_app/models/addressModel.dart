@@ -1,15 +1,15 @@
-class Address {
-  Address({
+class AddressModel {
+  AddressModel({
     this.address,
     this.location,
   });
 
   String address;
-  Location location;
+  LocationModel location;
 
-  factory Address.fromJson(Map<String, dynamic> json) => Address(
+  factory AddressModel.fromJson(Map<String, dynamic> json) => AddressModel(
     address: json["address"] == null ? '' : json["address"],
-    location: json["location"] == null ? Location() : Location.fromJson(json["location"]),
+    location: json["location"] == null ? LocationModel() : LocationModel.fromJson(json["location"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -18,8 +18,8 @@ class Address {
   };
 }
 
-class Location {
-  Location({
+class LocationModel {
+  LocationModel({
     this.lat,
     this.lng,
   });
@@ -27,7 +27,7 @@ class Location {
   double lat;
   double lng;
 
-  factory Location.fromJson(Map<String, dynamic> json) => Location(
+  factory LocationModel.fromJson(Map<String, dynamic> json) => LocationModel(
     lat: json["lat"] == null ? 0.0 : json["lat"].toDouble(),
     lng: json["lng"] == null ? 0.0 : json["lng"].toDouble(),
   );
