@@ -73,20 +73,18 @@ class OnlineOrdersScreen extends StatelessWidget {
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: ((MediaQuery.of(context).size.width/2)/250),
+                childAspectRatio: 0.95/1,
                 // crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
               itemBuilder: (BuildContext context, int index){
                 CartViewModel vm = Get.find();
-                return Obx((){
-                  return ProductCardWidget(
-                    productModel: productList[index],
-                    iconButton: IconButton(icon: Icon(vm.cartItems.contains(productList[index])?Icons.remove_circle_outline_rounded:Icons.add_circle_outline_rounded, color: Colors.red,), onPressed: (){
-                      Get.to(StoreScreen(storeModel: StoreModel(name: 'Test'),));
-                    }),
-                  );
-                });
+                return ProductCardWidget(
+                  productModel: productList[index],
+                  iconButton: IconButton(icon: Icon(vm.cartItems.contains(productList[index])?Icons.remove_circle_outline_rounded:Icons.add_circle_outline_rounded, color: Colors.red,), onPressed: (){
+                    Get.to(StoreScreen(storeModel: StoreModel(name: 'Test'),));
+                  }),
+                );
               },
             ),
           )

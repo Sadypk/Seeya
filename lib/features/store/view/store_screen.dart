@@ -34,7 +34,7 @@ class StoreScreen extends StatelessWidget {
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: ((MediaQuery.of(context).size.width/2)/250),
+          childAspectRatio: 0.95/1,
           // crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),

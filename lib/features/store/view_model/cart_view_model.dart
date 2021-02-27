@@ -4,17 +4,9 @@ import 'package:seeya/main_app/models/product_model.dart';
 
 class CartViewModel extends GetxController{
   var cartItems = <ProductModel>[].obs;
-  // var cartManualItems = <ProductModel>[].obs;
   var cartItemsWithQuantity = <CartModel>[].obs;
   var cartManualItemsWithQuantity = <CartModel>[].obs;
-  // var storeProducts = <CartModel>[].obs;
 
-  // confirmCart(){
-  //   cartManualItemsWithQuantity.clear();
-  //   cartItemsWithQuantity.clear();
-  //   cartItems.forEach((v) {cartItemsWithQuantity.add(CartModel(product: v));});
-  //   cartManualItems.forEach((v) {cartManualItemsWithQuantity.add(CartModel(product: v));});
-  // }
 
   addItemsFromText(String s){
     List<CartModel> list = [];
@@ -32,5 +24,10 @@ class CartViewModel extends GetxController{
        }
     }
     cartManualItemsWithQuantity.addAll(list);
+  }
+
+  clearEmptyModels(){
+    cartItemsWithQuantity.removeWhere((element) => element.product == null);
+    cartManualItemsWithQuantity.removeWhere((element) => element.product == null);
   }
 }

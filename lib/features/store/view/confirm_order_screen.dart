@@ -7,6 +7,9 @@ import 'package:seeya/features/store/view_model/cart_view_model.dart';
 import 'package:seeya/main_app/models/product_model.dart';
 
 class ConfirmOrderScreen extends StatelessWidget {
+
+  static var editAddress = false.obs;
+  var address = 'Virat Nagar'.obs;
   @override
   Widget build(BuildContext context) {
     Get.put(CartViewModel());
@@ -15,7 +18,7 @@ class ConfirmOrderScreen extends StatelessWidget {
 
     itemQuantityControllerTile(int i, bool manual){
       CartViewModel vm = Get.find();
-      return Obx((){
+      return (manual?vm.cartManualItemsWithQuantity[i].product:vm.cartItemsWithQuantity[i].product)!=null?Obx((){
         return Container(
           height: 60,
           margin: EdgeInsets.symmetric(vertical: 6),
@@ -30,23 +33,29 @@ class ConfirmOrderScreen extends StatelessWidget {
                     InkWell(
                       onTap: (){
                         if(manual){
-                          vm.cartManualItemsWithQuantity[i].count--;
-                          print(vm.cartManualItemsWithQuantity[i].count);
+                          if(vm.cartManualItemsWithQuantity[i].count>1){
+                            vm.cartManualItemsWithQuantity[i].count--;
+                            vm.cartManualItemsWithQuantity.add(CartModel(count: 0));
+                            print(vm.cartManualItemsWithQuantity[i].count);
+                          }
                         }else{
-                          vm.cartItemsWithQuantity[i].count--;
-                          print(vm.cartItemsWithQuantity[i].count);
+                          if(vm.cartItemsWithQuantity[i].count>1){
+                            vm.cartItemsWithQuantity[i].count--;
+                            vm.cartItemsWithQuantity.add(CartModel(count: 0));
+                            print(vm.cartItemsWithQuantity[i].count);
+                          }
                         }
                       },
                       child: Container(
-                        width: 25,
+                        width: 30,
                         height: 30,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
-                          color: Colors.lightBlueAccent,
-                          // border: Border.all(width: 1, color: Colors.blue)
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(5), bottomLeft: Radius.circular(5)),
+                          color: Colors.white,
+                          border: Border.all(width: 1, color: Colors.blue)
                         ),
                         child: Center(
-                          child: Icon(Icons.remove, color: (manual?vm.cartManualItemsWithQuantity[i].count:vm.cartItemsWithQuantity[i].count)>0?Colors.white:Colors.grey, size: 14,),
+                          child: Icon(Icons.remove, color: (manual?vm.cartManualItemsWithQuantity[i].count:vm.cartItemsWithQuantity[i].count)>1?Colors.blueAccent:Colors.grey, size: 14,),
                         ),
                       ),
                     ),
@@ -55,33 +64,35 @@ class ConfirmOrderScreen extends StatelessWidget {
                       height: 30,
                       decoration: BoxDecoration(
                         // borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
-                        color: Colors.lightBlueAccent,
-                        // border: Border.all(width: 1, color: Colors.blue)
+                        color: Colors.white,
+                        border: Border.all(width: 1, color: Colors.blue)
                       ),
                       child: Center(
-                        child: Text('${manual?vm.cartManualItemsWithQuantity[i] .count:vm.cartItemsWithQuantity[i].count}', style: TextStyle(color: Colors.white),),
+                        child: Text('${manual?vm.cartManualItemsWithQuantity[i] .count:vm.cartItemsWithQuantity[i].count}', style: TextStyle(color: Colors.blueAccent),),
                       ),
                     ),
                     InkWell(
                       onTap: (){
                         if(manual){
                           vm.cartManualItemsWithQuantity[i].count++;
+                          vm.cartManualItemsWithQuantity.add(CartModel(count: 0));
                           print(vm.cartManualItemsWithQuantity[i].count);
                         }else{
                           vm.cartItemsWithQuantity[i].count++;
+                          vm.cartItemsWithQuantity.add(CartModel(count: 0));
                           print(vm.cartItemsWithQuantity[i].count);
                         }
                       },
                       child: Container(
-                        width: 25,
+                        width: 30,
                         height: 30,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
-                          color: Colors.lightBlueAccent,
-                          // border: Border.all(width: 1, color: Colors.blue)
+                          borderRadius: BorderRadius.only(topRight: Radius.circular(5), bottomRight: Radius.circular(5)),
+                          color: Colors.white,
+                          border: Border.all(width: 1, color: Colors.blue)
                         ),
                         child: Center(
-                          child: Icon(Icons.add, color: Colors.white, size: 14,),
+                          child: Icon(Icons.add, color: Colors.blueAccent, size: 14,),
                         ),
                       ),
                     )
@@ -91,7 +102,7 @@ class ConfirmOrderScreen extends StatelessWidget {
             ),
           ),
         );
-      });
+      }):SizedBox();
     }
 
     List<Widget> cartList(){
@@ -111,36 +122,49 @@ class ConfirmOrderScreen extends StatelessWidget {
     }
 
     var check = false.obs;
-    var editAddress = false.obs;
-    TextEditingController editAddressController = TextEditingController(text: 'Your address');
+
+    TextEditingController editAddressController = TextEditingController(text: address.value);
     var editAddressTextField = Obx((){
       return Container(
         height: 50,
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(3)
+        ),
         width: MediaQuery.of(context).size.width,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Text('Deliver to: ', style: TextStyle(fontWeight: FontWeight.bold),),
             Flexible(
+                flex: 3,
+                child: Container(child: Text('Deliver to: ', style: TextStyle(fontWeight: FontWeight.bold),))),
+            Flexible(
+              flex: 8,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                // height: 50,
-                child: TextFormField(
+                decoration: BoxDecoration(
+                  color: editAddress.value?Colors.white:Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5)
+                ),
+                child: TextField(
                   controller: editAddressController,
-                  decoration: InputDecoration.collapsed(
-                      enabled: editAddress.value,
-                      // hintText: StringResources.enterRedeemBalanceText,
-                      hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)
-                  ),
+                  onChanged: (v){address.value = v;},
+                  enabled: editAddress.value,
+                  decoration: InputDecoration.collapsed(hintText: null),
                 ),
               ),
             ),
-            SizedBox(width: 10,),
-            InkWell(
-              onTap: (){},
-              child: Icon(editAddress.value?Icons.done:Icons.edit,size: 20, color: editAddress.value?Colors.green:Colors.grey,))
+            // SizedBox(width: 10,),
+            Flexible(
+              flex: 1,
+              child: InkWell(
+                onTap: (){
+                  editAddress.value = !editAddress.value;
+                },
+                child: Icon(editAddress.value?Icons.done:Icons.edit,size: 20, color: editAddress.value?Colors.green:Colors.grey,)),
+            )
           ],
         ),
       );
@@ -174,7 +198,7 @@ class ConfirmOrderScreen extends StatelessWidget {
                   Row(
                     children: [
                       Checkbox(value: check.value, onChanged: (v){check.value = v;}),
-                      Text('Message me if any items is missed or replaced items.')
+                      Expanded(child: Text('Message me if any items is missed or replaced items.'))
                     ],
                   ),
                   SizedBox(height: 10,),
@@ -191,30 +215,31 @@ class ConfirmOrderScreen extends StatelessWidget {
                   //   children: cartManualList(),
                   // ),
                   SizedBox(height: 20,),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: cartList(),
-                  ),
-                  // if(vm.cartManualItemsWithQuantity.isNotEmpty)Divider(height: 20,),
-                  if(vm.cartManualItemsWithQuantity.isNotEmpty)Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: cartManualList(),
-                  ),
-                  SizedBox(height: 20,),
-                  FlatButton(onPressed: null, child: Container(
-                    height: 50,
-                    width: 100,
-                    margin: EdgeInsets.only(bottom: 60),
-                    decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(5)
+                  Expanded(
+                    child: ListView(
+                      children: cartList()+cartManualList()+[SizedBox(height: 120,)],
                     ),
-                    child: Center(
-                      child: Text('Submit', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                    ),
-                  ))
+                  )
                 ],
               ),
+            ),
+            Positioned(
+              top: Get.height-250,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: FlatButton(onPressed: null, child: Container(
+                height: 50,
+                width: double.infinity,
+                margin: EdgeInsets.only(bottom: 60),
+                decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(5)
+                ),
+                child: Center(
+                  child: Text('Submit', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                ),
+              ))
             ),
             _buildBottomDrawer(context)
           ],

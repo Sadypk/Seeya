@@ -63,12 +63,26 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
             // itemBuilder: (_, index) => AssetThumb(asset: assets[index],height: (Get.height * .7).toInt(), width: (Get.width).toInt()),
           ),
           if(widget.storeModel!=null) _buildBottomDrawer(),
+          if(widget.storeModel==null)Positioned(
+            top: Get.height-100,
+            bottom: 0,
+            right: 0,
+            left: 0,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20)),
+              ),
+              child: submitTextField,
+            ),
+          )
         ],
       )
     );
   }
 
-  double initialGap = Get.height * .55;
+  double initialGap = Get.height * .6;
   double expandedGap = AppBar().preferredSize.height + Get.mediaQuery.padding.top;
   bool bottomDrawerIsOpen = false;
 
@@ -213,7 +227,7 @@ class HorizontalListWidget extends StatelessWidget {
         itemBuilder: (BuildContext context, int index){
           var isSelected = false.obs;
           return new Obx((){
-            return ProductCardWidget(
+            return vm.purchasedList[index].product!=null?ProductCardWidget(
               productModel: vm.purchasedList[index].product,
               iconButton: IconButton(
                 icon: Icon(!isSelected.value?Icons.add_circle_outline_rounded:FontAwesomeIcons.checkCircle, color: !isSelected.value?Colors.red:Colors.green, size: 22,),
@@ -281,7 +295,7 @@ class HorizontalListWidget extends StatelessWidget {
                   ],
                 ),
               ):SizedBox(),
-            );
+            ):SizedBox();
           });
         },
       ),
@@ -295,7 +309,7 @@ class GridListWidget extends StatelessWidget {
     PurchasedProductViewModel vm = Get.find();
     return Expanded(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        // padding: EdgeInsets.symmetric(horizontal: 5),
         child: GridView.builder(
           shrinkWrap: true,
           padding: EdgeInsets.zero,
@@ -303,13 +317,14 @@ class GridListWidget extends StatelessWidget {
             /// number of child in a row
               crossAxisCount: 2,
               mainAxisSpacing: 10,
-              crossAxisSpacing: 10
+              crossAxisSpacing: 10,
+            childAspectRatio: ((MediaQuery.of(context).size.width/2)/220),
           ),
           itemCount: vm.purchasedList.length,
           itemBuilder: (BuildContext context, int index){
             var isSelected = false.obs;
             return new Obx((){
-              return ProductCardWidget(
+              return vm.purchasedList[index].product!=null?ProductCardWidget(
                 productModel: vm.purchasedList[index].product,
                 iconButton: IconButton(
                   icon: Icon(!isSelected.value?Icons.add_circle_outline_rounded:FontAwesomeIcons.checkCircle, color: !isSelected.value?Colors.red:Colors.green, size: 22,),
@@ -327,6 +342,7 @@ class GridListWidget extends StatelessWidget {
                           onTap: (){
                             if(vm.purchasedList[index].count>1){
                               vm.purchasedList[index].count--;
+                              vm.purchasedList.add(CartModel(count: 0));
                             }
                             // vm.cartItemsWithQuantity.add(CartModel(count: 0));
                           },
@@ -360,6 +376,7 @@ class GridListWidget extends StatelessWidget {
                           onTap: (){
                             vm.purchasedList[index].count++;
                             print(vm.purchasedList[index].count);
+                            vm.purchasedList.add(CartModel(count: 0));
                             // vm.cartItemsWithQuantity.add(CartModel(count: 0));
                           },
                           child: Container(
@@ -377,7 +394,7 @@ class GridListWidget extends StatelessWidget {
                     ],
                   ),
                 ):SizedBox(),
-              );
+              ):SizedBox();
             });
           },
         ),

@@ -26,16 +26,16 @@ class BannerCardWidget extends StatelessWidget {
             )
           ),
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(bannerModel.title??'', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, fontStyle: FontStyle.italic),),
-              SizedBox(height: 10,),
-              Text(bannerModel.bannerDescription??'', style: TextStyle(fontSize: 13, height: 0.5),),
-            ],
-          ),
+          // child: Column(
+          //   mainAxisSize: MainAxisSize.max,
+          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     Text(bannerModel.title??'', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, fontStyle: FontStyle.italic),),
+          //     SizedBox(height: 10,),
+          //     Text(bannerModel.bannerDescription??'', style: TextStyle(fontSize: 13, height: 0.5),),
+          //   ],
+          // ),
         ),
       ),
     );
