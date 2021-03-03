@@ -12,7 +12,7 @@
         android:label="seeya"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB4IiDuQ9GbgEf5W2FTtY5NzjYLhwDTcec"/>
+            android:value="AIzaSyAVKjCxMvk5Nymx6VYSlhc4iOasFoTxuCk"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

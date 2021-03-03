@@ -1,7 +1,7 @@
 import 'package:seeya/main_app/models/product_model.dart';
 
 class CartModel{
-  ProductModel product;
+  ProductModelOld product;
   int count;
 
   CartModel({

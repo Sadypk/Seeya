@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:seeya/main_app/models/userModel.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -11,6 +12,9 @@ class UserViewModel{
 
   static var token = ''.obs;
   static setToken(String data) => token.value = data;
+
+  static var currentLocation = LatLng(0.0, 0.0).obs;
+  static setLocation(LatLng latLng) => currentLocation.value = latLng;
 }
 
 enum UserStatus{

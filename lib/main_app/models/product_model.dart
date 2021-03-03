@@ -1,6 +1,4 @@
-import 'package:get/get.dart';
-
-class ProductModel{
+class ProductModelOld{
   int productId;
   String productName;
   String productDescription;
@@ -8,7 +6,7 @@ class ProductModel{
   double productPrice;
   double cashBack;
 
-  ProductModel({
+  ProductModelOld({
     this.productId,
     this.productImage,
     this.productName,

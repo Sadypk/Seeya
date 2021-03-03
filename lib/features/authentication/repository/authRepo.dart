@@ -26,6 +26,7 @@ class AuthRepo{
             lat
             lng
           }
+          status
         }
         balance
         logo

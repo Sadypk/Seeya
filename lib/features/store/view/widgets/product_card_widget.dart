@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:seeya/main_app/models/product_model.dart';
 
 class ProductCardWidget extends StatelessWidget {
-  final ProductModel productModel;
+  final ProductModelOld productModel;
   final Function onTap;
   final IconButton iconButton;
   final Widget quantityController;
