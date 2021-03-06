@@ -46,9 +46,10 @@ class _SignInScreenState extends State<SignInScreen>
       return;
     } else {
       if(GetStorage().hasData('backup')){
-        mobile = TextEditingController(text: GetStorage().read('backup')['mobile']);
+        // mobile = TextEditingController(text: GetStorage().read('backup')['mobile']);
+        mobile = TextEditingController(text: '12121212121');
       }else{
-        mobile = TextEditingController();
+        mobile = TextEditingController(text: '12121212121');
       }
       setInitialScreenSize();
       startAnimation();
