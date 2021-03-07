@@ -4,7 +4,7 @@ import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/main_app/models/productModel.dart';
 import 'package:seeya/main_app/models/product_model.dart';
 import 'package:seeya/main_app/models/userModel.dart';
-import 'package:seeya/main_app/resources/gqlConfig.dart';
+import 'file:///E:/Flutter%20Projects/Seeya-App/lib/main_app/repository/gqlConfig.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 
 class MainRepo{

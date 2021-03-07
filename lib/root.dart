@@ -32,7 +32,7 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
 
   checkSession() async{
     print('Checking session...');
-    if(!GetStorage().hasData('userInfo')){
+    if(GetStorage().hasData('userInfo')){
       print('Session Available');
       try{
         var data = GetStorage().read('userInfo');
