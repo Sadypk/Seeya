@@ -1,10 +1,11 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:seeya/main_app/config/gqlConfig.dart';
 import 'package:seeya/main_app/models/userModel.dart';
-import 'file:///E:/Flutter%20Projects/Seeya-App/lib/main_app/repository/gqlConfig.dart';
 import 'package:seeya/main_app/util/snack.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 import 'package:seeya/features/chat/repository/streachatConfig.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+
 
 class AuthRepo{
 
