@@ -32,7 +32,7 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
 
   checkSession() async{
     print('Checking session...');
-    if(GetStorage().hasData('userInfo')){
+    if(!GetStorage().hasData('userInfo')){
       print('Session Available');
       try{
         var data = GetStorage().read('userInfo');
@@ -41,7 +41,8 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
           Get.to(()=>SignInScreen());
         }else{
           if(UserViewModel.user.value.addresses.length > 0){
-            Get.offAll(()=>AddressListScreen());
+            // Get.offAll(()=>AddressListScreen());
+            Get.offAll(()=>Home());
           }else{
             Get.offAll(()=>LocationPickerScreen());
           }

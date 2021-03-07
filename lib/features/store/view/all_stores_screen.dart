@@ -80,11 +80,11 @@ class _AllStoresScreenState extends State<AllStoresScreen> {
                 },
                 child: Column(
                   children: [
-                    // imageWidget(storeList[index].storeImage),
+                    imageWidget(storeList[index].logo),
                     SizedBox(height: 5,),
-                    // Text(storeList[index].cashBackList[0].toString(), style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),),
+                    Text(storeList[index].promotionCashback.toString(), style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),),
                     Text('Cash Back', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold)),
-                    // Text('was '+storeList[index].cashBackList[1].toString()+'%', style: TextStyle(fontSize:12, color: Colors.green, fontWeight: FontWeight.bold)),
+                    Text('was '+storeList[index].defaultCashback.toString()+'%', style: TextStyle(fontSize:12, color: Colors.green, fontWeight: FontWeight.bold)),
                   ],
                 ),
               );

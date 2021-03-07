@@ -11,7 +11,7 @@ class ProfileScreen extends StatelessWidget {
           width: 80,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.white
+            color: Colors.white38
           ),
           child: Center(
             child: Icon(Icons.person, size: 40,),
@@ -70,7 +70,7 @@ class ProfileScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               decoration: BoxDecoration(
-                color: Colors.grey[400]
+              color: Colors.white
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

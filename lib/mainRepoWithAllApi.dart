@@ -1,4 +1,5 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/main_app/models/productModel.dart';
 import 'package:seeya/main_app/models/product_model.dart';
@@ -7,6 +8,7 @@ import 'package:seeya/main_app/resources/gqlConfig.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 
 class MainRepo{
+  static var logger = Logger();
 
   /// gets all nearest restaurant based on users current location
   /// the user choose/ selected on the map in the beginning
@@ -48,6 +50,7 @@ class MainRepo{
           'lng' : UserViewModel.currentLocation.value.longitude
         }
       ));
+      logger.i(result.data);
       return List<StoreModel>.from(result.data['getNearestStoreByCustomer']['data'].map((x) => StoreModel.fromJson(x)));
     }catch(e){
       print(e.toString());

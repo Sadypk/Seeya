@@ -5,20 +5,39 @@ import 'package:seeya/features/chat/repository/streachatConfig.dart';
 import 'package:seeya/features/chat/view/chatScreen.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
+import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/all_stores_screen.dart';
 import 'package:seeya/features/home_screen/models/banner_model.dart';
 import 'package:seeya/features/home_screen/view/widgets/banner_card_widget.dart';
 import 'package:seeya/features/store/view/store_screen.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
+import 'package:seeya/mainRepoWithAllApi.dart';
 import 'package:seeya/main_app/models/product_model.dart';
 import 'package:seeya/main_app/view/widgets/custom_text_from_field.dart';
 import 'package:get/get.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final controller = PageController(initialPage: 0, viewportFraction: 0.9);
+  List<StoreModel> list = [];
+
+  @override
+  void initState() {
+    getNearestStore();
+    super.initState();
+  }
+
+  getNearestStore()async{
+    list.addAll(await MainRepo.getAllNearestStore());
+  }
+
   @override
   Widget build(BuildContext context) {
     List<BannerModel> bannerList = [
@@ -70,7 +89,7 @@ class HomeScreen extends StatelessWidget {
           ),
           Text('Last-minute gifts with Double Cash Back', style: TextStyle(fontSize: 12, color: Colors.grey),),
           SizedBox(height: 15,),
-          // StoreTileWidget(storeModel: storeList1[0], isClaimable: true, onTap: (){Get.to(StoreScreen(storeModel: storeList1[0],));},),
+          list.length>0?StoreTileWidget(storeModel: list[0], isClaimable: true, onTap: (){Get.to(StoreScreen(storeModel: storeList1[0],));},):SizedBox(),
           // StoreTileWidget(storeModel: storeList1[1], isClaimable: true),
           // StoreTileWidget(storeModel: storeList1[2], isClaimable: true),
         ],
