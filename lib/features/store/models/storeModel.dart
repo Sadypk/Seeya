@@ -16,7 +16,7 @@ class StoreModel {
   String name;
   String id;
   BusinessType businesstype;
-  AddressModel address;
+  StoreAddressModel address;
   String logo;
   double defaultCashback;
   double defaultWelcomeOffer;
@@ -27,7 +27,7 @@ class StoreModel {
     name: json["name"] == null ? 'null' : json["name"],
     id: json["_id"] == null ? 'null' : json["_id"],
     businesstype: json["businesstype"] == null ? BusinessType() : BusinessType.fromJson(json["businesstype"]),
-    address: json["address"] == null ? AddressModel() : AddressModel.fromJson(json["address"]),
+    address: json["address"] == null ? StoreAddressModel() : StoreAddressModel.fromJson(json["address"]),
     logo: json["logo"] ?? '',
     defaultCashback: json["default_cashback"] != null ?double.parse(json["default_cashback"].toString()) : 0.0,
     defaultWelcomeOffer: json["default_welcome_offer"] != null ?double.parse(json["default_welcome_offer"].toString()) : 0.0,
@@ -66,5 +66,25 @@ class BusinessType {
   Map<String, dynamic> toJson() => {
     "_id": id == null ? null : id,
     "name": name,
+  };
+}
+
+class StoreAddressModel {
+  StoreAddressModel({
+    this.address,
+    this.location,
+  });
+
+  String address;
+  LocationModel location;
+
+  factory StoreAddressModel.fromJson(Map<String, dynamic> json) => StoreAddressModel(
+    address: json["address"] == null ? '' : json["address"],
+    location: json["location"] == null ? LocationModel() : LocationModel.fromJson(json["location"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "address": address == null ? null : address,
+    "location": location == null ? null : location.toJson(),
   };
 }

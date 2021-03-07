@@ -144,7 +144,7 @@ class _HomeState extends State<Home> {
             size: h (110),
           ),
         ),
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         bottomNavigationBar: AnimatedBottomNavigationBar(
             icons: _icons,
             activeIndex: bottomIndex,
