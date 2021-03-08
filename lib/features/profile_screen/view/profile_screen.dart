@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:seeya/features/profile_screen/view/profile_edit.dart';
+import 'package:seeya/main_app/models/userModel.dart';
+import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  UserModel user;
+
+  @override
+  void initState() {
+    user = UserViewModel.user.value;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var userHeader = Row(
@@ -21,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Name',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+            Text('${user.firstName} ${user.lastName}',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
             Text('1,234\$',style: TextStyle(fontSize: 30),),
             Text('Lifetime earning',style: TextStyle(fontSize: 15),),
           ],
@@ -48,8 +64,13 @@ class ProfileScreen extends StatelessWidget {
     var listOptions = ListView(
       children: [
         ListTile(
+          title: Text('Edit Profile'),
+          leading: Icon(Icons.person),
+          onTap: (){Get.to(ProfileEditScreen());},
+        ),
+        ListTile(
           title: Text('Invite Friends'),
-          leading: Icon(Icons.person_add_alt_1_outlined),
+          leading: Icon(Icons.group_add),
         ),
         ListTile(
           title: Text('Invite Stores'),
@@ -63,6 +84,7 @@ class ProfileScreen extends StatelessWidget {
     );
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
@@ -70,7 +92,7 @@ class ProfileScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               decoration: BoxDecoration(
-              color: Colors.white
+              color: Colors.grey[100]
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

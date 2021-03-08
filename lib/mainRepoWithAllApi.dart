@@ -398,9 +398,19 @@ class MainRepo{
     }
   }
   ''';
-  static Future<bool> updateCustomerInfo(String firstName, String lastName, String email, String image, String dob, String gender) async{
+  static updateCustomerInfo({String firstName, String lastName, String email, String image, String dob, String gender,String address,double lat, double lng}) async {
+    print(firstName);
+    print(lastName);
+    print(email);
+    print(image);
+    print(dob);
+    print(gender);
+    print(address);
+    print(lat);
+    print(lng);
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      print(UserViewModel.token.value);
       QueryResult result2 = await client.mutate(MutationOptions(
           document: gql(mutateUpdateCustomerInfo),
           variables: {
@@ -410,15 +420,14 @@ class MainRepo{
             "image": image,
             "dob": dob,
             "gender": gender,
-            "address": 'do not touch this address',
-            "lat": 11.22,
-            "lng": 33.44
+            "address": address,
+            "lat": lat,
+            "lng": lng
           }
       ));
 
-
-
-      return result2.data['updateCustomerInformation']['error'];
+      logger.i(result2.data);
+      return result2.data;
     }catch(e){
       print(e.toString());
       return true;

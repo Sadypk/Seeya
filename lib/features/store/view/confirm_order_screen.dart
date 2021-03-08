@@ -215,6 +215,9 @@ class ConfirmOrderScreen extends StatelessWidget {
           actions: [
             FlatButton(
               color: Colors.cyanAccent,
+              onPressed: () {
+
+              },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                   decoration: BoxDecoration(

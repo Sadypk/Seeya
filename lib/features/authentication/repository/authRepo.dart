@@ -51,9 +51,9 @@ class AuthRepo{
         }
       ));
 
-      bool loginError = result.data['customerLoginOrSignUp']['error'];
+      print(result);
 
-      print(loginError);
+      bool loginError = result.data['customerLoginOrSignUp']['error'];
 
       if(loginError){
         Snack.top('Error', result.data['customerLoginOrSignUp']['msg']);
