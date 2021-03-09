@@ -374,56 +374,47 @@ class MainRepo{
 
 
   ///update customer information
-  ///if you do not want to update something send that string as empty string
-  ///it will not update, do not send null
-  ///empty string == that field will not get updated
-  static const mutateUpdateCustomerInfo = r'''
-  mutation($firstName: String $lastName: String $email: String $image: String $dob: String $gender: String $address: String $lat: Float $lng: Float){
-    updateCustomerInformation(customerInput:{
-      first_name: $firstName
-      last_name: $lastName
-      email: $email
-      logo: $image
-      date_of_birth: $dob
-      male_or_female: $gender
-      address:{
-        address: $address
-        location:{
-          lat: $lat
-          lng: $lng
-        }}
-    }){
-      error
-      msg
-    }
-  }
+  ///as it turns out if you send something empty it will become empty
+  ///and if you dont send it will become null
+  ///so gotta send everything
+  static updateCustomerInfo({String firstName, String lastName, String email, String image, String dob, String gender}) async {
+    const mutateUpdateCustomerInfo = r'''
+      mutation($firstName: String $lastName: String $email:String $image:String $dob:String $gender:String){
+          updateCustomerInformation(customerInput:{
+            first_name: $firstName
+            last_name: $lastName
+            email: $email
+            logo: $image
+            date_of_birth: $dob
+            male_or_female: $gender
+            address:{
+              address: "address address"
+              location:{
+                lat: 22.3636
+                lng: 12.3344
+              }}
+          }){
+            error
+            msg
+          }
+        }
   ''';
-  static updateCustomerInfo({String firstName, String lastName, String email, String image, String dob, String gender,String address,double lat, double lng}) async {
-    print(firstName);
-    print(lastName);
-    print(email);
-    print(image);
-    print(dob);
-    print(gender);
-    print(address);
-    print(lat);
-    print(lng);
+
+
+    Map<String, dynamic> variables = {
+      "firstName": firstName,
+      "lastName": lastName,
+      "email": email,
+      "image": image,
+      "dob": dob,
+      "gender": gender
+    };
+
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
-      print(UserViewModel.token.value);
       QueryResult result2 = await client.mutate(MutationOptions(
           document: gql(mutateUpdateCustomerInfo),
-          variables: {
-            "firstName": firstName,
-            "lastName": lastName,
-            "email": email,
-            "image": image,
-            "dob": dob,
-            "gender": gender,
-            "address": address,
-            "lat": lat,
-            "lng": lng
-          }
+          variables: variables
       ));
 
       logger.i(result2.data);

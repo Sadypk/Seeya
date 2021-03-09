@@ -5,11 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:seeya/mainRepoWithAllApi.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 import 'package:seeya/main_app/util/customButton.dart';
 import 'package:seeya/main_app/util/custom_textfield.dart';
+import 'package:seeya/main_app/util/imagePicker.dart';
+import 'package:seeya/main_app/util/screenLoader.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 
 class ProfileEditScreen extends StatefulWidget {
@@ -24,18 +27,24 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   bool isLoading = false;
 
   //Text Controllers
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController firstNameController;
+  TextEditingController lastNameController;
+  TextEditingController emailController;
+  TextEditingController dobController;
+  TextEditingController genderController;
 
   //FocusNode
   FocusNode firstNameFocusNode = FocusNode();
   FocusNode lastNameFocusNode = FocusNode();
   FocusNode emailFocusNode = FocusNode();
+  FocusNode dobFocusNode = FocusNode();
 
   //image
   final picker = ImagePicker();
   File image;
+  String gender;
+  int dob;
+  List<String> genders = ['Male', 'Female'];
 
   showDialog(context) {
     Get.dialog(CupertinoAlertDialog(
@@ -81,10 +90,35 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     }
   }
 
+  getDob() async{
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1990),
+      lastDate: DateTime(2030),
+    ).then((value) {
+      dob = value.millisecondsSinceEpoch;
+      dobController.text = DateFormat('dd MMM yyyy').format(value);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    firstNameController = TextEditingController(text: UserViewModel.user.value.firstName);
+    lastNameController = TextEditingController(text: UserViewModel.user.value.lastName);
+    emailController = TextEditingController(text: UserViewModel.user.value.email);
+    dobController = TextEditingController(text: DateFormat('dd MMM yyyy').format(DateTime(int.parse(UserViewModel.user.value.dateOfBirth))));
+    gender = UserViewModel.user.value.maleOrFemale.trim().capitalize;
+  }
+
+  bool loading = false;
+  screenLoading() => setState(()=>loading = !loading);
+
   @override
   Widget build(BuildContext context) {
     var imageWidget = Stack(
-      overflow: Overflow.visible,
+      clipBehavior: Clip.none,
       children: [
         CircleAvatar(
             radius: 80,
@@ -107,43 +141,86 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       ],
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit Profile'),
-      ),
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              imageWidget,
-              SizedBox(height: 30,),
-              CustomTextField(
-                label: 'First Name',
-                controller: firstNameController,
-                focusNode: firstNameFocusNode,
-                onSubmit: (v){lastNameFocusNode.requestFocus();},
+    return IsScreenLoading(
+      screenLoading: loading,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Edit Profile'),
+        ),
+        body: SafeArea(
+          child: Container(
+            padding: EdgeInsets.all(10),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  imageWidget,
+                  SizedBox(height: 30,),
+                  CustomTextField(
+                    label: 'First Name',
+                    controller: firstNameController,
+                    focusNode: firstNameFocusNode,
+                    onSubmit: (v){lastNameFocusNode.requestFocus();},
+                  ),
+                  CustomTextField(
+                    label: 'Last Name',
+                    controller: lastNameController,
+                    focusNode: lastNameFocusNode,
+                    onSubmit: (v){emailFocusNode.requestFocus();},
+                  ),
+                  CustomTextField(
+                    label: 'Email',
+                    controller: emailController,
+                    focusNode: emailFocusNode,
+                  ),
+                  GestureDetector(
+                    onTap: getDob,
+                    child: CustomTextField(
+                      enabled: false,
+                      label: 'Date of Birth',
+                      controller: dobController,
+                      focusNode: dobFocusNode,
+                    ),
+                  ),
+                  SizedBox(height: 5,),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey)
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        isExpanded: true,
+                        value: gender,
+                        onChanged: (val) => setState(()=>gender = val),
+                        hint: Text('Select gender'),
+                        items: genders.map((e) => DropdownMenuItem(child: Text(e),value: e,)).toList(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  CustomButton(title: 'Submit', function: () async {
+                    /// showing loading
+                    /// do some validation checks if needed before loading
+                    screenLoading();
+
+                    String imageLink = UserViewModel.user.value.logo;
+                    if(image!= null){
+                      imageLink = await ImageHelper.uploadImage(image);
+                    }
+
+                    var result = await MainRepo.updateCustomerInfo(firstName: firstNameController.text, lastName: lastNameController.text, email:  emailController.text,image: imageLink,dob: dob.toString(),gender: gender);
+
+                    screenLoading();
+
+                    if(result != null){
+                    print(result);
+                  }
+                  })
+                ],
               ),
-              CustomTextField(
-                label: 'Last Name',
-                controller: lastNameController,
-                focusNode: lastNameFocusNode,
-                onSubmit: (v){emailFocusNode.requestFocus();},
-              ),
-              CustomTextField(
-                label: 'Email',
-                controller: emailController,
-                focusNode: emailFocusNode,
-              ),
-              SizedBox(height: 20,),
-              CustomButton(title: 'Submit', function: () async {
-                var result = await MainRepo.updateCustomerInfo(firstName: firstNameController.text, lastName: lastNameController.text, email:  emailController.text,image: '',dob: '',gender: '',address: 'toilet',lat: 1212.12,lng:23123.00);
-              if(result != null){
-                print(result);
-              }
-              })
-            ],
+            ),
           ),
         ),
       ),

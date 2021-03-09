@@ -12,8 +12,9 @@ class CustomTextField extends StatefulWidget {
   final Function onChanged;
   final Function onSubmit;
   final FocusNode focusNode;
+  final bool enabled;
 
-  CustomTextField({this.controller, this.label, this.onChanged, this.keyBoardType, this.focusNode, this.prefix, this.onSubmit});
+  CustomTextField({this.controller, this.label, this.onChanged, this.keyBoardType, this.focusNode, this.prefix, this.onSubmit, this.enabled});
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -27,6 +28,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5,),
       child: TextField(
+        enabled: widget.enabled ?? true,
         onChanged: widget.onChanged,
         controller: widget.controller,
         keyboardType: TextInputType.number,
