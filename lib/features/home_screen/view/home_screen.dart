@@ -5,6 +5,7 @@ import 'package:seeya/features/chat/repository/streachatConfig.dart';
 import 'package:seeya/features/chat/view/chatScreen.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
+import 'package:seeya/features/products/view/top_products_screen.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/all_stores_screen.dart';
 import 'package:seeya/features/home_screen/models/banner_model.dart';
@@ -151,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // onPressed: widget.onTapViewAll,
               onPressed: (){},
               child: InkWell(
-                  onTap: (){Get.to(AllStoresScreen());},
+                  onTap: (){Get.to(TopProductsScreen());},
                   child: Text('View All', style: TextStyle(color: Colors.blue),)
               ),
             )

@@ -7,14 +7,15 @@ class ProductCardWidget extends StatelessWidget {
   final Function onTap;
   final IconButton iconButton;
   final Widget quantityController;
-  ProductCardWidget({this.productModel, this.onTap, this.iconButton, this.quantityController});
+  final double customAspectRatio;
+  ProductCardWidget({this.productModel, this.onTap, this.iconButton, this.quantityController, this.customAspectRatio});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: AspectRatio(
-        aspectRatio: 0.95/1,
+        aspectRatio: customAspectRatio??0.95/1,
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
@@ -76,7 +77,7 @@ class ProductCardWidget extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(height: 5,),
+                      // SizedBox(height: 5,),
                       Flexible(flex: 1,child: Text(productModel.productName, style: TextStyle(color: Colors.black54, fontSize: 13),)),
                     ],
                   ),

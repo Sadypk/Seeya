@@ -26,8 +26,8 @@ class ProductsTileWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 150,
-            width: 160,
+            // height: 140,
+            // width: 160,
             child: ClipRRect(
               borderRadius: BorderRadius.only(topRight: Radius.circular(10), topLeft: Radius.circular(10)),
               child: Image.network(productModel.productImage, fit: BoxFit.cover,)),
