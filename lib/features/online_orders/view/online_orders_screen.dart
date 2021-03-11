@@ -33,7 +33,7 @@ class OnlineOrdersScreen extends StatelessWidget {
     var productList = TopProductsViewModel().productList;
     var productsTabBarView = DefaultTabController(
         length: 5, child: Scaffold(
-        body: Column(
+        body: ListView(
         children: [
           SizedBox(height: 5,),
           ButtonsTabBar(

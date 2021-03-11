@@ -8,7 +8,8 @@ class ProductCardWidget extends StatelessWidget {
   final IconButton iconButton;
   final Widget quantityController;
   final double customAspectRatio;
-  ProductCardWidget({this.productModel, this.onTap, this.iconButton, this.quantityController, this.customAspectRatio});
+  final double customImageAspectRatio;
+  ProductCardWidget({this.productModel, this.onTap, this.iconButton, this.quantityController, this.customAspectRatio, this.customImageAspectRatio});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class ProductCardWidget extends StatelessWidget {
               Flexible(
                 flex: 4,
                 child: AspectRatio(
-                  aspectRatio: 16/9,
+                  aspectRatio: customImageAspectRatio??16/9,
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.red,
