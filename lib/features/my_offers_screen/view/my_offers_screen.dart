@@ -57,10 +57,10 @@ class MyOffersScreen extends StatelessWidget {
                       return Text('no store found');
                     }else{
                       return Expanded(
-                        child: ListView.builder(
+                        child: snapshot.data.length > 0 ? ListView.builder(
                             itemCount: snapshot.data.length,
                             itemBuilder: (BuildContext context, int index) => MyStoreTileWidget(store: snapshot.data[index],)
-                        )
+                        ) : Text('None Stores found')
                       );
                     }
                   }else{

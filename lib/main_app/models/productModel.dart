@@ -25,7 +25,7 @@ class ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
     id: json["_id"],
-    name: json["name"],
+    name: json["name"] ?? '',
     logo: json["logo"],
     catalog: Catalog.fromJson(json["catalog"]),
     mrp: json["mrp"].toDouble(),
@@ -62,7 +62,7 @@ class Catalog {
   String img;
 
   factory Catalog.fromJson(Map<String, dynamic> json) => Catalog(
-    name: json["name"],
+    name: json["name"] ?? '',
     id: json["_id"],
     img: json["img"],
   );

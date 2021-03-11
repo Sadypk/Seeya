@@ -41,8 +41,8 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
           Get.to(()=>SignInScreen());
         }else{
           if(UserViewModel.user.value.addresses.length > 0){
-            // Get.offAll(()=>AddressListScreen());
-            Get.offAll(()=>Home());
+            Get.offAll(()=>AddressListScreen());
+            // Get.offAll(()=>Home());
           }else{
             Get.offAll(()=>LocationPickerScreen());
           }
