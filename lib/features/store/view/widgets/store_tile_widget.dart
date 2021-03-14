@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
+import 'package:seeya/mainRepoWithAllApi.dart';
 
 class StoreTileWidget extends StatelessWidget {
   final StoreModel storeModel;
@@ -43,7 +45,7 @@ class StoreTileWidget extends StatelessWidget {
             shape: BoxShape.circle,
             color: Colors.white,
             image: DecorationImage(
-              image: NetworkImage(storeModel.logo),
+              image: CachedNetworkImageProvider(storeModel.logo),
               fit: BoxFit.cover
             )
           ),
@@ -51,24 +53,30 @@ class StoreTileWidget extends StatelessWidget {
       ),
     );
 
-    var claimButton = Container(
-      height: 30,
-      width: 80,
-      decoration: BoxDecoration(
-          color: Colors.white70,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(width: 1, color: Colors.white30),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.grey[300],
-                offset: Offset(1,1),
-                blurRadius: 1,
-                spreadRadius: 1
-            )
-          ]
-      ),
-      child: Center(
-        child: Text('Claim', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.blueGrey),),
+    var claimButton = InkWell(
+      onTap: () async{
+        await MainRepo.addSingleStoreToWallet(storeModel.id);
+      },
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        height: 30,
+        width: 80,
+        decoration: BoxDecoration(
+            color: Colors.white70,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(width: 1, color: Colors.white30),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey[300],
+                  offset: Offset(1,1),
+                  blurRadius: 1,
+                  spreadRadius: 1
+              )
+            ]
+        ),
+        child: Center(
+          child: Text('Claim', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.blueGrey),),
+        ),
       ),
     );
 
@@ -117,28 +125,33 @@ class StoreTileWidget extends StatelessWidget {
                   children: [
                     imageWidget,
                     SizedBox(width: 10,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(storeModel.name??'', style: TextStyle(fontWeight: FontWeight.bold),),
-                        SizedBox(height: 3,),
-                        if(storeModel.address.address!=null)Text(storeModel.address.address, style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Colors.blue),),
-                        if(storeModel.address.address!=null)SizedBox(height: 5,),
-                        cashBackText
-                      ],
+                    Container(
+                      width: MediaQuery.of(context).size.width * .48,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Text(storeModel.name??'', style: TextStyle(fontWeight: FontWeight.bold),),
+                          SizedBox(height: 3,),
+                          if(storeModel.address.address!=null)Text(storeModel.address.address, style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Colors.blue),),
+                          if(storeModel.address.address!=null)SizedBox(height: 5,),
+                          cashBackText
+                        ],
+                      ),
                     )
                   ],
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if(isClaimable)claimButton,
-                    if(isClaimable)SizedBox(height: 15,),
-                    // if(storeModel.distance!=null)Text('${storeModel.distance.round()}km away', style: TextStyle(fontSize: 12, color: Colors.green),)
-                  ],
+                Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if(isClaimable)claimButton,
+                      if(isClaimable)SizedBox(height: 15,),
+                      // if(storeModel.distance!=null)Text('${storeModel.distance.round()}km away', style: TextStyle(fontSize: 12, color: Colors.green),)
+                    ],
 
+                  ),
                 )
               ],
             ),

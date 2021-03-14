@@ -108,6 +108,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     firstNameController = TextEditingController(text: UserViewModel.user.value.firstName);
     lastNameController = TextEditingController(text: UserViewModel.user.value.lastName);
     emailController = TextEditingController(text: UserViewModel.user.value.email);
+    dob = int.parse(UserViewModel.user.value.dateOfBirth);
     dobController = TextEditingController(text: DateFormat('dd MMM yyyy').format(DateTime(int.parse(UserViewModel.user.value.dateOfBirth))));
     gender = UserViewModel.user.value.maleOrFemale.trim().capitalize;
   }

@@ -10,9 +10,10 @@ import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 class MainRepo{
   static var logger = Logger();
 
+  static Future<List<StoreModel>> getAllNearestStore() async{
   /// gets all nearest restaurant based on users current location
   /// the user choose/ selected on the map in the beginning
-  static const queryGetNearestStoreByCustomer = r'''
+    const queryGetNearestStoreByCustomer = r'''
   query($lat: Float $lng: Float){
     getNearestStoreByCustomer(lat: $lat lng: $lng){
       error
@@ -40,7 +41,6 @@ class MainRepo{
     }
   }
   ''';
-  static Future<List<StoreModel>> getAllNearestStore() async{
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(
@@ -58,9 +58,10 @@ class MainRepo{
     }
   }
 
-  /// get all linked store where the user and store
-  /// has a wallet connection
-  static const queryGetAllLinkedStoresByCustomer = r'''
+  static Future<List<StoreModel>> getAllLinkedStores() async{
+    /// get all linked store where the user and store
+    /// has a wallet connection
+    const queryGetAllLinkedStoresByCustomer = r'''
   query{
     getAllLinkedStoresByCustomer{
       error
@@ -88,7 +89,6 @@ class MainRepo{
     }
   }
   ''';
-  static Future<List<StoreModel>> getAllLinkedStores() async{
 
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
@@ -102,10 +102,10 @@ class MainRepo{
     }
   }
 
-
-  /// gets all products of the nearest restaurants based on the current
-  /// location the user choose/ selected on the map in the beginning
-  static const queryGetAllProductsByCustomer = r'''
+  static Future<List<ProductModel>> getAllProducts() async{
+    /// gets all products of the nearest restaurants based on the current
+    /// location the user choose/ selected on the map in the beginning
+    const queryGetAllProductsByCustomer = r'''
   query($lat: Float $lng: Float){
     getAllProductsByCustomer(lat: $lat lng: $lng){
       error
@@ -129,7 +129,6 @@ class MainRepo{
     }
   }
   ''';
-  static Future<List<ProductModel>> getAllProducts() async{
 
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
@@ -147,9 +146,9 @@ class MainRepo{
     }
   }
 
-
-  /// sending a store id will return all the product with cashBack offer
-  static const queryGetAllCashBackProducts = r'''
+  static Future<List<ProductModel>> getAllCashBackProductsOfOneRestaurant(String storeID) async{
+    /// sending a store id will return all the product with cashBack offer
+    const queryGetAllCashBackProducts = r'''
   query($storeID: ID){
     getAllCashbackProducts(store: $storeID){
       error
@@ -173,8 +172,6 @@ class MainRepo{
     }
   }
   ''';
-  static Future<List<ProductModel>> getAllCashBackProductsOfOneRestaurant(String storeID) async{
-
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(
@@ -190,9 +187,10 @@ class MainRepo{
     }
   }
 
-  /// get all not linked store where the user and store
-  /// has not yet created a wallet connection
-  static const queryGetAllNotLinkedStoresByCustomer = r'''
+  static Future<List<StoreModel>> getAllNotLinkedStores() async{
+    /// get all not linked store where the user and store
+    /// has not yet created a wallet connection
+    const queryGetAllNotLinkedStoresByCustomer = r'''
   query($lat: Float $lng: Float){
     getNearestStoresNotIntoWallet(lat: $lat lng: $lng){
       error
@@ -220,7 +218,6 @@ class MainRepo{
     }
   }
   ''';
-  static Future<List<StoreModel>> getAllNotLinkedStores() async{
 
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
@@ -238,9 +235,10 @@ class MainRepo{
     }
   }
 
-  /// get all the info of the customer by sending the token
-  /// al ready getting all the info when signing in just in case
-  static const queryGetCustomerInfoWithToken = r'''
+  static Future<UserModel> getCustomerInfoWithToken(String token) async{
+    /// get all the info of the customer by sending the token
+    /// al ready getting all the info when signing in just in case
+    const queryGetCustomerInfoWithToken = r'''
   query($token: String){
     verifyCustomerToken(token: $token){
       error
@@ -268,12 +266,10 @@ class MainRepo{
     }
   }
   ''';
-  static Future<UserModel> getCustomerInfoWithToken(String token) async{
-
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(
-          document: gql(queryGetAllProductsByCustomer),
+          document: gql(queryGetCustomerInfoWithToken),
           variables: {
             'token' : token,
           }
@@ -285,10 +281,10 @@ class MainRepo{
     }
   }
 
-
-  /// add all nearest restaurnt of the user to his wallet or whatever he calls
-  /// one click api, returns if it was sucessfull or not
-  static const mutateAddAllNearestRestaurant = r'''
+  static Future<bool> addAllRestaurant() async{
+    /// add all nearest restaurnt of the user to his wallet or whatever he calls
+    /// one click api, returns if it was sucessfull or not
+    const mutateAddAllNearestRestaurant = r'''
   mutation($lat: Float $lng: Float){
     addStoreByLocation(lat: $lat lng:$lng){
       error
@@ -296,7 +292,6 @@ class MainRepo{
     }
   }
   ''';
-  static Future<bool> addAllRestaurant() async{
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.mutate(MutationOptions(
@@ -313,10 +308,11 @@ class MainRepo{
     }
   }
 
-  /// adds a single restaurant balance to his own wallet
-  /// if the store has promotion welcome offer add that
-  /// otherwise add the default
-  static const mutateAddSingleStoreToWallet = r'''
+  static Future<bool> addSingleStoreToWallet(String storeID) async{
+    /// adds a single restaurant balance to his own wallet
+    /// if the store has promotion welcome offer add that
+    /// otherwise add the default
+    const mutateAddSingleStoreToWallet = r'''
   mutation($id: ID $balance: Float){
     addSingleStore(store: $id balance:$balance){
       error
@@ -324,7 +320,7 @@ class MainRepo{
     }
   }
   ''';
-  static const queryGetOneRestaurantWelcomeOffer = r'''
+    const queryGetOneRestaurantWelcomeOffer = r'''
   query($id: ID){
     getOneStore(_id: $id){
       error
@@ -337,7 +333,6 @@ class MainRepo{
     }
   }
   ''';
-  static Future<bool> addSingleStoreToWallet(String storeID) async{
     try{
       double balance;
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
@@ -363,7 +358,7 @@ class MainRepo{
           }
       ));
 
-
+      logger.i(result2);
 
       return result2.data['addSingleStore']['error'];
     }catch(e){
@@ -372,12 +367,11 @@ class MainRepo{
     }
   }
 
-
-  ///update customer information
-  ///as it turns out if you send something empty it will become empty
-  ///and if you dont send it will become null
-  ///so gotta send everything
   static updateCustomerInfo({String firstName, String lastName, String email, String image, String dob, String gender}) async {
+    ///update customer information
+    ///as it turns out if you send something empty it will become empty
+    ///and if you dont send it will become null
+    ///so gotta send everything
     const mutateUpdateCustomerInfo = r'''
       mutation($firstName: String $lastName: String $email:String $image:String $dob:String $gender:String){
           updateCustomerInformation(customerInput:{
