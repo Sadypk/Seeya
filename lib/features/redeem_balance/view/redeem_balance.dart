@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
-import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:get/get.dart';
 
@@ -54,7 +53,7 @@ class _RedeemBalanceScreenState extends State<RedeemBalanceScreen> {
                 ],
               ),
             ),
-            FlatButton(onPressed: (){}, child: Container(
+            TextButton(onPressed: (){}, child: Container(
               height: 45,
               width: 100,
               decoration: BoxDecoration(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:seeya/main_app/view/widgets/commonGreyButton.dart';
-import 'package:seeya/main_app/view/widgets/custom_text_from_field.dart';
 
 class SearchScreen extends StatefulWidget {
   @override

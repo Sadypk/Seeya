@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -22,8 +21,6 @@ class PurchasedProductsScreen extends StatefulWidget {
 class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
   final GetSizeConfig getSizeConfig = Get.find();
 
-  final BottomDrawerController _controller = BottomDrawerController();
-
   final Duration _duration = Duration(milliseconds: 400);
 
   List<File> images;
@@ -42,10 +39,6 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double h(double x){return getSizeConfig.height*x;}
-    double w(double x){return getSizeConfig.width*x;}
-
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -192,7 +185,7 @@ var submitTextField = Obx((){
             ),
           ),
         ),
-        FlatButton(
+        TextButton(
             onPressed: canSubmit.value?(){
               Get.offAll(Home());
             }:(){},

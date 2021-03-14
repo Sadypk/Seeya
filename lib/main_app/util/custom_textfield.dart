@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
-import 'package:seeya/main_app/util/size_config.dart';
-import 'package:get/get.dart';
 
 
 class CustomTextField extends StatefulWidget {

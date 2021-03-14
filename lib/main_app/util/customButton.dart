@@ -18,10 +18,9 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       onPressed: function,
-      color: color?? Colors.black,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius??sizeConfigController.width*20)),
+      style: TextButton.styleFrom(backgroundColor: color?? Colors.black,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius??sizeConfigController.width*20)),),
       child: Container(
         height: height??45,
         width: width??Get.width,

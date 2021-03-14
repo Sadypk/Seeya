@@ -13,7 +13,6 @@ import 'features/home_screen/view/home_screen.dart';
 import 'features/my_offers_screen/view/my_offers_screen.dart';
 import 'features/profile_screen/view/profile_screen.dart';
 import 'features/search_screen/view/search_screen.dart';
-import 'main_app/resources/string_resources.dart';
 import 'main_app/util/over_scroll.dart';
 
 class Home extends StatefulWidget {

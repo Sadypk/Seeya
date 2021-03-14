@@ -66,7 +66,7 @@ class _SelectStoreScreenState extends State<SelectStoreScreen> {
       appBar: AppBar(
         title: Text("Virat Nagar", style: TextStyle(color: Colors.black),),
         actions: [
-          FlatButton(onPressed: (){
+          TextButton(onPressed: (){
             // Get.to(PurchasedProductsScreen());
             Get.to(()=>ScanReceiptScreen());
           }, child: Text(StringResources.skipButtonText))

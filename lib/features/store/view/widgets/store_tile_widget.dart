@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
-import 'package:seeya/features/store/view/store_screen.dart';
 
 class StoreTileWidget extends StatelessWidget {
   final StoreModel storeModel;

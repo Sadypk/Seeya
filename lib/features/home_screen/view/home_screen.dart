@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:seeya/features/chat/repository/streachatConfig.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:seeya/features/chat/view/chatScreen.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
@@ -14,12 +14,8 @@ import 'package:seeya/features/store/view/store_screen.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
 import 'package:seeya/mainRepoWithAllApi.dart';
-import 'package:seeya/main_app/models/product_model.dart';
-import 'package:seeya/main_app/view/widgets/custom_text_from_field.dart';
 import 'package:get/get.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -71,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
-    var storeList1 = NearestStoreViewModel().storeList;
+
     var nearestStore = FutureBuilder(
       future: MainRepo.getAllNearestStore(),
       builder: (_, AsyncSnapshot<List<StoreModel>>snapshot){
@@ -79,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if(snapshot.data == null){
             return Text('something went wrong');
           }else if(snapshot.data.length == 0){
+
             return Container(
               padding: EdgeInsets.all(5),
               child: Column(
@@ -121,9 +118,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Text('Last-minute gifts with Double Cash Back', style: TextStyle(fontSize: 12, color: Colors.grey),),
                   SizedBox(height: 15,),
-                  if(snapshot.data.length>0)StoreTileWidget(storeModel: list[0], isClaimable: true, onTap: (){Get.to(StoreScreen(storeModel: storeList1[0],));},),
-                  if(snapshot.data.length>1)StoreTileWidget(storeModel: storeList1[1], isClaimable: true),
-                  if(snapshot.data.length>2)StoreTileWidget(storeModel: storeList1[2], isClaimable: true),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, i) {
+                      return StoreTileWidget(storeModel: snapshot.data[i], isClaimable: true, onTap: (){Get.to(StoreScreen(storeModel: snapshot.data[i],));},);
+                    },
+                  ),
                 ],
               ),
             );

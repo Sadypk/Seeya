@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
 import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 

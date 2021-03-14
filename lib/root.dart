@@ -4,10 +4,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:seeya/features/authentication/repository/authRepo.dart';
 import 'package:seeya/features/authentication/view/phone_verification_screen.dart';
-import 'package:seeya/home.dart';
 import 'package:get/get.dart';
 import 'package:seeya/main_app/util/size_config.dart';
-import 'package:seeya/features/authentication/view/phone_verification_screen.dart';
 import 'package:seeya/features/authentication/view/location_picker_screen.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 

@@ -54,7 +54,6 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    FocusScopeNode currentFocus = FocusScope.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

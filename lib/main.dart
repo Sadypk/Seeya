@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:seeya/home.dart';
 import 'package:seeya/root.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 

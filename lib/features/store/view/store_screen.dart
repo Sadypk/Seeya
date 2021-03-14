@@ -1,6 +1,5 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
 import 'package:seeya/features/scan_reciept/view/scan_reciept_screen.dart';
@@ -9,7 +8,6 @@ import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/confirm_order_screen.dart';
 import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 import 'package:seeya/features/store/view_model/cart_view_model.dart';
-import 'package:seeya/main_app/models/product_model.dart';
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:get/get.dart';
 
@@ -360,7 +358,6 @@ class StoreScreen extends StatelessWidget {
                       width: 60,
                       margin: EdgeInsets.only(right: 10, top: 10),
                       child: Stack(
-                        overflow: Overflow.visible,
                         children: [
                           Container(
                             height: 60,

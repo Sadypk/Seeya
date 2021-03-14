@@ -1,11 +1,9 @@
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/store/models/cart_model.dart';
 import 'package:seeya/features/store/view_model/cart_view_model.dart';
 import 'package:seeya/home.dart';
-import 'package:seeya/main_app/models/product_model.dart';
 
 class ConfirmOrderScreen extends StatelessWidget {
   var check = false.obs;
@@ -213,8 +211,8 @@ class ConfirmOrderScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text('Confirm Order', style: TextStyle(color: Colors.black87),),
           actions: [
-            FlatButton(
-              color: Colors.cyanAccent,
+            TextButton(
+              style: TextButton.styleFrom(backgroundColor: Colors.cyanAccent),
               onPressed: () {
 
               },
@@ -267,7 +265,7 @@ class ConfirmOrderScreen extends StatelessWidget {
               bottom: 0,
               left: 0,
               right: 0,
-              child: FlatButton(onPressed: null, child: Container(
+              child: TextButton(onPressed: null, child: Container(
                 height: 50,
                 width: double.infinity,
                 margin: EdgeInsets.only(bottom: 60),
