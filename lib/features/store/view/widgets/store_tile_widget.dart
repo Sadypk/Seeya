@@ -131,11 +131,11 @@ class StoreTileWidget extends StatelessWidget {
                     )
                   ],
                 ),
-                Column(
+                if(isClaimable)Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if(isClaimable)claimButton,
-                    if(isClaimable)SizedBox(height: 15,),
+                    claimButton,
+                    SizedBox(height: 15,),
                     // if(storeModel.distance!=null)Text('${storeModel.distance.round()}km away', style: TextStyle(fontSize: 12, color: Colors.green),)
                   ],
 

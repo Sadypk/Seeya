@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
+import 'package:seeya/main_app/util/validator.dart';
 
 
 class CustomTextField extends StatefulWidget {
@@ -11,8 +12,13 @@ class CustomTextField extends StatefulWidget {
   final Function onSubmit;
   final FocusNode focusNode;
   final bool enabled;
+  final Function validator;
 
-  CustomTextField({this.controller, this.label, this.onChanged, this.keyBoardType, this.focusNode, this.prefix, this.onSubmit, this.enabled});
+
+
+
+
+  CustomTextField({this.controller, this.label, this.onChanged, this.keyBoardType, this.focusNode, this.prefix, this.onSubmit, this.enabled, this.validator});
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -25,13 +31,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5,),
-      child: TextField(
+      child: TextFormField(
         enabled: widget.enabled ?? true,
         onChanged: widget.onChanged,
         controller: widget.controller,
         keyboardType: TextInputType.number,
         focusNode: widget.focusNode,
-        onSubmitted: widget.onSubmit,
+        onFieldSubmitted: widget.onSubmit,
+        validator: widget.validator,
         // inputFormatters: [LengthLimitingTextInputFormatter(11)],
         decoration: InputDecoration(
           prefixText: widget.prefix,
