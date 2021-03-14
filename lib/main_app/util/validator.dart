@@ -1,26 +1,26 @@
 // import 'package:p7app/main_app/resource/strings_resource.dart';
 // import 'package:p7app/method_extension.dart';
 //
-// class Validator {
-//   String nullFieldValidate(String value) =>
-//       value.isEmptyOrNull ? StringResources.thisFieldIsRequired : null;
+class Validator {
+  String nullFieldValidate(String value) =>
+      value==null || value.trim() == ''  ? "This field is required" : null;
 //
 //
 //
 //
-//
-//   String validateEmail(String value) {
-//     Pattern pattern =
-//         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-//     RegExp regex = new RegExp(pattern);
-//
-//     if (value.isEmpty) {
-//       return StringResources.pleaseEnterEmailText;
-//     }else if (!regex.hasMatch(value))
-//       return StringResources.pleaseEnterAValidEmailText;
-//     else
-//       return null;
-//   }
+
+  String validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+
+    if (value.isEmpty) {
+      return "Please enter email";
+    }else if (!regex.hasMatch(value))
+      return "Please enter a valid email address";
+    else
+      return null;
+  }
 //
 //   String validatePassword(String value) {
 //     final RegExp _passwordRegExp = RegExp(
@@ -138,4 +138,4 @@
 //     }
 //   }
 //
-// }
+}

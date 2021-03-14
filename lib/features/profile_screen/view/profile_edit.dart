@@ -14,6 +14,7 @@ import 'package:seeya/main_app/util/custom_textfield.dart';
 import 'package:seeya/main_app/util/imagePicker.dart';
 import 'package:seeya/main_app/util/screenLoader.dart';
 import 'package:seeya/main_app/util/size_config.dart';
+import 'package:seeya/main_app/util/validator.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   @override
@@ -25,6 +26,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   final GetSizeConfig sizeConfig = Get.find();
   bool edit = false;
   bool isLoading = false;
+
+  //Form
+  final _formKey = GlobalKey<FormState>();
 
   //Text Controllers
   TextEditingController firstNameController;
@@ -152,74 +156,82 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           child: Container(
             padding: EdgeInsets.all(10),
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  imageWidget,
-                  SizedBox(height: 30,),
-                  CustomTextField(
-                    label: 'First Name',
-                    controller: firstNameController,
-                    focusNode: firstNameFocusNode,
-                    onSubmit: (v){lastNameFocusNode.requestFocus();},
-                  ),
-                  CustomTextField(
-                    label: 'Last Name',
-                    controller: lastNameController,
-                    focusNode: lastNameFocusNode,
-                    onSubmit: (v){emailFocusNode.requestFocus();},
-                  ),
-                  CustomTextField(
-                    label: 'Email',
-                    controller: emailController,
-                    focusNode: emailFocusNode,
-                  ),
-                  GestureDetector(
-                    onTap: getDob,
-                    child: CustomTextField(
-                      enabled: false,
-                      label: 'Date of Birth',
-                      controller: dobController,
-                      focusNode: dobFocusNode,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    imageWidget,
+                    SizedBox(height: 30,),
+                    CustomTextField(
+                      label: 'First Name',
+                      controller: firstNameController,
+                      focusNode: firstNameFocusNode,
+                      onSubmit: (v){lastNameFocusNode.requestFocus();},
+                      validator: Validator().nullFieldValidate,
                     ),
-                  ),
-                  SizedBox(height: 5,),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.grey)
+                    CustomTextField(
+                      label: 'Last Name',
+                      controller: lastNameController,
+                      focusNode: lastNameFocusNode,
+                      onSubmit: (v){emailFocusNode.requestFocus();},
+                      validator: Validator().nullFieldValidate,
                     ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        isExpanded: true,
-                        value: gender,
-                        onChanged: (val) => setState(()=>gender = val),
-                        hint: Text('Select gender'),
-                        items: genders.map((e) => DropdownMenuItem(child: Text(e),value: e,)).toList(),
+                    CustomTextField(
+                      label: 'Email',
+                      controller: emailController,
+                      focusNode: emailFocusNode,
+                      validator: Validator().validateEmail,
+                    ),
+                    GestureDetector(
+                      onTap: getDob,
+                      child: CustomTextField(
+                        enabled: false,
+                        label: 'Date of Birth',
+                        controller: dobController,
+                        focusNode: dobFocusNode,
                       ),
                     ),
-                  ),
-                  SizedBox(height: 20,),
-                  CustomButton(title: 'Submit', function: () async {
-                    /// showing loading
-                    /// do some validation checks if needed before loading
-                    screenLoading();
+                    SizedBox(height: 5,),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.grey)
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          isExpanded: true,
+                          value: gender,
+                          onChanged: (val) => setState(()=>gender = val),
+                          hint: Text('Select gender'),
+                          items: genders.map((e) => DropdownMenuItem(child: Text(e),value: e,)).toList(),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20,),
+                    CustomButton(title: 'Submit', function: () async {
+                      if(_formKey.currentState.validate()){
+                        /// showing loading
+                        /// do some validation checks if needed before loading
+                        screenLoading();
 
-                    String imageLink = UserViewModel.user.value.logo;
-                    if(image!= null){
-                      imageLink = await ImageHelper.uploadImage(image);
-                    }
+                        String imageLink = UserViewModel.user.value.logo;
+                        if(image!= null){
+                          imageLink = await ImageHelper.uploadImage(image);
+                        }
 
-                    var result = await MainRepo.updateCustomerInfo(firstName: firstNameController.text, lastName: lastNameController.text, email:  emailController.text,image: imageLink,dob: dob.toString(),gender: gender);
+                        var result = await MainRepo.updateCustomerInfo(firstName: firstNameController.text, lastName: lastNameController.text, email:  emailController.text,image: imageLink,dob: dob.toString(),gender: gender);
 
-                    screenLoading();
+                        screenLoading();
 
-                    if(result != null){
-                    print(result);
-                  }
-                  })
-                ],
+                        if(result != null){
+                          print(result);
+                        }
+                      }
+                    })
+                  ],
+                ),
               ),
             ),
           ),
