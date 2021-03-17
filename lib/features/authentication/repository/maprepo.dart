@@ -74,7 +74,7 @@ class MapRepo{
 
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.mutate(MutationOptions(
-        document: gql(mutationAddCustomerAddress),
+        documentNode: gql(mutationAddCustomerAddress),
         variables: variables
       ));
 

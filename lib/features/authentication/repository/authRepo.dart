@@ -45,7 +45,7 @@ class AuthRepo{
 
       GraphQLClient client = GqlConfig.getClient();
       QueryResult result = await client.mutate(MutationOptions(
-        document: gql(mutationAuth),
+        documentNode: gql(mutationAuth),
         variables: {
           'mobile' : '88'+mobile
         }
