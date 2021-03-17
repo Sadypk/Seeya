@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/online_orders/view/online_orders_screen.dart';
 import 'package:seeya/features/redeem_balance/view/redeem_balance.dart';
-import 'package:seeya/features/scan_reciept/view/select_store_screen.dart';
+import 'package:seeya/features/scan_receipt/view/select_store_screen.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 import 'package:seeya/main_app/util/screenLoader.dart';

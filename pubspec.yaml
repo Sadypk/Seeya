@@ -39,7 +39,7 @@ dependencies:
 
 
 
-  camerawesome: ^0.1.2+1
+#  camerawesome: ^0.1.2+1
   stream_chat_flutter: ^0.2.21
   dio: ^3.0.10
   lottie: ^0.7.0+1

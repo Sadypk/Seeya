@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
-import 'package:seeya/features/scan_reciept/view_model/purchased_product_view_model.dart';
+import 'package:seeya/features/scan_receipt/view_model/purchased_product_view_model.dart';
 import 'package:seeya/features/store/models/cart_model.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
