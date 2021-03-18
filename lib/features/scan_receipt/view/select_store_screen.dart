@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
+import 'package:seeya/features/scan_receipt/theBoss/view/cameraView.dart';
 import 'package:seeya/features/scan_receipt/view/scan_reciept_screen.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/main_app/resources/string_resources.dart';
@@ -68,7 +69,8 @@ class _SelectStoreScreenState extends State<SelectStoreScreen> {
         actions: [
           TextButton(onPressed: (){
             // Get.to(PurchasedProductsScreen());
-            Get.to(()=>ScanReceiptScreen());
+            // Get.to(()=>ScanReceiptScreen());
+            Get.to(()=>TheBossCameraScreen());
           }, child: Text(StringResources.skipButtonText))
         ],
       ),

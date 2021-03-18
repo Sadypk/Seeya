@@ -131,8 +131,8 @@ class StoreScreen extends StatelessWidget {
           actions: [
             IconButton(icon: Icon(Icons.camera_alt_outlined ), onPressed: (){
               /// modding
-              // Get.to(()=>TheBossCameraScreen());
-              Get.to(ScanReceiptScreen());
+              Get.to(()=>TheBossCameraScreen());
+              // Get.to(ScanReceiptScreen());
             }),
             Obx((){
               var list = <CartModel>[].obs;
