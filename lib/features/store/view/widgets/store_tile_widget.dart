@@ -124,7 +124,7 @@ class StoreTileWidget extends StatelessWidget {
                 Row(
                   children: [
                     imageWidget,
-                    SizedBox(width: 10,),
+                    SizedBox(width: 5,),
                     Container(
                       width: MediaQuery.of(context).size.width * .48,
                       child: Column(

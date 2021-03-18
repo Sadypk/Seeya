@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
+import 'package:seeya/features/scan_receipt/theBoss/view/cameraView.dart';
 import 'package:seeya/features/scan_receipt/view/scan_reciept_screen.dart';
 import 'package:seeya/features/store/models/cart_model.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
@@ -129,6 +130,8 @@ class StoreScreen extends StatelessWidget {
           title: Text(storeModel.name, style: TextStyle(color: Colors.black54),),
           actions: [
             IconButton(icon: Icon(Icons.camera_alt_outlined ), onPressed: (){
+              /// modding
+              // Get.to(()=>TheBossCameraScreen());
               Get.to(ScanReceiptScreen());
             }),
             Obx((){

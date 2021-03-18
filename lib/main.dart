@@ -1,6 +1,8 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:seeya/features/scan_receipt/theBoss/view/cameraView.dart';
 import 'package:seeya/root.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -10,6 +12,7 @@ import 'main_app/util/size_config.dart';
 
 main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  TheBossCameraScreen.cameras = await availableCameras();
   await GetStorage.init();
   runApp(MyApp());
 }
