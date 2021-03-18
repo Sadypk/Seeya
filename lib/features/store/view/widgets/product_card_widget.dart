@@ -60,7 +60,7 @@ class ProductCardWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Flexible(
-                        flex: 2,
+                        flex: 3,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,11 +78,13 @@ class ProductCardWidget extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // SizedBox(height: 5,),
-                      Flexible(flex: 1,child: Text(productModel.productName, style: TextStyle(color: Colors.black54, fontSize: 13),)),
                     ],
                   ),
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Flexible(flex: 2,child: Text(productModel.productName, style: TextStyle(color: Colors.black54, fontSize: 13),)),
               ),
               if(quantityController!=null)Flexible(
                   flex: 1,

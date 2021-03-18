@@ -60,7 +60,7 @@ class StoreTileWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       child: Container(
         height: 30,
-        width: 80,
+        width: 60,
         decoration: BoxDecoration(
             color: Colors.white70,
             borderRadius: BorderRadius.circular(20),
