@@ -3,10 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:seeya/features/scan_receipt/view/purchased_products_screen.dart';
 import 'dart:io';
+
+import 'package:seeya/features/store/models/storeModel.dart';
 
 
 class TheBossCameraScreen extends StatefulWidget {
+  final StoreModel storeModel;
+  TheBossCameraScreen({this.storeModel});
   static List<CameraDescription> cameras;
   @override
   _TheBossCameraScreenState createState() => _TheBossCameraScreenState();
@@ -28,7 +33,7 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
     });
   }
   final Duration _duration = Duration(milliseconds: 200);
-  final images = [];
+  final List<File> images = [];
   bool isDone = false;
   @override
   Widget build(BuildContext context) {
@@ -41,17 +46,9 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
       body: Column(
         children: [
           Expanded(
-            child: AnimatedCrossFade(
-              firstChild: _buildCameraView(),
-              secondChild: _buildImageList(),
-              crossFadeState: !isDone ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-              duration: _duration),
+            child: _buildCameraView(),
           ),
-          AnimatedCrossFade(
-            firstChild: _buildCameraButtons(),
-            secondChild: _buildInputPriceButtons(),
-            crossFadeState: !isDone ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-            duration: _duration),
+          _buildCameraButtons()
         ],
       ),
     );
@@ -134,9 +131,7 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
 
         InkWell(
           onTap: (){
-            setState(() {
-              isDone = !isDone;
-            });
+            Get.to(PurchasedProductsScreen(storeModel: widget.storeModel,), arguments: images);
           },
           borderRadius: BorderRadius.circular(6),
           child: Container(

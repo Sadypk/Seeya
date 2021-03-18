@@ -70,7 +70,7 @@ class ProductCardWidget extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text('In Store', style: TextStyle(color: Colors.red, fontSize: 12),),
-                                SizedBox(height: 2,),
+                                // SizedBox(height: 2,),
                                 Text(productModel.cashBack.toString()+' back', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)
                               ],
                             ),

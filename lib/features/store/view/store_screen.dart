@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
 import 'package:seeya/features/scan_receipt/theBoss/view/cameraView.dart';
-import 'package:seeya/features/scan_receipt/view/scan_reciept_screen.dart';
 import 'package:seeya/features/store/models/cart_model.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/confirm_order_screen.dart';
