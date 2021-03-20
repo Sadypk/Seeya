@@ -40,13 +40,13 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.white
-        ),
-        backgroundColor: Colors.transparent,
-      ),
+      // extendBodyBehindAppBar: true,
+      // appBar: AppBar(
+      //   iconTheme: IconThemeData(
+      //     color: Colors.white
+      //   ),
+      //   backgroundColor: Colors.transparent,
+      // ),
       body: Stack(
         children: [
           ListView.builder(

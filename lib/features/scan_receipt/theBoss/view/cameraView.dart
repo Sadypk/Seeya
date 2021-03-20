@@ -18,18 +18,21 @@ class TheBossCameraScreen extends StatefulWidget {
 }
 
 class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
-
   CameraController controller;
+  bool flashOn = false;
+  bool longReceipt = false;
 
   @override
   void initState() {
     super.initState();
-    controller = CameraController(TheBossCameraScreen.cameras[0], ResolutionPreset.ultraHigh);
+    controller = CameraController(TheBossCameraScreen.cameras[0], ResolutionPreset.ultraHigh,);
     controller.initialize().then((_) {
       if (!mounted) {
         return;
       }
-      setState(() {});
+      setState(() {
+        controller.setFlashMode(FlashMode.off);
+      });
     });
   }
   final Duration _duration = Duration(milliseconds: 200);
@@ -38,22 +41,43 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Scan receipt'
+      // appBar: AppBar(
+      //   title: Text(
+      //     'Scan receipt'
+      //   ),
+      // ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            if(longReceipt)_buildFlashController(),
+            Expanded(
+              child: _buildCameraView(),
+            ),
+            _buildCameraButtons()
+          ],
         ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _buildCameraView(),
-          ),
-          _buildCameraButtons()
-        ],
       ),
     );
   }
 
+
+  _buildFlashController(){
+    return Container(
+      height: 50,
+      color: Colors.black,
+      child: Center(
+        child: IconButton(
+          onPressed: (){
+            setState(() {
+              flashOn = !flashOn;
+              controller.setFlashMode(flashOn?FlashMode.always:FlashMode.off);
+            });
+          },
+          icon: Icon(!flashOn?Icons.flash_off_rounded:Icons.flash_on_rounded, color: Colors.white,),
+        ),
+      ),
+    );
+  }
   _buildCameraView() => CameraPreview(
     controller,
   );
@@ -62,9 +86,10 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
     height: 100,
     width: Get.width,
     child: Row(
+      mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Stack(
+        longReceipt?Stack(
           children: [
             Container(
               margin: EdgeInsets.symmetric(vertical: 10),
@@ -97,15 +122,28 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
               ),
             )
           ],
+        ):IconButton(
+          onPressed: (){
+            setState(() {
+              flashOn = !flashOn;
+              controller.setFlashMode(flashOn?FlashMode.always:FlashMode.off);
+            });
+          },
+          icon: Icon(!flashOn?Icons.flash_off_rounded:Icons.flash_on_rounded, color: Colors.white,),
         ),
 
         InkWell(
           onTap: () async{
             XFile image = await controller.takePicture();
             File file = File(image.path);
-            setState(() {
+            if(longReceipt){
+              setState(() {
+                images.add(file);
+              });
+            }else{
               images.add(file);
-            });
+              Get.off(PurchasedProductsScreen(storeModel: widget.storeModel,), arguments: images);
+            }
           },
           child: Container(
             height: 70,
@@ -129,9 +167,9 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
           ),
         ),
 
-        InkWell(
+        longReceipt?InkWell(
           onTap: (){
-            Get.to(PurchasedProductsScreen(storeModel: widget.storeModel,), arguments: images);
+            Get.off(PurchasedProductsScreen(storeModel: widget.storeModel,), arguments: images);
           },
           borderRadius: BorderRadius.circular(6),
           child: Container(
@@ -150,68 +188,17 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
               ),
             ),
           ),
-        )
-      ],
-    ),
-  );
-
-
-  _buildImageList() => ListView(
-    shrinkWrap: true,
-    children: images.map((e) => Image.file(e)).toList(),
-  );
-  _buildInputPriceButtons() => Container(
-    color: Colors.white,
-    height: 100,
-    width: Get.width,
-    padding: EdgeInsets.symmetric(horizontal: 25),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        ):Column(
           children: [
-            SizedBox(
-              width: Get.width * .5,
-              height: 50,
-              child: TextField(
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-                keyboardType: TextInputType.number,
-              ),
+            IconButton(
+              onPressed: (){setState(() {
+                longReceipt = !longReceipt;
+              });},
+              icon: Icon(Icons.receipt_long_rounded, color: Colors.white,),
             ),
-            TextButton(
-              onPressed: (){},
-              child: Text(
-                'Apply coupon'
-              ),
-            )
+            SizedBox(height: 5,),
+            Text('Long Receipt', style: TextStyle(color: Colors.white),)
           ],
-        ),
-
-        InkWell(
-          onTap: (){
-            setState(() {
-              isDone = !isDone;
-            });
-          },
-          child: Container(
-            width: 90,
-            height: 50,
-            decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(6)
-            ),
-            child: Center(
-              child: Text(
-                'Submit',
-                style: TextStyle(
-                    color: Colors.white
-                ),
-              ),
-            ),
-          ),
         )
       ],
     ),
