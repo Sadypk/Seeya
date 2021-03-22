@@ -49,11 +49,14 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
       // ),
       body: Stack(
         children: [
-          ListView.builder(
-            itemCount: images.length,
-            shrinkWrap: true,
-            itemBuilder: (_, index) => Image.file(images[index]),
-            // itemBuilder: (_, index) => AssetThumb(asset: assets[index],height: (Get.height * .7).toInt(), width: (Get.width).toInt()),
+          Container(
+            height: Get.height,
+            child: ListView.builder(
+              itemCount: images.length,
+              shrinkWrap: true,
+              itemBuilder: (_, index) => Image.file(images[index]),
+              // itemBuilder: (_, index) => AssetThumb(asset: assets[index],height: (Get.height * .7).toInt(), width: (Get.width).toInt()),
+            ),
           ),
           if(widget.storeModel!=null) _buildBottomDrawer(),
           if(widget.storeModel==null)Positioned(
