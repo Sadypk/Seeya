@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>NSMicrophoneUsageDescription</key>
-    <string>Can I use the mic please?</string>
+    <string>Redundant but still need it for receipt pic</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>This app needs access to location when open.</string>
     <key>NSLocationAlwaysUsageDescription</key>
@@ -11,7 +11,7 @@
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Example usage description</string>
     <key>NSCameraUsageDescription</key>
-    <string>Example usage description</string>
+    <string>Needs to take receipt photo</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

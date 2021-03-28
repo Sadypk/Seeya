@@ -39,7 +39,7 @@ class MyOfferStoresRepo{
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(
-          documentNode: gql(queryGetRestaurants)
+          document: gql(queryGetRestaurants)
       ));
       return List<StoreModel>.from(result.data['getAllLinkedStoresByCustomer']['data'].map((x) => StoreModel.fromJson(x)));
     }catch(e){

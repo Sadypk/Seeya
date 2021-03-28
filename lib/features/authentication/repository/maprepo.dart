@@ -4,7 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:seeya/main_app/config/gqlConfig.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
-
+import 'package:location/location.dart';
 
 class MapRepo{
 
@@ -34,6 +34,33 @@ class MapRepo{
     }
 
     return await Geolocator.getCurrentPosition();
+  }
+
+  static Future<Position> getCurrentLocation2() async{
+    Location location = Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return null;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return null;
+      }
+    }
+
+    _locationData = await location.getLocation();
+    return Position(latitude: _locationData.latitude, longitude: _locationData.longitude);
   }
 
   static Future<Address> getAddressFromAddress(String value) async{
@@ -74,7 +101,7 @@ class MapRepo{
 
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.mutate(MutationOptions(
-        documentNode: gql(mutationAddCustomerAddress),
+        document: gql(mutationAddCustomerAddress),
         variables: variables
       ));
 

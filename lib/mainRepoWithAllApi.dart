@@ -25,7 +25,7 @@ class MainRepo{
           _id
           name
         }
-        address{
+        address{re
           address
           location{
             lat
@@ -42,16 +42,22 @@ class MainRepo{
   }
   ''';
     try{
+
+      final variables = {
+        'lat' : UserViewModel.currentLocation.value.latitude,
+        'lng' : UserViewModel.currentLocation.value.longitude
+      };
+
+      print(variables);
+
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(
-        documentNode: gql(queryGetNearestStoreByCustomer),
-        variables: {
-          'lat' : UserViewModel.currentLocation.value.latitude,
-          'lng' : UserViewModel.currentLocation.value.longitude
-        }
+        document: gql(queryGetNearestStoreByCustomer),
+        variables: variables
       ));
       logger.i(result.data);
-      return List<StoreModel>.from(result.data['getNearestStoreByCustomer']['data'].map((x) => StoreModel.fromJson(x)));
+      return [];
+      // return List<StoreModel>.from(result.data['getNearestStoreByCustomer']['data'].map((x) => StoreModel.fromJson(x)));
     }catch(e){
       print(e.toString());
       return null;
@@ -93,7 +99,7 @@ class MainRepo{
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(
-        documentNode: gql(queryGetAllLinkedStoresByCustomer),
+        document: gql(queryGetAllLinkedStoresByCustomer),
       ));
       return List<StoreModel>.from(result.data['getAllLinkedStoresByCustomer']['data'].map((x) => StoreModel.fromJson(x)));
     }catch(e){
@@ -133,7 +139,7 @@ class MainRepo{
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(
-          documentNode: gql(queryGetAllProductsByCustomer),
+          document: gql(queryGetAllProductsByCustomer),
         variables: {
           'lat' : UserViewModel.currentLocation.value.latitude,
           'lng' : UserViewModel.currentLocation.value.longitude
@@ -175,7 +181,7 @@ class MainRepo{
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(
-          documentNode: gql(queryGetAllCashBackProducts),
+          document: gql(queryGetAllCashBackProducts),
           variables: {
             'storeID' : storeID
           }
@@ -222,7 +228,7 @@ class MainRepo{
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(
-          documentNode: gql(queryGetAllNotLinkedStoresByCustomer),
+          document: gql(queryGetAllNotLinkedStoresByCustomer),
         variables: {
           'lat' : UserViewModel.currentLocation.value.latitude,
           'lng' : UserViewModel.currentLocation.value.longitude
@@ -269,7 +275,7 @@ class MainRepo{
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(
-          documentNode: gql(queryGetCustomerInfoWithToken),
+          document: gql(queryGetCustomerInfoWithToken),
           variables: {
             'token' : token,
           }
@@ -295,7 +301,7 @@ class MainRepo{
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.mutate(MutationOptions(
-          documentNode: gql(mutateAddAllNearestRestaurant),
+          document: gql(mutateAddAllNearestRestaurant),
           variables: {
             'lat' : UserViewModel.currentLocation.value.latitude,
             'lng' : UserViewModel.currentLocation.value.longitude
@@ -338,7 +344,7 @@ class MainRepo{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
 
       QueryResult result1 = await client.query(QueryOptions(
-          documentNode: gql(queryGetOneRestaurantWelcomeOffer),
+          document: gql(queryGetOneRestaurantWelcomeOffer),
           variables: {
             'id' : storeID
           }
@@ -351,7 +357,7 @@ class MainRepo{
       }
 
       QueryResult result2 = await client.mutate(MutationOptions(
-          documentNode: gql(mutateAddSingleStoreToWallet),
+          document: gql(mutateAddSingleStoreToWallet),
           variables: {
             'id' : storeID,
             'balance' : balance
@@ -407,7 +413,7 @@ class MainRepo{
     try{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result2 = await client.mutate(MutationOptions(
-          documentNode: gql(mutateUpdateCustomerInfo),
+          document: gql(mutateUpdateCustomerInfo),
           variables: variables
       ));
 

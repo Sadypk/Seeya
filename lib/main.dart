@@ -5,7 +5,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:seeya/features/scan_receipt/theBoss/view/cameraView.dart';
 import 'package:seeya/root.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-
 import 'features/chat/repository/streachatConfig.dart';
 import 'main_app/resources/app_const.dart';
 import 'main_app/util/size_config.dart';
@@ -37,9 +36,6 @@ class MyApp extends StatelessWidget {
           textTheme: newTextTheme,
           scaffoldBackgroundColor: Colors.white,
           primaryColor: AppConst.blue,
-          primaryTextTheme: TextTheme(
-            headline6: TextStyle(color: Colors.black54)
-          ),
           appBarTheme: AppBarTheme(
               elevation: 0,
               color: Colors.white,
