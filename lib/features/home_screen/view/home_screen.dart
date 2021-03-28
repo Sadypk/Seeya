@@ -11,6 +11,7 @@ import 'package:seeya/features/store/view/all_stores_screen.dart';
 import 'package:seeya/features/home_screen/models/banner_model.dart';
 import 'package:seeya/features/home_screen/view/widgets/banner_card_widget.dart';
 import 'package:seeya/features/store/view/store_screen.dart';
+import 'package:seeya/features/store/view/widgets/circle_image_widget.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
 import 'package:seeya/mainRepoWithAllApi.dart';
@@ -67,6 +68,60 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
+
+    var storeList = NearestStoreViewModel().storeList;
+    var favoriteShops = Container(
+      padding: EdgeInsets.all(5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.favorite_border_rounded),
+                  SizedBox(width: 5,),
+                  Text('Online & in stores', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                ],
+              ),
+              InkWell(
+                  onTap: (){Get.to(AllStoresScreen());},
+                  child: Text('View All', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),)
+              ),
+            ],
+          ),
+          SizedBox(height: 15,),
+          Container(
+            height: 110,
+            child: ListView.builder(
+              itemCount: 6,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (BuildContext context, int index){
+              return Container(
+                margin: EdgeInsets.only(right: 15),
+                child: InkWell(
+                  onTap: (){
+                    Get.to(StoreScreen(storeModel: storeList[0],));
+                  },
+                  child: Column(
+                    children: [
+                      CircleImageWidget(image: storeList[0].logo),
+                      SizedBox(height: 5,),
+                      Text(storeList[0].name, style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold)),
+                      Text('${storeList[0].defaultCashback}% cashback', style: TextStyle(fontSize:12, color: Colors.green, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ),
+              );
+            }),
+          )
+        ],
+      ),
+    );
 
     var nearestStore = FutureBuilder(
       future: MainRepo.getAllNearestStore(),
@@ -211,6 +266,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   bannerWidget,
                   Divider(height: 30,),
+                  favoriteShops,
+                  SizedBox(height: 10,),
                   nearestStore,
                   SizedBox(height: 10,),
                   topProducts,

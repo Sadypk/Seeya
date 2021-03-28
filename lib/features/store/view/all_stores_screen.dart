@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:seeya/features/store/view/widgets/circle_image_widget.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/store/view/store_screen.dart';
@@ -12,53 +13,6 @@ class AllStoresScreen extends StatefulWidget {
 class _AllStoresScreenState extends State<AllStoresScreen> {
   @override
   Widget build(BuildContext context) {
-    imageWidget(String image){
-      return Container(
-        height: 70,
-        width: 70,
-        margin: EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.grey[500]),
-          boxShadow: [
-            BoxShadow(
-                offset: Offset(1,1),
-                color: Colors.grey,
-                blurRadius: 1,
-                spreadRadius: 1
-            )
-          ],
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end:
-            Alignment(0.8, 0.0), // 10% of the width, so there are ten blinds.
-            colors: [
-              Colors.black45,
-              Colors.grey[200]
-            ], // red to yellow
-          ),
-        ),
-        child: Center(
-          child: Container(
-            height: 63,
-            width: 63,
-            // padding: EdgeInsets.all(3),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              image: DecorationImage(
-                  image: NetworkImage(image),
-                  fit: BoxFit.cover
-                // fit: BoxFit.cover
-              ),
-            ),
-
-          ),
-        ),
-      );
-    };
-
-
     var storeList = NearestStoreViewModel().storeList;
     var myFavorites = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +34,7 @@ class _AllStoresScreenState extends State<AllStoresScreen> {
                 },
                 child: Column(
                   children: [
-                    imageWidget(storeList[index].logo),
+                    CircleImageWidget(image: storeList[index].logo),
                     SizedBox(height: 5,),
                     Text(storeList[index].promotionCashback.toString(), style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),),
                     Text('Cash Back', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold)),
