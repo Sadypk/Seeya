@@ -14,6 +14,7 @@ import 'package:seeya/features/store/view/store_screen.dart';
 import 'package:seeya/features/store/view/widgets/circle_image_widget.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
+import 'package:seeya/features/store/view/widgets/top_picks_card_widget.dart';
 import 'package:seeya/mainRepoWithAllApi.dart';
 import 'package:get/get.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
@@ -118,6 +119,44 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             }),
+          )
+        ],
+      ),
+    );
+
+    var topPicks = Container(
+      padding: EdgeInsets.all(5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.thumb_up_alt_outlined),
+                  SizedBox(width: 5,),
+                  Text('Top Picks for you', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                ],
+              ),
+              InkWell(
+                  onTap: (){Get.to(AllStoresScreen());},
+                  child: Text('View All', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),)
+              ),
+            ],
+          ),
+          SizedBox(height: 15,),
+          Container(
+            height: 130,
+            child: ListView.builder(
+                itemCount: 6,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index){
+                  return TopPicksCardWidget(storeModel: storeList[0],);
+                }),
           )
         ],
       ),
@@ -267,6 +306,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   bannerWidget,
                   Divider(height: 30,),
                   favoriteShops,
+                  SizedBox(height: 10,),
+                  topPicks,
                   SizedBox(height: 10,),
                   nearestStore,
                   SizedBox(height: 10,),

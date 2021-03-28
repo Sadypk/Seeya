@@ -15,7 +15,7 @@ class NearestStoreViewModel extends GetxController{
       defaultCashback: 2.0,
       promotionCashback: 5.0,
       defaultWelcomeOffer: 3.0,
-      logo: 'https://weartesters.com/wp-content/uploads/2016/07/adidas-logo-e1468257076328.jpg'
+      logo: 'https://i0.wp.com/deltacollegian.net/wp-content/uploads/2017/05/adidas.png?fit=880%2C660'
     ),
     StoreModel(
         name: 'Adidas',

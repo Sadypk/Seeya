@@ -11,29 +11,29 @@ class CircleImageWidget extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.grey[500]),
+          // border: Border.all(color: Colors.grey[500]),
           boxShadow: [
             BoxShadow(
                 offset: Offset(1,1),
-                color: Colors.grey[500],
+                color: Colors.grey[300],
                 blurRadius: 1,
                 spreadRadius: 1
             )
           ],
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end:
-            Alignment(0.8, 0.0), // 10% of the width, so there are ten blinds.
-            colors: [
-              Colors.black45,
-              Colors.grey[200]
-            ], // red to yellow
-          ),
+          // gradient: LinearGradient(
+          //   begin: Alignment.topLeft,
+          //   end:
+          //   Alignment(0.8, 0.0), // 10% of the width, so there are ten blinds.
+          //   colors: [
+          //     Colors.black45,
+          //     Colors.grey[100]
+          //   ], // red to yellow
+          // ),
         ),
         child: Center(
           child: Container(
-            height: 65,
-            width: 65,
+            height: 68,
+            width: 68,
             // padding: EdgeInsets.all(3),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
