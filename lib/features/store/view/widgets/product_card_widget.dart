@@ -82,9 +82,12 @@ class ProductCardWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Flexible(flex: 2,child: Text(productModel.productName, style: TextStyle(color: Colors.black54, fontSize: 13),)),
+              Flexible(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Text(productModel.productName, style: TextStyle(color: Colors.black54, fontSize: 13),),
+                ),
               ),
               if(quantityController!=null)Flexible(
                   flex: 1,

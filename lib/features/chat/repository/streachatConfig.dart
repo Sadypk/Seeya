@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class SConfig{
-  static final client = Client(
-      's3ppuz6g7vau',
+  static final client = StreamChatClient(
+      'auvn4u9akwnu',
       logLevel: Level.WARNING
   );
 

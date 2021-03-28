@@ -45,7 +45,7 @@ class AuthRepo{
 
       GraphQLClient client = GqlConfig.getClient();
       QueryResult result = await client.mutate(MutationOptions(
-        documentNode: gql(mutationAuth),
+        document: gql(mutationAuth),
         variables: {
           'mobile' : '88'+mobile
         }
@@ -61,48 +61,44 @@ class AuthRepo{
         UserViewModel.setToken(result.data['customerLoginOrSignUp']['token']);
         UserViewModel.setUser(UserModel.fromJson(result.data['customerLoginOrSignUp']['data']));
         UserViewModel.changeUserStatus(UserStatus.LOGGED_IN);
-        Future.delayed(Duration(seconds: 2),() async{
-          try{
-            print('set user');
-            await SConfig.client.setUser(
-                User(
-                    id: UserViewModel.user.value.id,
-                    extraData: {
-                      'name' : UserViewModel.user.value.firstName == '' && UserViewModel.user.value.lastName == '' ? 'John Doe' : UserViewModel.user.value.firstName + ' '+ UserViewModel.user.value.lastName,
-                      'image' : UserViewModel.user.value.logo == null || UserViewModel.user.value.logo == '' ? 'https://bellfund.ca/wp-content/uploads/2018/03/demo-user.jpg' : UserViewModel.user.value.logo,
-                      'userType' : 'customer'
-                    }
-                ),
-                SConfig.client.devToken(UserViewModel.user.value.id)
-            );
-          }catch(e){
-            print(e.toString());
-            print('stream set user failed');
-            return true;
-          }
-        });
+        try{
+          print('set user');
+          await SConfig.client.connectUser(
+              User(
+                  id: UserViewModel.user.value.id,
+                  extraData: {
+                    'name' : UserViewModel.user.value.firstName == '' && UserViewModel.user.value.lastName == '' ? 'John Doe' : UserViewModel.user.value.firstName + ' '+ UserViewModel.user.value.lastName,
+                    'image' : UserViewModel.user.value.logo == null || UserViewModel.user.value.logo == '' ? 'https://bellfund.ca/wp-content/uploads/2018/03/demo-user.jpg' : UserViewModel.user.value.logo,
+                    'userType' : 'customer'
+                  }
+              ),
+              SConfig.client.devToken(UserViewModel.user.value.id)
+          );
+        }catch(e){
+          print(e.toString());
+          print('stream set user failed');
+          return true;
+        }
         /// also need to update info if there is any
         /// otherwise setUser will only set according to id,
         /// it wont replace any info
-        Future.delayed(Duration(seconds: 2),() async{
-          try{
-            print('update user');
-            await SConfig.client.updateUser(
-                User(
-                    id: UserViewModel.user.value.id,
-                    extraData: {
-                      'name' : UserViewModel.user.value.firstName == '' && UserViewModel.user.value.lastName == '' ? 'John Doe' : UserViewModel.user.value.firstName + ' '+ UserViewModel.user.value.lastName,
-                      'image' : UserViewModel.user.value.logo == null || UserViewModel.user.value.logo == '' ? 'https://bellfund.ca/wp-content/uploads/2018/03/demo-user.jpg' : UserViewModel.user.value.logo,
-                      'userType' : 'customer'
-                    }
-                )
-            );
-          }catch(e){
-            print(e.toString());
-            print('stream update user failed');
-            return true;
-          }
-        });
+        try{
+          print('update user');
+          await SConfig.client.updateUser(
+              User(
+                  id: UserViewModel.user.value.id,
+                  extraData: {
+                    'name' : UserViewModel.user.value.firstName == '' && UserViewModel.user.value.lastName == '' ? 'John Doe' : UserViewModel.user.value.firstName + ' '+ UserViewModel.user.value.lastName,
+                    'image' : UserViewModel.user.value.logo == null || UserViewModel.user.value.logo == '' ? 'https://bellfund.ca/wp-content/uploads/2018/03/demo-user.jpg' : UserViewModel.user.value.logo,
+                    'userType' : 'customer'
+                  }
+              )
+          );
+        }catch(e){
+          print(e.toString());
+          print('stream update user failed');
+          return true;
+        }
 
       }
       return loginError;

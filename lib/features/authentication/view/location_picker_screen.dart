@@ -61,7 +61,11 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   }
 
   getData() async{
-    Position position = await MapRepo.getCurrentLocation();
+    Position position = await MapRepo.getCurrentLocation2();
+    if(position == null){
+      Get.back();
+      return ;
+    }
     initialCameraPosition = CameraPosition(
       target: LatLng(position.latitude, position.longitude),
       zoom: LocationPickerScreen.defaultZoom,
