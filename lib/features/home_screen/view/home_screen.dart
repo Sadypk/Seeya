@@ -1,3 +1,4 @@
+import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -231,49 +232,85 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
     var productList1 = TopProductsViewModel().productList;
-    var topProducts = Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Text('Top Products',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            RawMaterialButton(
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              // onPressed: widget.onTapViewAll,
-              onPressed: (){},
-              child: InkWell(
-                  onTap: (){Get.to(TopProductsScreen());},
-                  child: Text('View All', style: TextStyle(color: Colors.blue),)
-              ),
-            )
-          ],),
+    // var topProducts = Column(
+    //   children: [
+    //     Row(
+    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //       children: [
+    //         Padding(
+    //           padding: EdgeInsets.only(left: 15),
+    //           child: Text('Top Products',
+    //             style: TextStyle(fontWeight: FontWeight.bold),
+    //           ),
+    //         ),
+    //         RawMaterialButton(
+    //           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    //           // onPressed: widget.onTapViewAll,
+    //           onPressed: (){},
+    //           child: InkWell(
+    //               onTap: (){Get.to(TopProductsScreen());},
+    //               child: Text('View All', style: TextStyle(color: Colors.blue),)
+    //           ),
+    //         )
+    //       ],),
+    //
+    //     Container(
+    //       height: 210,
+    //       child: ListView.builder(
+    //         padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+    //         itemCount: productList1.length,
+    //         scrollDirection: Axis.horizontal,
+    //         itemBuilder: (context, index) {
+    //           return ProductsTileWidget(productModel: productList1[index], );
+    //         },
+    //       ),
+    //     ),
+    //   ],
+    // );
 
-        Container(
-          height: 210,
-          child: ListView.builder(
-            padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-            itemCount: productList1.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              return ProductsTileWidget(productModel: productList1[index], );
-            },
-          ),
-        ),
-      ],
+    var specialOffers = DefaultTabController(
+        length: 4,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Special offers made for you', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+            SizedBox(height: 10,),
+            ButtonsTabBar(
+              backgroundColor: Colors.black54,
+              unselectedBackgroundColor: Colors.white,
+              unselectedLabelStyle: TextStyle(color: Colors.black),
+              radius: 20,
+              borderColor: Colors.grey[200],
+              contentPadding: EdgeInsets.symmetric(horizontal: 10),
+              borderWidth: 1,
+              labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              tabs: [
+                Tab(
+                  text: "Recent",
+                ),
+                Tab(
+                  text: "Category",
+                ),
+                Tab(
+                  text: "Expiring First",
+                ),
+                Tab(
+                  text: "High to Low",
+                ),
+              ],
+            ),
+          ],
+        )
     );
 
 
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        title: Text('Home'),
         backgroundColor: Colors.transparent,
         actions: [
-          IconButton(icon: Icon(FeatherIcons.user, color: Colors.grey,), onPressed: (){}),
+          IconButton(icon: Icon(FeatherIcons.bell, color: Colors.grey,), onPressed: (){}),
           IconButton(icon: Icon(FeatherIcons.messageCircle, color: Colors.grey), onPressed: () async{
             if(UserViewModel.userStatus.value == UserStatus.LOGGED_IN){
               Get.to(()=>ChatScreen());
@@ -309,9 +346,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(height: 10,),
                   topPicks,
                   SizedBox(height: 10,),
-                  nearestStore,
-                  SizedBox(height: 10,),
-                  topProducts,
+                  specialOffers,
+                  // SizedBox(height: 10,),
+                  // nearestStore,
+                  // SizedBox(height: 10,),
+                  // topProducts,
                   SizedBox(height: 25 ,),
                 ],
               ))

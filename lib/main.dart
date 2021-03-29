@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
               elevation: 0,
               color: Colors.white,
               centerTitle: false,
+              titleTextStyle: TextStyle(color: Colors.black54),
               iconTheme: IconThemeData(
                   color: Colors.black
               )
