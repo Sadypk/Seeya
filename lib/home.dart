@@ -80,7 +80,7 @@ class _HomeState extends State<Home> {
       height: 50,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        border: Border.
+        // border: Border.
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
