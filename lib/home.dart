@@ -64,8 +64,8 @@ class _HomeState extends State<Home> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(iconData, color: index==bottomIndex?Colors.purpleAccent:Colors.grey[300],),
-              Text(label, style: TextStyle(color: index==bottomIndex?Colors.purpleAccent:Colors.grey[300]),)
+              Icon(iconData, color: index==bottomIndex?Colors.purpleAccent:Colors.grey[400],),
+              Text(label, style: TextStyle(color: index==bottomIndex?Colors.purpleAccent:Colors.grey[400]),)
             ],
           ),
         ),
@@ -76,12 +76,20 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     var customBottomNavBar = Container(
-      color: Colors.white,
-      height: 50,
-      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.symmetric(vertical: 7),
       decoration: BoxDecoration(
-        // border: Border.
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(0,-1),
+            color: Colors.grey[200],
+            spreadRadius: 1,
+            blurRadius: 1
+          )
+        ]
       ),
+      height: 55,
+      width: MediaQuery.of(context).size.width,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
@@ -89,17 +97,96 @@ class _HomeState extends State<Home> {
         children: [
           bottomNavBarItem(0, Icons.home_outlined, 'Home'),
           bottomNavBarItem(1, Icons.search, 'Near'),
-          Container(
-            width: MediaQuery.of(context).size.width/5,
-            child: Center(
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.black54)
-                ),
-                child: Center(child: Icon(Icons.add, color: Colors.black54,))),
+          InkWell(
+            onTap: () {
+              Get.bottomSheet(
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(w(50)),
+                            topLeft: Radius.circular(w(50))),
+                        boxShadow: [AppConst.shadowBottomNavBar]),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(w(50)),
+                                  topLeft: Radius.circular(w(50)))
+                          ),
+                          elevation: 0,
+                          child: Container(
+                            width: double.infinity,
+                            height: h(150),
+                            child: Row(
+                              children: [
+                                SizedBox(width: w(30),),
+                                Text(
+                                  'Choose an option',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: h(50),
+                                      color: AppConst.black),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: OverScroll(
+                            child: ListView(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.zero,
+                              children: [
+                                ListTile(
+                                  onTap: (){
+                                    Get.back();
+                                    Get.to(SelectStoreScreen());
+                                  },
+                                  title: Text('Scan Receipt'),
+                                  leading: Icon(Icons.upload_rounded),
+                                ),
+                                ListTile(
+                                  onTap: (){
+                                    Get.back();
+                                    Get.to(OnlineOrdersScreen());
+                                  },
+                                  title: Text('Order Online'),
+                                  leading: Icon(Icons.camera_alt),
+                                ),
+                                ListTile(
+                                  onTap: (){
+                                    Get.back();
+                                    Get.to(RedeemBalanceScreen());
+                                  },
+                                  title: Text('Redeem Cash'),
+                                  leading: Icon(Icons.attach_money_sharp),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: h(20),)
+                      ],
+                    ),
+                  )
+              );
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width/5,
+              child: Center(
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.black54, width: 3)
+                  ),
+                  child: Center(child: Icon(Icons.add, color: Colors.black54,))),
+              ),
             ),
           ),
           bottomNavBarItem(2, Icons.account_balance_wallet_rounded, 'Wallet'),
@@ -110,92 +197,6 @@ class _HomeState extends State<Home> {
     return Obx(()=>IsScreenLoading(
       screenLoading: Home.loading.value,
       child: Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {
-        //     Get.bottomSheet(
-        //         Container(
-        //           decoration: BoxDecoration(
-        //               color: Colors.white,
-        //               borderRadius: BorderRadius.only(
-        //                   topRight: Radius.circular(w(50)),
-        //                   topLeft: Radius.circular(w(50))),
-        //               boxShadow: [AppConst.shadow]),
-        //           child: Column(
-        //             mainAxisSize: MainAxisSize.min,
-        //             crossAxisAlignment: CrossAxisAlignment.start,
-        //             children: [
-        //               Card(
-        //                 shape: RoundedRectangleBorder(
-        //                     borderRadius: BorderRadius.only(
-        //                         topRight: Radius.circular(w(50)),
-        //                         topLeft: Radius.circular(w(50)))
-        //                 ),
-        //                 elevation: 0,
-        //                 child: Container(
-        //                   width: double.infinity,
-        //                   height: h(150),
-        //                   child: Row(
-        //                     children: [
-        //                       SizedBox(width: w(30),),
-        //                       Text(
-        //                         'Choose an option',
-        //                         style: TextStyle(
-        //                             fontWeight: FontWeight.normal,
-        //                             fontSize: h(50),
-        //                             color: AppConst.black),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                 ),
-        //               ),
-        //               Flexible(
-        //                 child: OverScroll(
-        //                   child: ListView(
-        //                     shrinkWrap: true,
-        //                     padding: EdgeInsets.zero,
-        //                     children: [
-        //                       ListTile(
-        //                         onTap: (){
-        //                           Get.back();
-        //                           Get.to(SelectStoreScreen());
-        //                         },
-        //                         title: Text('Scan Receipt'),
-        //                         leading: Icon(Icons.upload_rounded),
-        //                       ),
-        //                       ListTile(
-        //                         onTap: (){
-        //                           Get.back();
-        //                           Get.to(OnlineOrdersScreen());
-        //                         },
-        //                         title: Text('Order Online'),
-        //                         leading: Icon(Icons.camera_alt),
-        //                       ),
-        //                       ListTile(
-        //                         onTap: (){
-        //                           Get.back();
-        //                           Get.to(RedeemBalanceScreen());
-        //                         },
-        //                         title: Text('Redeem Cash'),
-        //                         leading: Icon(Icons.attach_money_sharp),
-        //                       )
-        //                     ],
-        //                   ),
-        //                 ),
-        //               ),
-        //               SizedBox(height: h(20),)
-        //             ],
-        //           ),
-        //         )
-        //     );
-        //   },
-        //   backgroundColor: AppConst.themeBlue,
-        //   child: Icon(
-        //     Icons.add,
-        //     color: Colors.white,
-        //     size: h (110),
-        //   ),
-        // ),
         resizeToAvoidBottomInset: false,
         // bottomNavigationBar: AnimatedBottomNavigationBar(
         //     icons: _icons,
