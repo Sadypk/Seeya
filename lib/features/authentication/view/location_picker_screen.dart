@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:get/get.dart';
@@ -308,11 +309,12 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                           maxLines: 1,
                           style: TextStyle(fontSize: 12),
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(left: 5, right: 7),
+                            contentPadding: EdgeInsets.only(left: 5, right: 10),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
-                            prefixIcon: Icon(FeatherIcons.mapPin, color: Colors.black87, size: 18,),
-                            suffixIconConstraints: BoxConstraints(
-                              minWidth: 40
+                            prefixIcon: Icon(FeatherIcons.mapPin, color: Colors.black87, size: 16,),
+                            prefixIconConstraints: BoxConstraints(
+                              maxWidth: 40,
+                              minWidth: 30
                             ),
                             suffixText: 'Change',
                             suffixStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppConst.themePurple, fontFamily: 'Stag', decoration: TextDecoration.underline),
