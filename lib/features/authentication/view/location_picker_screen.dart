@@ -45,6 +45,11 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     await getAddressFromLatLng(latLng);
   }
 
+  getToUserLocation()async{
+    var currentLatLng = await Geolocator.getCurrentPosition();
+    _updateCameraPosition(LatLng(currentLatLng.latitude, currentLatLng.longitude));
+  }
+
   getAddressFromLatLng(LatLng latLng) async {
     currentPosition = latLng;
     Address address = await MapRepo.getAddressFromLatLng(latLng);
@@ -197,74 +202,99 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
               bottom: 0,
               right: 0,
               left: 0,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(12)),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0,1),
-                      color: Colors.grey,
-                      blurRadius: 1,
-                      spreadRadius: 1
-                    )
-                  ]
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Delivery Location', style: AppConst.titleText1,),
-                    SizedBox(height: 7,),
-                    TextFormField(
-                      controller: _textEditingController,
-                      onFieldSubmitted: searchFromTxtField,
-                      style: TextStyle(fontSize: 12),
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(left: 5, right: 7),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        prefixIcon: Icon(FeatherIcons.mapPin, color: Colors.black87, size: 18,),
-                        suffixText: 'Change',
-                        suffixStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppConst.themePurple, fontFamily: 'Stag', decoration: TextDecoration.underline),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
-                            color: Colors.blue,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
-                            color: Colors.grey[300],
-                            width: 1.0,
-                          ),
-                        ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: (){
+                      getToUserLocation();
+                    },
+                    child: Container(
+                      height: 35,
+                      width: 35,
+                      margin: EdgeInsets.only(right: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: Colors.grey[300],width: 1),
+                        boxShadow: [AppConst.shadowBasic]
+                      ),
+                      child: Center(
+                        child: Icon(Icons.gps_fixed_rounded, color: Colors.grey, size: 18,),
                       ),
                     ),
-                    SizedBox(height: 15,),
-                    Text('Tag this location', style: AppConst.header,),
-                    SizedBox(height: 10,),
-                    Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                  SizedBox(height: 30,),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(12)),
+                        boxShadow: [
+                          BoxShadow(
+                              offset: Offset(0,1),
+                              color: Colors.grey,
+                              blurRadius: 1,
+                              spreadRadius: 1
+                          )
+                        ]
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        tagLocationSelectionCard('Home', 0),
-                        tagLocationSelectionCard('Work', 1),
-                        tagLocationSelectionCard('Hotel', 2),
-                        tagLocationSelectionCard('Offer', 3),
+                        Text('Delivery Location', style: AppConst.titleText1,),
+                        SizedBox(height: 7,),
+                        TextFormField(
+                          controller: _textEditingController,
+                          onFieldSubmitted: searchFromTxtField,
+                          style: TextStyle(fontSize: 12),
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.only(left: 5, right: 7),
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            prefixIcon: Icon(FeatherIcons.mapPin, color: Colors.black87, size: 18,),
+                            suffixText: 'Change',
+                            suffixStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppConst.themePurple, fontFamily: 'Stag', decoration: TextDecoration.underline),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(
+                                color: Colors.blue,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(
+                                color: Colors.grey[300],
+                                width: 1.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 15,),
+                        Text('Tag this location', style: AppConst.header,),
+                        SizedBox(height: 10,),
+                        Row(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            tagLocationSelectionCard('Home', 0),
+                            tagLocationSelectionCard('Work', 1),
+                            tagLocationSelectionCard('Hotel', 2),
+                            tagLocationSelectionCard('Offer', 3),
+                          ],
+                        ),
+                        SizedBox(height: 20,),
+                        GradientButton(
+                          height: 55,
+                          label: 'Confirm Location and Proceed',
+                          fontStyle: TextStyle(fontWeight: FontWeight.w400, letterSpacing: 0.3, color: Colors.white, fontSize: 14),
+                          onTap: (){
+                            setNewLocation(currentPosition);
+                            Get.offAll(Home());
+                          },
+                        )
                       ],
                     ),
-                    SizedBox(height: 20,),
-                    GradientButton(
-                      height: 55,
-                      label: 'Confirm Location and Proceed',
-                      fontStyle: TextStyle(fontWeight: FontWeight.w400, letterSpacing: 0.3, color: Colors.white, fontSize: 14),
-                      onTap: (){
-                        setNewLocation(currentPosition);
-                        Get.offAll(Home());
-                      },
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
             )
 
