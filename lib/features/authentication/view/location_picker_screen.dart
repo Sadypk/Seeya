@@ -38,16 +38,26 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   LatLng currentPosition;
 
   addMarker(LatLng latLng) async{
+    gMarker.clear();
     gMarker.add(Marker(
       markerId: MarkerId('gMarker'),
       position: latLng,
+      infoWindow: InfoWindow(
+        title: 'Title',
+        snippet: 'Subtitle'
+      ),
+      icon: markerImage
     ));
     await getAddressFromLatLng(latLng);
   }
 
   getToUserLocation()async{
-    var currentLatLng = await Geolocator.getCurrentPosition();
-    _updateCameraPosition(LatLng(currentLatLng.latitude, currentLatLng.longitude));
+    Position pos = await MapRepo.getCurrentLocation();
+
+    await addMarker(LatLng(pos.latitude, pos.longitude));
+    await _updateCameraPosition(LatLng(pos.latitude, pos.longitude));
+
+    setState(() {});
   }
 
   getAddressFromLatLng(LatLng latLng) async {
@@ -66,8 +76,17 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     GoogleMapController controller = await _controller.future;
     await controller.animateCamera(CameraUpdate.newCameraPosition(cPosition));
   }
+  BitmapDescriptor markerImage;
+  Future<BitmapDescriptor> _getPinIcon(String image) async{
+    return await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 1.0), image);
+  }
 
   getData() async{
+    /// if we need to make custom info window will do so
+    /// currently dont think we need to anyway so fk it right?
+    // markerImage = await _getPinIcon('assets/images/mapMarker.png');
+    /// hacked solution :D
+    markerImage = await _getPinIcon('assets/images/markerInfoWindow.png');
     Position position = await MapRepo.getCurrentLocation2();
     if(position == null){
       Get.back();
@@ -79,6 +98,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     );
     currentPosition = LatLng(position.latitude, position.longitude);
     await addMarker(LatLng(position.latitude, position.longitude));
+
     setState(() {
       loading = false;
     });
@@ -113,6 +133,43 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     super.dispose();
   }
 
+  // _markerOnTap(PointObject point) async {
+  //   final RenderBox renderBox = context.findRenderObject();
+  //   Rect _itemRect = renderBox.localToGlobal(Offset.zero) & renderBox.size;
+  //
+  //   _infoWidgetRoute = InfoWidgetRoute(
+  //     child: point.child,
+  //     buildContext: context,
+  //     textStyle: const TextStyle(
+  //       fontSize: 14,
+  //       color: Colors.black,
+  //     ),
+  //     mapsWidgetSize: _itemRect,
+  //   );
+  //
+  //   await _mapController.animateCamera(
+  //     CameraUpdate.newCameraPosition(
+  //       CameraPosition(
+  //         target: LatLng(
+  //           point.location.latitude - 0.0001,
+  //           point.location.longitude,
+  //         ),
+  //         zoom: 15,
+  //       ),
+  //     ),
+  //   );
+  //   await _mapController.animateCamera(
+  //     CameraUpdate.newCameraPosition(
+  //       CameraPosition(
+  //         target: LatLng(
+  //           point.location.latitude,
+  //           point.location.longitude,
+  //         ),
+  //         zoom: 15,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   bool screenLoading = false;
   int selected = 100;
@@ -131,6 +188,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
           width: 65,
           margin: EdgeInsets.only(right: 20),
           decoration: BoxDecoration(
+            color: Colors.white,
             borderRadius: BorderRadius.circular(4),
             border: Border.all(color: index!=selected?Color.fromARGB(25, 112, 112, 112):Colors.transparent),
             gradient: index==selected?AppConst.gradient1:null,
@@ -228,14 +286,14 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Color(0xfffefefe),
                         borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(12)),
                         boxShadow: [
                           BoxShadow(
-                              offset: Offset(0,1),
-                              color: Colors.grey,
-                              blurRadius: 1,
-                              spreadRadius: 1
+                            offset: Offset(0,1),
+                            color: Colors.grey.shade300,
+                            blurRadius: 10,
+                            spreadRadius: 2
                           )
                         ]
                     ),
@@ -247,11 +305,15 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                         TextFormField(
                           controller: _textEditingController,
                           onFieldSubmitted: searchFromTxtField,
+                          maxLines: 1,
                           style: TextStyle(fontSize: 12),
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.only(left: 5, right: 7),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             prefixIcon: Icon(FeatherIcons.mapPin, color: Colors.black87, size: 18,),
+                            suffixIconConstraints: BoxConstraints(
+                              minWidth: 40
+                            ),
                             suffixText: 'Change',
                             suffixStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppConst.themePurple, fontFamily: 'Stag', decoration: TextDecoration.underline),
                             focusedBorder: OutlineInputBorder(
@@ -260,6 +322,8 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                                 color: Colors.blue,
                               ),
                             ),
+                            fillColor: Colors.white,
+                            filled: true,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5),
                               borderSide: BorderSide(
