@@ -31,17 +31,27 @@ class AppConst{
   );
 
   //Font Styles
+  static TextStyle appbarTextStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: 'Stag', letterSpacing: 0.3);
+
   static TextStyle titleText1 = TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'Stag');
   static TextStyle titleText1Purple = TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'Stag', color: themePurple);
+  static TextStyle titleText1White = TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'Stag', color: Colors.white);
+
 
   static TextStyle titleText2 = TextStyle(fontSize: 18, fontWeight: FontWeight.w500, fontFamily: 'Stag');
   static TextStyle titleText2Purple = TextStyle(fontSize: 18, fontWeight: FontWeight.w500, fontFamily: 'Stag');
 
   static TextStyle header = TextStyle(fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'Stag', letterSpacing: 0.3);
+  static TextStyle header2 = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: 'Stag', letterSpacing: 0.3);
   static TextStyle purpleTextBold = TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: themePurple, fontFamily: 'Stag', letterSpacing: 0.3);
+
+  static TextStyle descriptionText2 = TextStyle(fontSize: 14, color: black, fontFamily: 'Stag', letterSpacing: 0.3);
+  static TextStyle descriptionTextPurple2 = TextStyle(fontSize: 14, color: themePurple, fontFamily: 'Stag', letterSpacing: 0.3);
 
   static TextStyle descriptionText = TextStyle(fontSize: 10, color: black, fontFamily: 'Stag', letterSpacing: 0.3);
   static TextStyle descriptionTextPurple = TextStyle(fontSize: 10, color: themePurple, fontFamily: 'Stag', letterSpacing: 0.3);
+  static TextStyle descriptionTextRed = TextStyle(fontSize: 10, color: Color(0xffEE175B), fontFamily: 'Stag', letterSpacing: 0.3, fontWeight: FontWeight.w600);
+  static TextStyle descriptionTextWhite = TextStyle(fontSize: 10, color: Colors.white, fontFamily: 'Stag', letterSpacing: 0.3);
 
   //image paths
   static String referAndEarnImage = 'assets/images/Refer and earn illustration.png';

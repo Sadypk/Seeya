@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:seeya/features/store/view/widgets/circle_image_widget.dart';
+import 'file:///F:/Flutter%20Projects/Seeya-Customer/lib/main_app/view/widgets/circle_image_widget.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/store/view/store_screen.dart';

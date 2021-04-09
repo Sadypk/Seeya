@@ -12,12 +12,15 @@ import 'package:seeya/features/store/view/all_stores_screen.dart';
 import 'package:seeya/features/home_screen/models/banner_model.dart';
 import 'package:seeya/features/home_screen/view/widgets/banner_card_widget.dart';
 import 'package:seeya/features/store/view/store_screen.dart';
-import 'package:seeya/features/store/view/widgets/circle_image_widget.dart';
+import 'package:seeya/features/store/view/widgets/offer_cards_gradient.dart';
+import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
+import 'file:///F:/Flutter%20Projects/Seeya-Customer/lib/main_app/view/widgets/circle_image_widget.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
 import 'package:seeya/features/store/view/widgets/top_picks_card_widget.dart';
 import 'package:seeya/mainRepoWithAllApi.dart';
 import 'package:get/get.dart';
+import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -80,25 +83,25 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.favorite_border_rounded),
                   SizedBox(width: 5,),
-                  Text('Online & in stores', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                  Text('You favorite stores', style: AppConst.header2,),
                 ],
               ),
               InkWell(
                   onTap: (){Get.to(AllStoresScreen());},
-                  child: Text('View All', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),)
+                  child: Text('View All', style: AppConst.descriptionTextPurple,)
               ),
             ],
           ),
-          SizedBox(height: 15,),
+          SizedBox(height: 11,),
           Container(
-            height: 110,
+            height: 90,
             child: ListView.builder(
               itemCount: 6,
               scrollDirection: Axis.horizontal,
@@ -110,11 +113,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     Get.to(StoreScreen(storeModel: storeList[0],));
                   },
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircleImageWidget(image: storeList[0].logo),
                       SizedBox(height: 5,),
-                      Text(storeList[0].name, style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold)),
-                      Text('${storeList[0].defaultCashback}% cashback', style: TextStyle(fontSize:12, color: Colors.green, fontWeight: FontWeight.bold)),
+                      Text(storeList[0].name, style: AppConst.descriptionText2),
+                      Text('${storeList[0].defaultCashback}% cashback', style: AppConst.descriptionTextPurple),
                     ],
                   ),
                 ),
@@ -125,43 +129,43 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
-    var topPicks = Container(
-      padding: EdgeInsets.all(5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.thumb_up_alt_outlined),
-                  SizedBox(width: 5,),
-                  Text('Top Picks for you', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-                ],
-              ),
-              InkWell(
-                  onTap: (){Get.to(AllStoresScreen());},
-                  child: Text('View All', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),)
-              ),
-            ],
-          ),
-          SizedBox(height: 15,),
-          Container(
-            height: 130,
-            child: ListView.builder(
-                itemCount: 6,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index){
-                  return TopPicksCardWidget(storeModel: storeList[0],);
-                }),
-          )
-        ],
-      ),
-    );
+    // var topPicks = Container(
+    //   padding: EdgeInsets.all(5),
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       Row(
+    //         mainAxisSize: MainAxisSize.max,
+    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         children: [
+    //           Row(
+    //             mainAxisSize: MainAxisSize.min,
+    //             children: [
+    //               Icon(Icons.thumb_up_alt_outlined),
+    //               SizedBox(width: 5,),
+    //               Text('Top Picks for you', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+    //             ],
+    //           ),
+    //           InkWell(
+    //               onTap: (){Get.to(AllStoresScreen());},
+    //               child: Text('View All', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),)
+    //           ),
+    //         ],
+    //       ),
+    //       SizedBox(height: 15,),
+    //       Container(
+    //         height: 130,
+    //         child: ListView.builder(
+    //             itemCount: 6,
+    //             scrollDirection: Axis.horizontal,
+    //             itemBuilder: (BuildContext context, int index){
+    //               return TopPicksCardWidget(storeModel: storeList[0],);
+    //             }),
+    //       )
+    //     ],
+    //   ),
+    // );
 
     var nearestStore = FutureBuilder(
       future: MainRepo.getAllNearestStore(),
@@ -230,6 +234,19 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
 
+    var gradientCards = Container(
+      height: 90,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          OfferCardsGradient(title: 'Grocery', description: 'Get all offer now', begin: Color(0xff664FB0), end: Color(0xffDA58D7),),
+          OfferCardsGradient(title: 'Fresh', description: 'Get all offer now', begin: Color(0xff8D67E5), end: Color(0xffD590C1)),
+          OfferCardsGradient(title: 'Restaurant', description: 'Get all offer now', begin: Color(0xffEF6DA0), end: Color(0xffEE8E6B)),
+          OfferCardsGradient(title: 'Pharmacy', description: 'Get all offer now', begin: Color(0xff83EAF1), end: Color(0xff63A4FF)),
+        ],
+      ),
+    );
+
 
     var productList1 = TopProductsViewModel().productList;
     // var topProducts = Column(
@@ -269,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // );
 
     var specialOffers = DefaultTabController(
-        length: 4,
+        length: 5,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -289,16 +306,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   text: "Recent",
                 ),
                 Tab(
-                  text: "Category",
+                  text: "Grocery",
                 ),
                 Tab(
-                  text: "Expiring First",
+                  text: "Fresh",
                 ),
                 Tab(
-                  text: "High to Low",
+                  text: "Restaurant",
+                ),
+                Tab(
+                  text: "Pharmacy",
                 ),
               ],
             ),
+            // SpecialOfferTile(storeModel: storeList[0],)
+            Container(
+              height: 500,
+              child: ListView.builder(
+                itemCount: 6,
+                  itemBuilder: (BuildContext context, int index){
+                    return SpecialOfferTile(storeModel: storeList[0],);
+                  }
+                  ),
+            )
           ],
         )
     );
@@ -307,7 +337,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('Home'),
+        title: Text('Home', style: TextStyle(color: Color(0xff252525), fontSize: 14),),
         backgroundColor: Colors.transparent,
         actions: [
           IconButton(icon: Icon(FeatherIcons.bell, color: Colors.grey,), onPressed: (){}),
@@ -327,16 +357,6 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
           child: Column(
             children: [
-              // Row(
-              //   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   mainAxisSize: MainAxisSize.max,
-              //   children: [
-              //     Expanded(
-              //       child: searchBox,
-              //     ),
-              //     IconButton(icon: Icon(Icons.message, color: Colors.grey,), onPressed: (){})
-              //   ],
-              // ),
               SizedBox(height: 10,),
               Expanded(child: ListView(
                 children: [
@@ -344,14 +364,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   Divider(height: 30,),
                   favoriteShops,
                   SizedBox(height: 10,),
-                  topPicks,
-                  SizedBox(height: 10,),
+                  gradientCards,
+                  SizedBox(height: 25,),
                   specialOffers,
-                  // SizedBox(height: 10,),
-                  // nearestStore,
-                  // SizedBox(height: 10,),
-                  // topProducts,
-                  SizedBox(height: 25 ,),
+                  // SizedBox(height: 25 ,),
                 ],
               ))
             ],
