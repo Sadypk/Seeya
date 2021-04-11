@@ -9,6 +9,7 @@ class SpecialOfferTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5),
+      margin: EdgeInsets.only(bottom: 5),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -18,13 +19,17 @@ class SpecialOfferTile extends StatelessWidget {
             spreadRadius: 0.5
           ),
         ],
+        borderRadius: BorderRadius.circular(4),
         border: Border.all(color: Colors.grey[200]),
         color: Colors.white
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text('Expires in: 1 day', style: AppConst.descriptionTextRed,),
+          Padding(
+            padding: const EdgeInsets.only(right: 5, ),
+            child: Text('Expires in: 1 day', style: AppConst.descriptionTextRed,),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

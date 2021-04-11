@@ -31,6 +31,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final controller = PageController(initialPage: 0, viewportFraction: 0.9);
   List<StoreModel> list = [];
+  double padding = 20;
 
   @override
   void initState() {
@@ -59,24 +60,20 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     ];
     var bannerWidget = Container(
-      padding: EdgeInsets.only(bottom: 5),
-      height: 155,
-      // width: 200,
-      child: ListView.builder(
-        padding: EdgeInsets.zero,
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemCount: bannerList.length,
-        itemBuilder: (BuildContext context, int index){
-          return BannerCardWidget(bannerList[index]);
-        },
+      height: 122,
+      // padding: EdgeInsets.symmetric(horizontal: padding),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/banner.png'),
+          fit: BoxFit.cover
+        )
       ),
     );
 
 
     var storeList = NearestStoreViewModel().storeList;
     var favoriteShops = Container(
-      padding: EdgeInsets.all(5),
+      padding: EdgeInsets.only(left: padding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -95,7 +92,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               InkWell(
                   onTap: (){Get.to(AllStoresScreen());},
-                  child: Text('View All', style: AppConst.descriptionTextPurple,)
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Text('View All', style: AppConst.descriptionTextPurple,),
+                  )
               ),
             ],
           ),
@@ -167,75 +167,76 @@ class _HomeScreenState extends State<HomeScreen> {
     //   ),
     // );
 
-    var nearestStore = FutureBuilder(
-      future: MainRepo.getAllNearestStore(),
-      builder: (_, AsyncSnapshot<List<StoreModel>>snapshot){
-        if(snapshot.hasData && snapshot.data != null){
-          if(snapshot.data == null){
-            return Text('something went wrong');
-          }else if(snapshot.data.length == 0){
-
-            return Container(
-              padding: EdgeInsets.all(5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Online & in stores', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-                      InkWell(
-                          onTap: (){Get.to(AllStoresScreen());},
-                          child: Text('See All', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),)
-                      ),
-                    ],
-                  ),
-                  Text('No stores found', style: TextStyle(fontSize: 12, color: Colors.grey),),
-                  SizedBox(height: 15,),
-                ],
-              ),
-            );
-          }else{
-            return Container(
-              padding: EdgeInsets.all(5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Online & in stores', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-                      InkWell(
-                          onTap: (){Get.to(AllStoresScreen());},
-                          child: Text('See All', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),)
-                      ),
-                    ],
-                  ),
-                  Text('Last-minute gifts with Double Cash Back', style: TextStyle(fontSize: 12, color: Colors.grey),),
-                  SizedBox(height: 15,),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, i) {
-                      return StoreTileWidget(storeModel: snapshot.data[i], isClaimable: true, onTap: (){Get.to(StoreScreen(storeModel: snapshot.data[i],));},);
-                    },
-                  ),
-                ],
-              ),
-            );
-          }
-        }else{
-          return SpinKitWave(color: Theme.of(context).primaryColor);
-        }
-      },
-    );
+    // var nearestStore = FutureBuilder(
+    //   future: MainRepo.getAllNearestStore(),
+    //   builder: (_, AsyncSnapshot<List<StoreModel>>snapshot){
+    //     if(snapshot.hasData && snapshot.data != null){
+    //       if(snapshot.data == null){
+    //         return Text('something went wrong');
+    //       }else if(snapshot.data.length == 0){
+    //
+    //         return Container(
+    //           padding: EdgeInsets.all(5),
+    //           child: Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             children: [
+    //               Row(
+    //                 mainAxisSize: MainAxisSize.max,
+    //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 children: [
+    //                   Text('Online & in stores', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+    //                   InkWell(
+    //                       onTap: (){Get.to(AllStoresScreen());},
+    //                       child: Text('See All', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),)
+    //                   ),
+    //                 ],
+    //               ),
+    //               Text('No stores found', style: TextStyle(fontSize: 12, color: Colors.grey),),
+    //               SizedBox(height: 15,),
+    //             ],
+    //           ),
+    //         );
+    //       }else{
+    //         return Container(
+    //           padding: EdgeInsets.all(5),
+    //           child: Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             children: [
+    //               Row(
+    //                 mainAxisSize: MainAxisSize.max,
+    //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 children: [
+    //                   Text('Online & in stores', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+    //                   InkWell(
+    //                       onTap: (){Get.to(AllStoresScreen());},
+    //                       child: Text('See All', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),)
+    //                   ),
+    //                 ],
+    //               ),
+    //               Text('Last-minute gifts with Double Cash Back', style: TextStyle(fontSize: 12, color: Colors.grey),),
+    //               SizedBox(height: 15,),
+    //               ListView.builder(
+    //                 shrinkWrap: true,
+    //                 itemCount: snapshot.data.length,
+    //                 itemBuilder: (context, i) {
+    //                   return StoreTileWidget(storeModel: snapshot.data[i], isClaimable: true, onTap: (){Get.to(StoreScreen(storeModel: snapshot.data[i],));},);
+    //                 },
+    //               ),
+    //             ],
+    //           ),
+    //         );
+    //       }
+    //     }else{
+    //       return SpinKitWave(color: Theme.of(context).primaryColor);
+    //     }
+    //   },
+    // );
 
     var gradientCards = Container(
       height: 90,
+      padding: EdgeInsets.only(left: 20),
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
@@ -287,49 +288,62 @@ class _HomeScreenState extends State<HomeScreen> {
 
     var specialOffers = DefaultTabController(
         length: 5,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Special offers made for you', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-            SizedBox(height: 10,),
-            ButtonsTabBar(
-              backgroundColor: Colors.black54,
-              unselectedBackgroundColor: Colors.white,
-              unselectedLabelStyle: TextStyle(color: Colors.black),
-              radius: 20,
-              borderColor: Colors.grey[200],
-              contentPadding: EdgeInsets.symmetric(horizontal: 10),
-              borderWidth: 1,
-              labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              tabs: [
-                Tab(
-                  text: "Recent",
-                ),
-                Tab(
-                  text: "Grocery",
-                ),
-                Tab(
-                  text: "Fresh",
-                ),
-                Tab(
-                  text: "Restaurant",
-                ),
-                Tab(
-                  text: "Pharmacy",
-                ),
-              ],
-            ),
-            // SpecialOfferTile(storeModel: storeList[0],)
-            Container(
-              height: 500,
-              child: ListView.builder(
-                itemCount: 6,
-                  itemBuilder: (BuildContext context, int index){
-                    return SpecialOfferTile(storeModel: storeList[0],);
-                  }
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Special offers made for you', style: AppConst.titleText1,),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Text('View All', style: AppConst.descriptionTextPurple,),
                   ),
-            )
-          ],
+                ],
+              ),
+              SizedBox(height: 20,),
+              ButtonsTabBar(
+                backgroundColor: Color(0xff252525),
+                unselectedBackgroundColor: Colors.white,
+                unselectedLabelStyle: TextStyle(color: Color(0xff252525)),
+                radius: 20,
+                borderColor: Color(0xff707070),
+                unselectedBorderColor: Color(0xff707070),
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                borderWidth: 1,
+                labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                tabs: [
+                  Tab(
+                    text: "Recent",
+                  ),
+                  Tab(
+                    text: "Grocery",
+                  ),
+                  Tab(
+                    text: "Fresh",
+                  ),
+                  Tab(
+                    text: "Restaurant",
+                  ),
+                  Tab(
+                    text: "Pharmacy",
+                  ),
+                ],
+              ),
+              SizedBox(height: 10,),
+              Container(
+                height: 500,
+                child: ListView.builder(
+                  itemCount: 6,
+                    itemBuilder: (BuildContext context, int index){
+                      return SpecialOfferTile(storeModel: storeList[0],);
+                    }
+                    ),
+              )
+            ],
+          ),
         )
     );
 
@@ -340,8 +354,8 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('Home', style: TextStyle(color: Color(0xff252525), fontSize: 14),),
         backgroundColor: Colors.transparent,
         actions: [
-          IconButton(icon: Icon(FeatherIcons.bell, color: Colors.grey,), onPressed: (){}),
-          IconButton(icon: Icon(FeatherIcons.messageCircle, color: Colors.grey), onPressed: () async{
+          IconButton(icon: Icon(FeatherIcons.bell, size: 18,), onPressed: (){}),
+          IconButton(icon: Icon(FeatherIcons.messageSquare, size: 18,), onPressed: () async{
             if(UserViewModel.userStatus.value == UserStatus.LOGGED_IN){
               Get.to(()=>ChatScreen());
             }else{
@@ -349,29 +363,20 @@ class _HomeScreenState extends State<HomeScreen> {
               Get.snackbar('Nope', 'not logged in');
             }
           }),
-          IconButton(icon: Icon(Icons.shopping_bag_outlined, color: Colors.grey), onPressed: (){}),
+          IconButton(icon: Icon(FeatherIcons.shoppingCart, size: 18), onPressed: (){}),
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
-          child: Column(
-            children: [
-              SizedBox(height: 10,),
-              Expanded(child: ListView(
-                children: [
-                  bannerWidget,
-                  Divider(height: 30,),
-                  favoriteShops,
-                  SizedBox(height: 10,),
-                  gradientCards,
-                  SizedBox(height: 25,),
-                  specialOffers,
-                  // SizedBox(height: 25 ,),
-                ],
-              ))
-            ],
-          ),
+        child: ListView(
+          children: [
+            bannerWidget,
+            SizedBox(height: 20,),
+            favoriteShops,
+            SizedBox(height: 25,),
+            gradientCards,
+            SizedBox(height: 25,),
+            specialOffers,
+          ],
         ),
       ),
     );

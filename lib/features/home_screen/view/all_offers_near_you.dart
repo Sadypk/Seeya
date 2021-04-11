@@ -14,8 +14,7 @@ class _AllOffersNearYouState extends State<AllOffersNearYou> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('All offers near your area'),
-        titleTextStyle: AppConst.appbarTextStyle,
+        title: Text('All offers near your area', style: AppConst.appbarTextStyle,),
         automaticallyImplyLeading: false,
       ),
       body: Container(

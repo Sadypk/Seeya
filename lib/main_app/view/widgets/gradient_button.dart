@@ -29,7 +29,7 @@ class GradientButton extends StatelessWidget {
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
             // color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(4),
             gradient: AppConst.gradient1,
             // border: Border.all(width: 1, color: Colors.grey)
         ),
