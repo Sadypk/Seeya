@@ -18,11 +18,11 @@ class CircleImageWidget extends StatelessWidget {
           // border: Border.all(color: Colors.grey[500]),
           boxShadow: [
             BoxShadow(
-                offset: Offset(0.3, 1),
-                color: Colors.grey[300],
-                blurRadius: 5,
-                spreadRadius: 2
-            )
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 3,
+              offset: Offset(0, 2),
+            ),
           ],
         ),
 

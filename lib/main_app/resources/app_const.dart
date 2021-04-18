@@ -43,9 +43,11 @@ class AppConst{
 
   static TextStyle header = TextStyle(fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'Stag', letterSpacing: 0.3);
   static TextStyle header2 = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: 'Stag', letterSpacing: 0.3);
+  static TextStyle header2Purple = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: 'Stag', letterSpacing: 0.3);
   static TextStyle purpleTextBold = TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: themePurple, fontFamily: 'Stag', letterSpacing: 0.3);
 
   static TextStyle descriptionText2 = TextStyle(fontSize: 14, color: black, fontFamily: 'Stag', letterSpacing: 0.3);
+  static TextStyle descriptionTextWhite2 = TextStyle(fontSize: 14, color: Colors.white, fontFamily: 'Stag', letterSpacing: 0.3);
   static TextStyle descriptionTextPurple2 = TextStyle(fontSize: 14, color: themePurple, fontFamily: 'Stag', letterSpacing: 0.3);
 
   static TextStyle descriptionText = TextStyle(fontSize: 10, color: black, fontFamily: 'Stag', letterSpacing: 0.3);

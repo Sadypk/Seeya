@@ -7,6 +7,7 @@ import 'package:seeya/features/chat/view/chatScreen.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
 import 'package:seeya/features/products/view/top_products_screen.dart';
+import 'package:seeya/features/scan_receipt/view/scan_your_receipt.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/all_stores_screen.dart';
 import 'package:seeya/features/home_screen/models/banner_model.dart';
@@ -59,15 +60,20 @@ class _HomeScreenState extends State<HomeScreen> {
           bannerBackgroundImage: 'https://thumbs.dreamstime.com/z/bright-banner-page-online-shopping-store-template-modern-flat-webpage-design-concept-website-mobile-happy-girl-vector-136259459.jpg'
       ),
     ];
-    var bannerWidget = Container(
-      height: 122,
-      // padding: EdgeInsets.symmetric(horizontal: padding),
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/banner.png'),
-          fit: BoxFit.cover
-        )
+    var bannerWidget = InkWell(
+      child: Container(
+        height: 122,
+        // padding: EdgeInsets.symmetric(horizontal: padding),
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/banner.png'),
+                fit: BoxFit.cover
+            )
+        ),
       ),
+      onTap: (){
+        Get.to(ScanYourReceipt());
+      },
     );
 
 
