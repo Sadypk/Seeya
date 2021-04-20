@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
-import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
+import 'package:seeya/features/store/view/widgets/product_card_widget_old.dart';
 
 class TopProductsScreen extends StatefulWidget {
   @override

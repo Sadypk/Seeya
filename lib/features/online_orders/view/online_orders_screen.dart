@@ -6,7 +6,7 @@ import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/store_screen.dart';
-import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
+import 'package:seeya/features/store/view/widgets/product_card_widget_old.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/store/view_model/cart_view_model.dart';
 import 'package:seeya/main_app/resources/string_resources.dart';

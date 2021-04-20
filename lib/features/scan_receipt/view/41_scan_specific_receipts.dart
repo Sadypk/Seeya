@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart';
+import 'package:seeya/features/scan_receipt/view/42_scan_grocery_receipts_by_categories.dart';
 import 'package:seeya/features/scan_receipt/view/43_stores_with_category_offers.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
@@ -31,9 +32,9 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
           children: [
-            SizedBox(height: 25,),
+            // SizedBox(height: 25,),
             Container(
-              height: 50,
+              height: 100,
               child: ListView.builder(
                   itemCount: 6,
                   scrollDirection: Axis.horizontal,
@@ -43,12 +44,12 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
                         Get.to(StoresWithCategoryOffers());
                       },
                       child: Container(
-                          margin: EdgeInsets.only(right: 16),
+                          margin: EdgeInsets.only(right: 16, top: 25, bottom: 25),
                           child: SquareImageWidget(image: 'https://i0.wp.com/deltacollegian.net/wp-content/uploads/2017/05/adidas.png?fit=880%2C660',)),
                     );
                   }),
             ),
-            SizedBox(height: 25,),
+            // SizedBox(height: 25,),
             GradientButton(
               height: 40,
               label: 'Upload receipts',
@@ -87,11 +88,16 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
               child: ListView.builder(
                   itemCount: 15,
                   itemBuilder: (BuildContext context, int index){
-                    return Column(
-                      children: [
-                        StoreShopNowTile(label: 'Adidas',),
-                        Divider(color: Colors.grey[200], thickness: 1, height: 20,),
-                      ],
+                    return InkWell(
+                      onTap: (){
+                        Get.to(ScanGroceryReceiptsByCategories());
+                      },
+                      child: Column(
+                        children: [
+                          StoreShopNowTile(label: 'Adidas',),
+                          Divider(color: Colors.grey[200], thickness: 1, height: 20,),
+                        ],
+                      ),
                     );
                   }
               ),

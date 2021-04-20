@@ -7,8 +7,9 @@ import 'package:seeya/features/chat/view/chatScreen.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
 import 'package:seeya/features/products/view/top_products_screen.dart';
-import 'package:seeya/features/scan_receipt/view/scan_your_receipt.dart';
+import 'package:seeya/features/scan_receipt/view/40_scan_your_receipt.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
+import 'package:seeya/features/store/view/46_nearest_stores_main_page.dart';
 import 'package:seeya/features/store/view/all_stores_screen.dart';
 import 'package:seeya/features/home_screen/models/banner_model.dart';
 import 'package:seeya/features/home_screen/view/widgets/banner_card_widget.dart';
@@ -305,7 +306,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text('Special offers made for you', style: AppConst.titleText1,),
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
-                    child: Text('View All', style: AppConst.descriptionTextPurple,),
+                    child: InkWell(
+                        onTap: (){
+                          Get.to(NearestStoresMainPage());
+                        },
+                        child: Text('View All', style: AppConst.descriptionTextPurple,)),
                   ),
                 ],
               ),

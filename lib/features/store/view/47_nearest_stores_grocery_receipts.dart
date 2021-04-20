@@ -1,29 +1,53 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
+import 'package:seeya/features/store/view/48_nearest_stores_with_category_offers.dart';
+import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/view/widgets/custom_outline_button.dart';
-import '44_favourite_grocery_stores.dart';
+import 'package:seeya/main_app/view/widgets/square_image_widget.dart';
 
-class StoresWithCategoryOffers extends StatefulWidget {
+class NearestStoresGroceryReceipts extends StatefulWidget {
   @override
-  _StoresWithCategoryOffersState createState() => _StoresWithCategoryOffersState();
+  _NearestStoresGroceryReceiptsState createState() => _NearestStoresGroceryReceiptsState();
 }
 
-class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
+class _NearestStoresGroceryReceiptsState extends State<NearestStoresGroceryReceipts> {
   @override
   Widget build(BuildContext context) {
     var storeList = NearestStoreViewModel().storeList;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan vegetable offers', style: AppConst.appbarTextStyle,),
+        title: Text('Nearest grocery stores', style: AppConst.appbarTextStyle,),
+        iconTheme: IconThemeData(color: Colors.white),
+        actions: [
+          IconButton(icon: Icon(Icons.search, size: 20,), onPressed: (){}),
+          IconButton(icon: Icon(FeatherIcons.mapPin, size: 16,), onPressed: (){}),
+        ],
       ),
       body: Column(
         children: [
-          SizedBox(height: 20,),
+          Container(
+            height: 100,
+            margin: EdgeInsets.only(left: 20),
+            child: ListView.builder(
+                itemCount: 6,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index){
+                  return InkWell(
+                    onTap: (){
+
+                    },
+                    child: Container(
+                        margin: EdgeInsets.only(right: 16, top: 25, bottom: 25),
+                        child: SquareImageWidget(image: 'https://i0.wp.com/deltacollegian.net/wp-content/uploads/2017/05/adidas.png?fit=880%2C660',)),
+                  );
+                }),
+          ),
           DefaultTabController(
               length: 5,
               child: Padding(
@@ -70,71 +94,33 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10,),
-                    Container(
-                      height: 200,
-                      child: ListView.builder(
-                          itemCount: 2,
-                          itemBuilder: (BuildContext context, int index){
-                            return SpecialOfferTile(storeModel: storeList[0],);
-                          }
-                      ),
-                    )
                   ],
                 ),
               )
           ),
-          SizedBox(height: 15,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomOutlineButton(
-                onTap: (){
-                  Get.to(FavouriteGroceryStores());
-                },
-                label: 'View all offers',
-                height: 28,
-                width: 160,
-                fontStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, fontFamily: 'Stag'),
-              )
-            ],
-          ),
-          SizedBox(height: 30,),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('All restaurants near you', style: AppConst.header2,),
-                Row(
-                  children: [
-                    Text('Sort by', style: AppConst.descriptionText,),
-                    Icon(Icons.keyboard_arrow_down_outlined, size: 18, color: Colors.black87,)
-                  ],
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Divider(height: 20,),
-          ),
+          SizedBox(height: 10,),
           Container(
             child: Expanded(
-                child: ListView.builder(
-                  itemCount: 3,
-                    itemBuilder: (BuildContext context, int index){
-                      return Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          children: [
-                            StoreShopNowTile(label: 'Adidas'),
-                            Divider(height: 20,)
-                          ],
-                        ),
-                      );
-                    }
-                )
+              child: GridView.builder(
+                itemCount: 6,
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 162/164,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemBuilder: (BuildContext context, int index){
+                  return InkWell(
+                    onTap: (){
+                      Get.to(NearestStoresWithCategoryOffers());
+                    },
+                    child: Container(
+                        margin: EdgeInsets.only(left: index%2==0?20:0, right: index%2==0?0:20),
+                        child: ProductCardWidget()),
+                  );
+                },
+              ),
             ),
           )
         ],

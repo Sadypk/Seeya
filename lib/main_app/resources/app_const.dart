@@ -23,6 +23,12 @@ class AppConst{
       blurRadius: 1,
       offset: Offset(0.5,0.5)
   );
+  static BoxShadow shadowBasic2 = BoxShadow(
+      color: Colors.grey[300],
+      spreadRadius: 1,
+      blurRadius: 1,
+      offset: Offset(-0.5,-0.5)
+  );
   static BoxShadow shadowBottomNavBar = BoxShadow(
       color: Colors.grey[300],
       spreadRadius: 0.6,

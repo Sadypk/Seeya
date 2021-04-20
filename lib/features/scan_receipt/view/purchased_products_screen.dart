@@ -7,7 +7,7 @@ import 'package:seeya/features/home_screen/view_models/top_products_view_model.d
 import 'package:seeya/features/scan_receipt/view_model/purchased_product_view_model.dart';
 import 'package:seeya/features/store/models/cart_model.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
-import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
+import 'package:seeya/features/store/view/widgets/product_card_widget_old.dart';
 import 'package:seeya/home.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 

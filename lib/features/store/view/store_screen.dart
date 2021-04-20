@@ -6,7 +6,7 @@ import 'package:seeya/features/scan_receipt/theBoss/view/cameraView.dart';
 import 'package:seeya/features/store/models/cart_model.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/confirm_order_screen.dart';
-import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
+import 'package:seeya/features/store/view/widgets/product_card_widget_old.dart';
 import 'package:seeya/features/store/view_model/cart_view_model.dart';
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:get/get.dart';

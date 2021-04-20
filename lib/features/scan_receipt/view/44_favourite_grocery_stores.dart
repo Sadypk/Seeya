@@ -6,14 +6,15 @@ import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.
 import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/view/widgets/custom_outline_button.dart';
-import '44_favourite_grocery_stores.dart';
+import 'package:seeya/main_app/view/widgets/square_image_widget.dart';
+import '45_fav_stores_main_page.dart';
 
-class StoresWithCategoryOffers extends StatefulWidget {
+class FavouriteGroceryStores extends StatefulWidget {
   @override
-  _StoresWithCategoryOffersState createState() => _StoresWithCategoryOffersState();
+  _FavouriteGroceryStoresState createState() => _FavouriteGroceryStoresState();
 }
 
-class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
+class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
   @override
   Widget build(BuildContext context) {
     var storeList = NearestStoreViewModel().storeList;
@@ -23,7 +24,23 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
       ),
       body: Column(
         children: [
-          SizedBox(height: 20,),
+          Container(
+            height: 100,
+            margin: EdgeInsets.only(left: 20),
+            child: ListView.builder(
+                itemCount: 6,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index){
+                  return InkWell(
+                    onTap: (){
+
+                    },
+                    child: Container(
+                        margin: EdgeInsets.only(right: 16, top: 25, bottom: 25),
+                        child: SquareImageWidget(image: 'https://i0.wp.com/deltacollegian.net/wp-content/uploads/2017/05/adidas.png?fit=880%2C660',)),
+                  );
+                }),
+          ),
           DefaultTabController(
               length: 5,
               child: Padding(
@@ -90,7 +107,7 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
             children: [
               CustomOutlineButton(
                 onTap: (){
-                  Get.to(FavouriteGroceryStores());
+                  Get.to(FavStoresMainPage());
                 },
                 label: 'View all offers',
                 height: 28,
@@ -122,7 +139,7 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
           Container(
             child: Expanded(
                 child: ListView.builder(
-                  itemCount: 3,
+                    itemCount: 3,
                     itemBuilder: (BuildContext context, int index){
                       return Container(
                         margin: EdgeInsets.symmetric(horizontal: 20),
