@@ -17,7 +17,7 @@ class OfferCardsGradient extends StatelessWidget {
         Get.to(AllOffersNearYou());
       },
       child: Container(
-        padding: EdgeInsets.only(left: 8),
+        padding: EdgeInsets.only(left: 8,top: 12,bottom: 12),
         margin: EdgeInsets.only(right: 5),
         height: 90,
         width: 100,
@@ -32,14 +32,14 @@ class OfferCardsGradient extends StatelessWidget {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(title, style: AppConst.titleText1White, ),
             SizedBox(height: 4,),
             Text(description, style: AppConst.descriptionTextWhite,),
             SizedBox(height: 10,),
-            Text('View more', style: TextStyle(fontSize: 10, color: Colors.white, fontFamily: 'Stag', letterSpacing: 0.3, decoration: TextDecoration.underline)),
+            Text('View more', style: TextStyle(fontSize: 8, color: Colors.white, fontFamily: 'Stag', letterSpacing: 0.3, decoration: TextDecoration.underline)),
 
           ],
         ),

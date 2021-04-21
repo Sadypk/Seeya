@@ -18,9 +18,9 @@ class CircleImageWidget extends StatelessWidget {
           // border: Border.all(color: Colors.grey[500]),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 2,
-              blurRadius: 3,
+              color: Colors.grey.shade200,
+              spreadRadius: 5,
+              blurRadius: 4,
               offset: Offset(0, 2),
             ),
           ],

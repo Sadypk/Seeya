@@ -61,7 +61,8 @@ class AuthRepo{
         UserViewModel.setToken(result.data['customerLoginOrSignUp']['token']);
         UserViewModel.setUser(UserModel.fromJson(result.data['customerLoginOrSignUp']['data']));
         UserViewModel.changeUserStatus(UserStatus.LOGGED_IN);
-        try{
+        // TODO turned of chat for faster login
+        /*try{
           print('set user');
           await SConfig.client.connectUser(
               User(
@@ -98,7 +99,7 @@ class AuthRepo{
           print(e.toString());
           print('stream update user failed');
           return true;
-        }
+        }*/
 
       }
       return loginError;

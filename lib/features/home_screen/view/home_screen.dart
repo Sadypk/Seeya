@@ -1,4 +1,5 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -16,7 +17,6 @@ import 'package:seeya/features/home_screen/view/widgets/banner_card_widget.dart'
 import 'package:seeya/features/store/view/store_screen.dart';
 import 'package:seeya/features/store/view/widgets/offer_cards_gradient.dart';
 import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
-import 'file:///F:/Flutter%20Projects/Seeya-Customer/lib/main_app/view/widgets/circle_image_widget.dart';
 import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
 import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
 import 'package:seeya/features/store/view/widgets/top_picks_card_widget.dart';
@@ -24,6 +24,11 @@ import 'package:seeya/mainRepoWithAllApi.dart';
 import 'package:get/get.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
+import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
+
+
+import 'package:seeya/newMainAPIs.dart';
+import 'package:seeya/newDataViewModel.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -41,35 +46,40 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  bool loading = true;
   getNearestStore()async{
     list.addAll(await MainRepo.getAllNearestStore());
+    await NewApi.getAllCategories();
+    await NewApi.getHomeFavShops();
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    List<BannerModel> bannerList = [
-      BannerModel(
-        title: 'Start shopping and get a \$10 Bonus',
-        bannerDescription: 'Select a store, then tap \"Shop\"\n\n' 'Swipe to learn more >',
-        bannerBackgroundImage: 'https://image.freepik.com/free-vector/fashion-promotion-store-banner-gradient-modern-background-template_8306-296.jpg'
-      ),
-      BannerModel(
-          title: 'Start shopping and get a \$10 Bonus',
-          bannerDescription:
-          "Select a store, then tap"
-          "Swipe to learn more >",
-          bannerBackgroundImage: 'https://thumbs.dreamstime.com/z/bright-banner-page-online-shopping-store-template-modern-flat-webpage-design-concept-website-mobile-happy-girl-vector-136259459.jpg'
-      ),
-    ];
     var bannerWidget = InkWell(
-      child: Container(
-        height: 122,
-        // padding: EdgeInsets.symmetric(horizontal: padding),
-        decoration: BoxDecoration(
+      child: AspectRatio(
+        aspectRatio: 375/112,
+        child: Container(
+          // padding: EdgeInsets.symmetric(horizontal: padding),
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(color: Colors.grey,width: .5)
+            ),
             image: DecorationImage(
                 image: AssetImage('assets/images/banner.png'),
                 fit: BoxFit.cover
-            )
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.shade200,
+                offset: Offset(0,-1),
+                spreadRadius: 3,
+                blurRadius: 3
+              )
+            ]
+          ),
         ),
       ),
       onTap: (){
@@ -77,8 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
 
-
-    var storeList = NearestStoreViewModel().storeList;
     var favoriteShops = Container(
       padding: EdgeInsets.only(left: padding),
       child: Column(
@@ -106,28 +114,23 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          SizedBox(height: 11,),
+          SizedBox(height: 6),
           Container(
-            height: 90,
+            height: 100,
             child: ListView.builder(
-              itemCount: 6,
+              itemCount: NewDataViewModel.homeFavStores.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index){
               return Container(
                 margin: EdgeInsets.only(right: 15),
-                child: InkWell(
-                  onTap: (){
-                    Get.to(StoreScreen(storeModel: storeList[0],));
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleImageWidget(image: storeList[0].logo),
-                      SizedBox(height: 5,),
-                      Text(storeList[0].name, style: AppConst.descriptionText2),
-                      Text('${storeList[0].defaultCashback}% cashback', style: AppConst.descriptionTextPurple),
-                    ],
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleImageWidget(image: NewDataViewModel.homeFavStores[index].logo),
+                    SizedBox(height: 12),
+                    Text(NewDataViewModel.homeFavStores[index].name, style: AppConst.descriptionText2),
+                    Text('${NewDataViewModel.homeFavStores[index].defaultCashback}% cashback', style: AppConst.descriptionTextPurple),
+                  ],
                 ),
               );
             }),
@@ -241,17 +244,39 @@ class _HomeScreenState extends State<HomeScreen> {
     //   },
     // );
 
+    final gradients = [
+      {
+        'begin' : Color(0xff664FB0),
+        'end' : Color(0xffDA58D7),
+      },
+      {
+        'begin' : Color(0xff8D67E5),
+        'end' : Color(0xffD590C1),
+      },
+      {
+        'begin' : Color(0xffEF6DA0),
+        'end' : Color(0xffEE8E6B),
+      },
+      {
+        'begin' : Color(0xff83EAF1),
+        'end' : Color(0xff63A4FF),
+      },
+    ];
+
     var gradientCards = Container(
       height: 90,
       padding: EdgeInsets.only(left: 20),
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          OfferCardsGradient(title: 'Grocery', description: 'Get all offer now', begin: Color(0xff664FB0), end: Color(0xffDA58D7),),
-          OfferCardsGradient(title: 'Fresh', description: 'Get all offer now', begin: Color(0xff8D67E5), end: Color(0xffD590C1)),
-          OfferCardsGradient(title: 'Restaurant', description: 'Get all offer now', begin: Color(0xffEF6DA0), end: Color(0xffEE8E6B)),
-          OfferCardsGradient(title: 'Pharmacy', description: 'Get all offer now', begin: Color(0xff83EAF1), end: Color(0xff63A4FF)),
-        ],
+      child: ListView.builder(
+        shrinkWrap: true,
+      padding: EdgeInsets.zero,
+      scrollDirection: Axis.horizontal,
+       itemCount: NewDataViewModel.businessTypes.length,
+       itemBuilder:(_, index)=> OfferCardsGradient(
+           title: NewDataViewModel.businessTypes[index].name,
+           description: 'Get all offer now',
+           begin: gradients[index]['begin'],
+           end: gradients[index]['end']
+       )
       ),
     );
 
@@ -316,6 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizedBox(height: 20,),
               ButtonsTabBar(
+                physics: AlwaysScrollableScrollPhysics(),
                 backgroundColor: Color(0xff252525),
                 unselectedBackgroundColor: Colors.white,
                 unselectedLabelStyle: TextStyle(color: Color(0xff252525)),
@@ -346,12 +372,13 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 10,),
               Container(
                 height: 500,
-                child: ListView.builder(
-                  itemCount: 6,
-                    itemBuilder: (BuildContext context, int index){
-                      return SpecialOfferTile(storeModel: storeList[0],);
-                    }
-                    ),
+                color: Colors.red,
+                // child: ListView.builder(
+                //   itemCount: 6,
+                //     itemBuilder: (BuildContext context, int index){
+                //       return SpecialOfferTile(storeModel: storeList[0],);
+                //     }
+                //     ),
               )
             ],
           ),
@@ -365,7 +392,10 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('Home', style: TextStyle(color: Color(0xff252525), fontSize: 14),),
         backgroundColor: Colors.transparent,
         actions: [
-          IconButton(icon: Icon(FeatherIcons.bell, size: 18,), onPressed: (){}),
+          IconButton(icon: Icon(FeatherIcons.bell, size: 18,), onPressed: () async{
+            await NewApi.getAllCategories();
+
+          }),
           IconButton(icon: Icon(FeatherIcons.messageSquare, size: 18,), onPressed: () async{
             if(UserViewModel.userStatus.value == UserStatus.LOGGED_IN){
               Get.to(()=>ChatScreen());
@@ -375,9 +405,10 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           }),
           IconButton(icon: Icon(FeatherIcons.shoppingCart, size: 18), onPressed: (){}),
+          SizedBox(width: 8)
         ],
       ),
-      body: SafeArea(
+      body: loading ? SpinKitDualRing(color: AppConst.themePurple) : SafeArea(
         child: ListView(
           children: [
             bannerWidget,
