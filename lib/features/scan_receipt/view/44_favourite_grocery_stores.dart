@@ -1,5 +1,6 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
@@ -7,9 +8,13 @@ import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/view/widgets/custom_outline_button.dart';
 import 'package:seeya/main_app/view/widgets/square_image_widget.dart';
+import '43_stores_with_category_offers.dart';
 import '45_fav_stores_main_page.dart';
 
 class FavouriteGroceryStores extends StatefulWidget {
+  final String title;
+
+  const FavouriteGroceryStores({Key key, this.title}) : super(key: key);
   @override
   _FavouriteGroceryStoresState createState() => _FavouriteGroceryStoresState();
 }
@@ -20,7 +25,15 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
     var storeList = NearestStoreViewModel().storeList;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan vegetable offers', style: AppConst.appbarTextStyle,),
+        iconTheme: IconThemeData(color: Colors.white),
+        titleSpacing: 0,
+        title: Text('Favourite ${widget.title} stores', style: AppConst.appbarTextStyle,),
+        actions: [
+          Icon(Icons.search, size: 20,),
+          SizedBox(width: 20),
+          Icon(FeatherIcons.mapPin, size: 16,),
+          SizedBox(width: 20)
+        ],
       ),
       body: Column(
         children: [
@@ -33,11 +46,13 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
                 itemBuilder: (BuildContext context, int index){
                   return InkWell(
                     onTap: (){
-
+                      Get.to(()=>StoresWithCategoryOffers(title: 'Demo'));
                     },
                     child: Container(
                         margin: EdgeInsets.only(right: 16, top: 25, bottom: 25),
-                        child: SquareImageWidget(image: 'https://i0.wp.com/deltacollegian.net/wp-content/uploads/2017/05/adidas.png?fit=880%2C660',)),
+                        child: SquareImageWidget(
+                          title: 'Demo',
+                          image: 'https://i0.wp.com/deltacollegian.net/wp-content/uploads/2017/05/adidas.png?fit=880%2C660',)),
                   );
                 }),
           ),
@@ -52,10 +67,10 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Special offers made for you', style: AppConst.titleText1,),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Text('View All', style: AppConst.descriptionTextPurple,),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(right: 10),
+                        //   child: Text('View All', style: AppConst.descriptionTextPurple,),
+                        // ),
                       ],
                     ),
                     SizedBox(height: 20,),
@@ -112,7 +127,7 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
                 label: 'View all offers',
                 height: 28,
                 width: 160,
-                fontStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, fontFamily: 'Stag'),
+                fontStyle: TextStyle(fontSize: 12,fontFamily: 'Stag'),
               )
             ],
           ),

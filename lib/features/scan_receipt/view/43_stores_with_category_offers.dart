@@ -1,5 +1,6 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
@@ -9,6 +10,9 @@ import 'package:seeya/main_app/view/widgets/custom_outline_button.dart';
 import '44_favourite_grocery_stores.dart';
 
 class StoresWithCategoryOffers extends StatefulWidget {
+  final String title;
+
+  const StoresWithCategoryOffers({Key key, this.title}) : super(key: key);
   @override
   _StoresWithCategoryOffersState createState() => _StoresWithCategoryOffersState();
 }
@@ -19,7 +23,15 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
     var storeList = NearestStoreViewModel().storeList;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan vegetable offers', style: AppConst.appbarTextStyle,),
+        iconTheme: IconThemeData(color: Colors.white),
+        titleSpacing: 0,
+        title: Text('${widget.title} offers', style: AppConst.appbarTextStyle,),
+        actions: [
+          Icon(Icons.search, size: 20,),
+          SizedBox(width: 20),
+          Icon(FeatherIcons.mapPin, size: 16,),
+          SizedBox(width: 20)
+        ],
       ),
       body: Column(
         children: [
@@ -35,10 +47,10 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Special offers made for you', style: AppConst.titleText1,),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Text('View All', style: AppConst.descriptionTextPurple,),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(right: 10),
+                        //   child: Text('View All', style: AppConst.descriptionTextPurple,),
+                        // ),
                       ],
                     ),
                     SizedBox(height: 20,),
@@ -95,7 +107,7 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
                 label: 'View all offers',
                 height: 28,
                 width: 160,
-                fontStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, fontFamily: 'Stag'),
+                fontStyle: TextStyle(fontSize: 12, fontFamily: 'Stag'),
               )
             ],
           ),

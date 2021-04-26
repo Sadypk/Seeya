@@ -15,12 +15,13 @@ class StoreShopNowTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CircleImageWidget(image: 'https://i0.wp.com/deltacollegian.net/wp-content/uploads/2017/05/adidas.png?fit=880%2C660',),
-            SizedBox(width: 8,),
+            SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(label, style: TextStyle(fontSize: 14, fontFamily: 'Stag', ),),
-                Text('10% Cashback', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w600, fontFamily: 'OpenSans', color: Color(0xffEE1717)),)
+                SizedBox(height: 3,),
+                Text('10% Cashback', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, fontFamily: 'OpenSans', color: Color(0xffEE1717)),)
               ],
             )
           ],

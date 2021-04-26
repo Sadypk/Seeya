@@ -64,4 +64,63 @@ class NewApi{
       print(e.toString());
     }
   }
+
+  static Future<void> getHomePageSpecialOfferAndCategoryData(String bType, [int pSize, int pNum]) async{
+    final _query = r'''query($lat: Float $lng: Float $bType: ID $pSize: Int $pNum: Int){
+  getHomePageSpecialOfferAndCategoryData(
+    lat: $lat
+    lng: $lng
+    businesstype: $bType
+    page_size: $pSize
+    page_number: $pNum
+  ){
+    error
+    msg
+    data{
+      products{
+        _id
+        name
+        store{
+          _id
+        }
+        cashback
+        selling_price
+        expiry_date
+      }
+      stores{
+        _id
+        name
+        promotion_cashback_status
+        promotion_cashback
+        default_cashback
+        promotion_cashback_date{
+          start_date
+          end_date
+        }
+      }
+    }
+  }
+}''';
+
+    try{
+
+      //TODO static for now
+      final variables = {
+        "lat": 22.8259892,
+        "lng": 89.5510924,
+        "bType": "",
+        "pSize": pSize ?? 100,
+        "pNum": pNum ?? 1
+      };
+
+     GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
+      logger.i(result.data);
+      if(!result.data['getHomePageSpecialOfferAndCategoryData']['error']){
+        NewDataViewModel.homeFavStores = List.from(result.data['getHomePageSpecialOfferAndCategoryData']['data'].map((type)=>HomeFavModel.fromJson(type)));
+      }
+    }catch(e){
+      print(e.toString());
+    }
+  }
 }
