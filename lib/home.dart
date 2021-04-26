@@ -127,9 +127,10 @@ class _HomeState extends State<Home> {
                                 Text(
                                   'Choose an option',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: h(50),
-                                      color: AppConst.black),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                      fontFamily: 'Stag',
+                                      color: Color(0xff252525)),
                                 ),
                               ],
                             ),
