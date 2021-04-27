@@ -1,9 +1,11 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:logger/logger.dart';
+import 'package:seeya/features/scan_receipt/view/45_fav_stores_main_page.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/main_app/config/gqlConfig.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 import 'newDataViewModel.dart';
+import 'package:seeya/main_app/models/45_model.dart';
 import 'package:seeya/features/home_screen/models/homeFavStoreModel.dart';
 
 class NewApi{
@@ -134,34 +136,182 @@ class NewApi{
 
   static Future<void> get45_FavStoreMainScreenData() async{
     final _query = r'''query($lat : Float $lng: Float){
-    getHomePageFavoriteShops(lat: $lat, lng:$lng){
-      error
-      msg
-      data{
+  getFavoritePageData(lat: $lat lng: $lng){
+    error
+    msg
+    data{
+      Fresh{
         _id
-        name
-        logo
-        default_cashback
+        item_count
+        catalogs{
+          _id
+          name
+          img
+        }
+        products{
+          _id
+          name
+          logo
+          store{
+            _id
+            name
+          }
+          cashback
+          expiry_date
+          businesstype{
+            _id
+          }
+        }
+        stores{
+          _id
+          name
+          businesstype{
+            _id
+          }
+          default_cashback
+          promotion_cashback
+          promotion_cashback_status
+          promotion_cashback_date{
+            start_date
+            end_date
+          }
+        }
+      }
+      Grocery{
+        _id
+        item_count
+        catalogs{
+          _id
+          name
+          img
+        }
+        products{
+          _id
+          name
+          logo
+          store{
+            _id
+            name
+          }
+          cashback
+          expiry_date
+          businesstype{
+            _id
+          }
+        }
+        stores{
+          _id
+          name
+          businesstype{
+            _id
+          }
+          default_cashback
+          promotion_cashback
+          promotion_cashback_status
+          promotion_cashback_date{
+            start_date
+            end_date
+          }
+        }
+      }
+      Restaurant{
+        _id
+        item_count
+        catalogs{
+          _id
+          name
+          img
+        }
+        products{
+          _id
+          name
+          logo
+          store{
+            _id
+            name
+          }
+          cashback
+          expiry_date
+          businesstype{
+            _id
+          }
+        }
+        stores{
+          _id
+          name
+          businesstype{
+            _id
+          }
+          default_cashback
+          promotion_cashback
+          promotion_cashback_status
+          promotion_cashback_date{
+            start_date
+            end_date
+          }
+        }
+      }
+      Pharmacy{
+        _id
+        item_count
+        catalogs{
+          _id
+          name
+          img
+        }
+        products{
+          _id
+          name
+          logo
+          store{
+            _id
+            name
+          }
+          cashback
+          expiry_date
+          businesstype{
+            _id
+          }
+        }
+        stores{
+          _id
+          name
+          businesstype{
+            _id
+          }
+          default_cashback
+          promotion_cashback
+          promotion_cashback_status
+          promotion_cashback_date{
+            start_date
+            end_date
+          }
+        }
       }
     }
-  }''';
+  }
+}''';
 
     try{
 
       //TODO static for now
       final variables = {
-        'lat' : 22.8259896,
-        'lng' : 89.5510924,
+        'lat': 22.8259892,
+        'lng': 89.5510924
       };
 
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
       logger.i(result.data);
-      if(!result.data['getHomePageFavoriteShops']['error']){
-        NewDataViewModel.homeFavStores = List.from(result.data['getHomePageFavoriteShops']['data'].map((type)=>HomeFavModel.fromJson(type)));
+      if(!result.data['getFavoritePageData']['error']){
+        NewDataViewModel.grocery = FavPageDataModel.fromJson(result.data['getFavoritePageData']['data']['Grocery']);
+        NewDataViewModel.fresh = FavPageDataModel.fromJson(result.data['getFavoritePageData']['data']['Fresh']);
+        NewDataViewModel.restaurant = FavPageDataModel.fromJson(result.data['getFavoritePageData']['data']['Restaurant']);
+        NewDataViewModel.pharmacy = FavPageDataModel.fromJson(result.data['getFavoritePageData']['data']['Pharmacy']);
       }
     }catch(e){
       print(e.toString());
+      print("e.toString()");
     }
   }
 }

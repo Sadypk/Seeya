@@ -1,6 +1,7 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/chat/model/ddModel.dart';
 import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart';
@@ -12,6 +13,7 @@ import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
 import 'package:seeya/main_app/view/widgets/gradient_button.dart';
 import 'package:seeya/newDataViewModel.dart';
+import 'package:seeya/newMainAPIs.dart';
 
 import '44_favourite_grocery_stores.dart';
 
@@ -73,8 +75,13 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
   }
 
   getData() async{
-    
+    await NewApi.get45_FavStoreMainScreenData();
+    setState(() {
+      loading = false;
+    });
   }
+
+  bool loading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -91,22 +98,47 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
           SizedBox(width: 20)
         ],
       ),
-      body: Container(
+      body: loading ? SpinKitDualRing(color: AppConst.themePurple) : Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
             SizedBox(height: 20,),
             InkWell(
-                onTap: (){
-                  Get.to(()=>FavouriteGroceryStores(title: 'Grocery'));
-                },
-                child: customTile('Grocery', 58)),
+              onTap: (){
+                Get.to(()=>FavouriteGroceryStores(title: 'Grocery',stores: NewDataViewModel.grocery.stores, products: NewDataViewModel.grocery.products));
+              },
+              child: customTile('Grocery', NewDataViewModel.grocery.itemCount)
+            ),
             Divider(color: Colors.grey[200], thickness: 1, height: 20,),
-            customTile('Fresh Items', 37),
+
+
+
+            InkWell(
+              onTap: (){
+                Get.to(()=>FavouriteGroceryStores(title: 'Fresh',stores: NewDataViewModel.fresh.stores, products: NewDataViewModel.fresh.products));
+
+              },
+              child: customTile('Fresh Items', NewDataViewModel.fresh.itemCount)),
+
+
             Divider(color: Colors.grey[200], thickness: 1, height: 20,),
-            customTile('Pharmacy', 26),
+
+            InkWell(
+              onTap: (){
+                Get.to(()=>FavouriteGroceryStores(title: 'Pharmacy',stores: NewDataViewModel.pharmacy.stores, products: NewDataViewModel.pharmacy.products));
+
+              },
+              child: customTile('Pharmacy', NewDataViewModel.pharmacy.itemCount)),
+
             Divider(color: Colors.grey[200], thickness: 1, height: 20,),
-            customTile('Restaurant', 32),
+
+            InkWell(
+              onTap: (){
+                Get.to(()=>FavouriteGroceryStores(title: 'Restaurant',stores: NewDataViewModel.restaurant.stores, products: NewDataViewModel.restaurant.products));
+
+              },
+              child: customTile('Restaurant', NewDataViewModel.restaurant.itemCount)),
+
             Divider(color: Colors.grey[200], thickness: 1, height: 20,),
             SizedBox(height: 15,),
             Expanded(
@@ -131,6 +163,7 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
                         unselectedBackgroundColor: Colors.white,
                         unselectedLabelStyle: TextStyle(color: Color(0xff252525)),
                         radius: 20,
+                        physics: AlwaysScrollableScrollPhysics(),
                         borderColor: Color(0xff707070),
                         unselectedBorderColor: Color(0xff707070),
                         contentPadding: EdgeInsets.symmetric(horizontal: 10),

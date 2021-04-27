@@ -6,16 +6,20 @@ import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
+import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:seeya/main_app/view/widgets/custom_outline_button.dart';
 import 'package:seeya/main_app/view/widgets/square_image_widget.dart';
 import 'package:seeya/newDataViewModel.dart';
 import '43_stores_with_category_offers.dart';
 import '45_fav_stores_main_page.dart';
+import 'package:seeya/main_app/models/45_model.dart';
 
 class FavouriteGroceryStores extends StatefulWidget {
   final String title;
+  final List<StoreModel> stores;
+  final List<ProductModel> products;
 
-  const FavouriteGroceryStores({Key key, this.title}) : super(key: key);
+  const FavouriteGroceryStores({Key key,@required this.title,@required this.stores,@required this.products}) : super(key: key);
   @override
   _FavouriteGroceryStoresState createState() => _FavouriteGroceryStoresState();
 }
@@ -109,7 +113,13 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
                       child: ListView.builder(
                           itemCount: 2,
                           itemBuilder: (BuildContext context, int index){
-                            return SpecialOfferTile(data: NewDataViewModel.homeSpecialDataRecent[index]);
+                            return SpecialOfferTile(data: SpecialOfferTileData(
+                              image: StringResources.demoImage,
+                              title: 'title',
+                              subtitle1: '123',
+                              subtitle2: '123',
+                              label: '123'
+                            ));
                           }
                       ),
                     )
