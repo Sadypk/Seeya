@@ -57,7 +57,7 @@ class AppConst{
   static TextStyle descriptionTextPurple2 = TextStyle(fontSize: 14, color: themePurple, fontFamily: 'Stag', letterSpacing: 0.3);
 
   static TextStyle descriptionText = TextStyle(fontSize: 10, color: black, fontFamily: 'Stag', letterSpacing: 0.3);
-  static TextStyle descriptionTextPurple = TextStyle(fontSize: 8,fontWeight: FontWeight.w600, color: themePurple, fontFamily: 'open', letterSpacing: 0.3);
+  static TextStyle descriptionTextPurple = TextStyle(fontSize: 10,fontWeight: FontWeight.w600, color: themePurple, fontFamily: 'open', letterSpacing: 0.3);
   static TextStyle descriptionTextRed = TextStyle(fontSize: 10, color: Color(0xffEE175B), fontFamily: 'Stag', letterSpacing: 0.3, fontWeight: FontWeight.w600);
   static TextStyle descriptionTextWhite = TextStyle(fontSize: 10, color: Colors.white, fontFamily: 'open', letterSpacing: 0.3);
 

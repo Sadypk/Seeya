@@ -15,9 +15,11 @@ import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 import 'package:seeya/main_app/models/addressModel.dart';
 import 'package:seeya/home.dart';
 import 'package:seeya/main_app/util/screenLoader.dart';
+import 'package:seeya/main_app/util/snack.dart';
 import 'package:seeya/main_app/view/widgets/gradient_button.dart';
 
 import 'widgets/waitingForMapLoadingWIdget.dart';
+import '../repository/maprepo.dart';
 
 
 class LocationPickerScreen extends StatefulWidget {
@@ -173,15 +175,14 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   // }
 
   bool screenLoading = false;
-  int selected = 100;
+  String selected = '';
   @override
   Widget build(BuildContext context) {
-    tagLocationSelectionCard(String label, int index){
+    tagLocationSelectionCard(String label){
       return InkWell(
         onTap: (){
           setState(() {
-            selected = index;
-            print(selected);
+            selected = label;
           });
         },
         child: Container(
@@ -191,10 +192,10 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(4),
-            border: Border.all(color: index!=selected?Color.fromARGB(25, 112, 112, 112):Colors.transparent),
-            gradient: index==selected?AppConst.gradient1:null,
+            border: Border.all(color: label != selected?Color.fromARGB(25, 112, 112, 112):Colors.transparent),
+            gradient: label==selected?AppConst.gradient1:null,
             boxShadow: [
-              if(index!=selected)BoxShadow(
+              if(label!=selected)BoxShadow(
                 color: Color.fromARGB(5, 1, 1, 1),
                 offset: Offset(0.5,0.5),
                 spreadRadius: 0,
@@ -203,7 +204,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
             ]
           ),
           child: Center(
-            child: Text(label, style: TextStyle(color: index==selected?Colors.white:Colors.black,),),
+            child: Text(label, style: TextStyle(color: label==selected?Colors.white:Colors.black,),),
           ),
         ),
       );
@@ -341,10 +342,10 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                         Row(
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            tagLocationSelectionCard('Home', 0),
-                            tagLocationSelectionCard('Work', 1),
-                            tagLocationSelectionCard('Hotel', 2),
-                            tagLocationSelectionCard('Offer', 3),
+                            tagLocationSelectionCard('Home'),
+                            tagLocationSelectionCard('Work'),
+                            tagLocationSelectionCard('Hotel'),
+                            tagLocationSelectionCard('Offer'),
                           ],
                         ),
                         SizedBox(height: 20,),
@@ -352,9 +353,26 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                           height: 55,
                           label: 'Confirm Location and Proceed',
                           fontStyle: TextStyle(fontWeight: FontWeight.w400, letterSpacing: 0.3, color: Colors.white, fontSize: 14),
-                          onTap: (){
-                            setNewLocation(currentPosition);
-                            Get.offAll(Home());
+                          onTap: () async{
+                            setState(() {
+                              screenLoading = true;
+                            });
+
+                            if(UserViewModel.user.value.addresses.length < 4){
+                              bool error = await MapRepo.addCustomerAddress(_textEditingController.text, selected, currentPosition.latitude, currentPosition.longitude);
+                              if(error){
+                                Snack.top('Sorry', 'Something went wrong');
+                              }else{
+                                UserViewModel.setLocation(LatLng(currentPosition.latitude, currentPosition.longitude));
+                                Get.offAll(Home());
+                              }
+                            }else if (UserViewModel.user.value.addresses.length == 4){
+                              Snack.top('Sorry', 'Can not add more addresses');
+                            }
+
+                            setState(() {
+                              screenLoading = false;
+                            });
                           },
                         )
                       ],
@@ -422,6 +440,9 @@ class AddressListScreen extends StatelessWidget {
               },
               title: Text(
                 address.address
+              ),
+              subtitle: Text(
+                address.title
               ),
             ),
           );

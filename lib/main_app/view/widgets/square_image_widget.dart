@@ -1,20 +1,20 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:seeya/main_app/resources/app_const.dart';
 
 class SquareImageWidget extends StatelessWidget {
   final String image;
-  SquareImageWidget({this.image});
+  final String title;
+  SquareImageWidget({this.image,this.title});
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 47,
-      width: 60,
+      height: 55,
+      width: 65,
       // margin: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: Colors.white,
-        image: DecorationImage(
-          image: NetworkImage(image),
-        ),
         // border: Border.all(color: Colors.grey[500]),
         boxShadow: [
           BoxShadow(
@@ -25,7 +25,22 @@ class SquareImageWidget extends StatelessWidget {
           )
         ],
       ),
-
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Icon(
+            Icons.home,
+            color: AppConst.themePurple,
+          ),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 10,
+              fontFamily: 'Stag'
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -9,7 +9,9 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class AuthRepo{
 
-  static const mutationAuth = r'''
+
+  static requestLogin(String mobile) async{
+    final mutationAuth = r'''
   mutation($mobile: String){
     customerLoginOrSignUp(mobile: $mobile){
       error
@@ -22,6 +24,7 @@ class AuthRepo{
         mobile
         email
         addresses{
+          title
           address
           location{
             lat
@@ -37,9 +40,6 @@ class AuthRepo{
     }
   }
   ''';
-
-  static requestLogin(String mobile) async{
-
     try{
       print('requestLogin > '+mobile);
 

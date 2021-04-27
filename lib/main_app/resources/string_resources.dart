@@ -19,6 +19,8 @@ class StringResources{
   static const String onlineOrdersAppbarTitleText = 'Online Orders';
   static const String clickStoreToOrderText = 'Click any store to order online';
 
+  static const String demoImage = 'https://demo.plugins360.com/wp-content/uploads/2017/12/demo.png';
+
   
   
 

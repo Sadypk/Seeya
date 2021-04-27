@@ -75,10 +75,13 @@ class MapRepo{
   }
 
 
-  static const mutationAddCustomerAddress = r'''
-  mutation($address : String $lat: Float $lng: Float){
+
+  static Future<bool> addCustomerAddress(String address,String title, double lat, double lng) async{
+    final mutationAddCustomerAddress = r'''
+  mutation($address : String $title: String $lat: Float $lng: Float){
     addCustomerAddress(address:{
       address: $address
+      title: $title
       location:{
         lat: $lat
         lng: $lng
@@ -89,12 +92,11 @@ class MapRepo{
     }
   }
   ''';
-
-  static addCustomerAddress(String address, double lat, double lng) async{
     try{
 
       Map<String, dynamic> variables = {
         'address' : address,
+        'title' : title,
         'lat' : lat,
         'lng' : lng
       };
