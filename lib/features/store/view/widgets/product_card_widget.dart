@@ -22,6 +22,7 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
         ]
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             height: 98,
@@ -33,19 +34,19 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
             ),
           ),
           Divider(thickness: 1, color: Colors.grey[300],),
-          Container(
-            height: 66,
-            width: 162,
-            padding: EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text('Chocolate', style: TextStyle(fontSize: 12, fontFamily: 'Stag', color: Color(0xff333333)),),
-                Text('10% Cashback', style: TextStyle(color: Color(0xffEE175B), fontSize: 8, fontWeight: FontWeight.w600),),
-                Text('1,500₹', style: AppConst.titleText1Purple,)
-              ],
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text('Chocolate', style: TextStyle(fontSize: 12, fontFamily: 'Stag', color: Color(0xff333333)),),
+                  Text('10% Cashback', style: TextStyle(color: Color(0xffEE175B), fontSize: 8, fontWeight: FontWeight.w600),),
+                  Text('1,500₹', style: AppConst.titleText1Purple,)
+                ],
+              ),
             ),
           )
         ],

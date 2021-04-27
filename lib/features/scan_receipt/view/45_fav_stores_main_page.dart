@@ -2,13 +2,16 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
+import 'package:seeya/features/chat/model/ddModel.dart';
 import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/scan_receipt/view/41_scan_specific_receipts.dart';
 import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
+import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
 import 'package:seeya/main_app/view/widgets/gradient_button.dart';
+import 'package:seeya/newDataViewModel.dart';
 
 import '44_favourite_grocery_stores.dart';
 
@@ -90,7 +93,7 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
-        child: ListView(
+        child: Column(
           children: [
             SizedBox(height: 20,),
             InkWell(
@@ -106,62 +109,71 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
             customTile('Restaurant', 32),
             Divider(color: Colors.grey[200], thickness: 1, height: 20,),
             SizedBox(height: 15,),
-            DefaultTabController(
-                length: 5,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Special offers made for you', style: AppConst.titleText1,),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Text('View All', style: AppConst.descriptionTextPurple,),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    ButtonsTabBar(
-                      backgroundColor: Color(0xff252525),
-                      unselectedBackgroundColor: Colors.white,
-                      unselectedLabelStyle: TextStyle(color: Color(0xff252525)),
-                      radius: 20,
-                      borderColor: Color(0xff707070),
-                      unselectedBorderColor: Color(0xff707070),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      borderWidth: 1,
-                      labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                      tabs: [
-                        Tab(
-                          text: "Recent",
-                        ),
-                        Tab(
-                          text: "Grocery",
-                        ),
-                        Tab(
-                          text: "Fresh",
-                        ),
-                        Tab(
-                          text: "Restaurant",
-                        ),
-                        Tab(
-                          text: "Pharmacy",
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10,),
-                    Container(
-                      height: 200,
-                      child: ListView.builder(
-                          itemCount: 2,
-                          itemBuilder: (BuildContext context, int index){
-                            return SpecialOfferTile(storeModel: storeList[0],);
-                          }
+            Expanded(
+              child : DefaultTabController(
+                  length: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Special offers made for you', style: AppConst.titleText1,),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Text('View All', style: AppConst.descriptionTextPurple,),
+                          ),
+                        ],
                       ),
-                    )
-                  ],
-                )
+                      SizedBox(height: 20,),
+                      ButtonsTabBar(
+                        backgroundColor: Color(0xff252525),
+                        unselectedBackgroundColor: Colors.white,
+                        unselectedLabelStyle: TextStyle(color: Color(0xff252525)),
+                        radius: 20,
+                        borderColor: Color(0xff707070),
+                        unselectedBorderColor: Color(0xff707070),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        borderWidth: 1,
+                        labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        tabs: [
+                          Tab(
+                            text: "Recent",
+                          ),
+                          Tab(
+                            text: "Grocery",
+                          ),
+                          Tab(
+                            text: "Fresh",
+                          ),
+                          Tab(
+                            text: "Restaurant",
+                          ),
+                          Tab(
+                            text: "Pharmacy",
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10,),
+                      Expanded(
+                        child: ListView.builder(
+                            itemCount: 20,
+                            itemBuilder: (BuildContext context, int index){
+                              return SpecialOfferTile(
+                                data: SpecialOfferTileData(
+                                  image: StringResources.demoImage,
+                                  label: 'label label',
+                                  title: 'title',
+                                  subtitle1: 'subtitle 1',
+                                  subtitle2: 'subtitle 2'
+                                )
+                              );
+                            }
+                        ),
+                      )
+                    ],
+                  )
+              ),
             ),
           ],
         ),

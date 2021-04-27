@@ -65,7 +65,7 @@ class NewApi{
     }
   }
 
-  static Future<void> getHomePageSpecialOfferAndCategoryData(String bType, [int pSize, int pNum]) async{
+  static Future<List<dynamic>> getHomePageSpecialOfferAndCategoryData(String bType, [int pNum]) async{
     final _query = r'''query($lat: Float $lng: Float $bType: ID $pSize: Int $pNum: Int){
   getHomePageSpecialOfferAndCategoryData(
     lat: $lat
@@ -78,10 +78,12 @@ class NewApi{
     msg
     data{
       products{
+        logo
         _id
         name
         store{
           _id
+          name
         }
         cashback
         selling_price
@@ -90,6 +92,7 @@ class NewApi{
       stores{
         _id
         name
+        logo
         promotion_cashback_status
         promotion_cashback
         default_cashback
@@ -103,21 +106,59 @@ class NewApi{
 }''';
 
     try{
-
       //TODO static for now
       final variables = {
         "lat": 22.8259892,
         "lng": 89.5510924,
-        "bType": "",
-        "pSize": pSize ?? 100,
+        "bType": bType,
+        "pSize": 100,
         "pNum": pNum ?? 1
       };
 
      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
-      logger.i(result.data);
+      List<dynamic> data = [];
       if(!result.data['getHomePageSpecialOfferAndCategoryData']['error']){
-        NewDataViewModel.homeFavStores = List.from(result.data['getHomePageSpecialOfferAndCategoryData']['data'].map((type)=>HomeFavModel.fromJson(type)));
+        data.addAll(result.data['getHomePageSpecialOfferAndCategoryData']['data']['products'].where((data) => DateTime.fromMillisecondsSinceEpoch(int.parse(data['expiry_date'])).isAfter(DateTime.now())));
+        data.addAll(result.data['getHomePageSpecialOfferAndCategoryData']['data']['stores'].where((data) => data['promotion_cashback_status'] == 'active' && DateTime.fromMillisecondsSinceEpoch(int.parse(data['promotion_cashback_date']['end_date'])).isAfter(DateTime.now())));
+        data.shuffle();
+        return data;
+      }else{
+        return [];
+      }
+    }catch(e){
+      print(e.toString());
+      return [];
+    }
+  }
+
+  static Future<void> get45_FavStoreMainScreenData() async{
+    final _query = r'''query($lat : Float $lng: Float){
+    getHomePageFavoriteShops(lat: $lat, lng:$lng){
+      error
+      msg
+      data{
+        _id
+        name
+        logo
+        default_cashback
+      }
+    }
+  }''';
+
+    try{
+
+      //TODO static for now
+      final variables = {
+        'lat' : 22.8259896,
+        'lng' : 89.5510924,
+      };
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
+      logger.i(result.data);
+      if(!result.data['getHomePageFavoriteShops']['error']){
+        NewDataViewModel.homeFavStores = List.from(result.data['getHomePageFavoriteShops']['data'].map((type)=>HomeFavModel.fromJson(type)));
       }
     }catch(e){
       print(e.toString());

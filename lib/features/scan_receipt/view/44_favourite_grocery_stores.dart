@@ -8,6 +8,7 @@ import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/view/widgets/custom_outline_button.dart';
 import 'package:seeya/main_app/view/widgets/square_image_widget.dart';
+import 'package:seeya/newDataViewModel.dart';
 import '43_stores_with_category_offers.dart';
 import '45_fav_stores_main_page.dart';
 
@@ -108,7 +109,7 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
                       child: ListView.builder(
                           itemCount: 2,
                           itemBuilder: (BuildContext context, int index){
-                            return SpecialOfferTile(storeModel: storeList[0],);
+                            return SpecialOfferTile(data: NewDataViewModel.homeSpecialDataRecent[index]);
                           }
                       ),
                     )

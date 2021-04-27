@@ -24,6 +24,7 @@ import 'package:seeya/features/store/view/widgets/top_picks_card_widget.dart';
 import 'package:seeya/mainRepoWithAllApi.dart';
 import 'package:get/get.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
+import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
 
@@ -51,6 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
   getNearestStore()async{
     await NewApi.getAllCategories();
     await NewApi.getHomeFavShops();
+    NewDataViewModel.homeSpecialDataRecent.addAll(await NewApi.getHomePageSpecialOfferAndCategoryData(''));
+    NewDataViewModel.homeSpecialDataGrocery.addAll(await NewApi.getHomePageSpecialOfferAndCategoryData('5fde415692cc6c13f9e879fd'));
+    NewDataViewModel.homeSpecialDataFresh.addAll(await NewApi.getHomePageSpecialOfferAndCategoryData('5fdf434058a42e05d4bc2044'));
+    NewDataViewModel.homeSpecialDataRestaurant.addAll(await NewApi.getHomePageSpecialOfferAndCategoryData('5fe0bfef4657be045655cf4a'));
+    NewDataViewModel.homeSpecialDataPharmacy.addAll(await NewApi.getHomePageSpecialOfferAndCategoryData('5fe22e111df87913f06a4cc9'));
     setState(() {
       loading = false;
     });
@@ -316,6 +322,16 @@ class _HomeScreenState extends State<HomeScreen> {
     //   ],
     // );
 
+    meowList(List<dynamic> datas) => datas.length > 0 ? ListView.builder(
+        itemCount: datas.length,
+        primary: false,
+        padding: EdgeInsets.only(bottom: 50),
+        itemBuilder: (BuildContext context, int index){
+          SpecialOfferTileData data = SpecialOfferTileData.convertData(datas[index]);
+          return SpecialOfferTile(data: data);
+        }
+    ) : Align(alignment: Alignment.topCenter,child: Text('Nothing available'));
+
     var specialOffers = DefaultTabController(
         length: 5,
         child: Padding(
@@ -370,18 +386,21 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 10,),
               Container(
                 height: 500,
-                color: Colors.red,
-                // child: ListView.builder(
-                //   itemCount: 6,
-                //   itemBuilder: (BuildContext context, int index){
-                //     return SpecialOfferTile(storeModel: storeList[0],);
-                //   }
-                // ),
+                child: TabBarView(
+                  children: [
+                    meowList(NewDataViewModel.homeSpecialDataRecent),
+                    meowList(NewDataViewModel.homeSpecialDataGrocery),
+                    meowList(NewDataViewModel.homeSpecialDataFresh),
+                    meowList(NewDataViewModel.homeSpecialDataRestaurant),
+                    meowList(NewDataViewModel.homeSpecialDataPharmacy),
+                  ],
+                ),
               )
             ],
           ),
         )
     );
+
 
 
     return Scaffold(
@@ -391,8 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.transparent,
         actions: [
           IconButton(icon: Icon(FeatherIcons.bell, size: 18,), onPressed: () async{
-            await NewApi.getHomeFavShops();
-
+            await NewApi.getHomePageSpecialOfferAndCategoryData('');
           }),
           IconButton(icon: Icon(FeatherIcons.messageSquare, size: 18,), onPressed: () async{
             if(UserViewModel.userStatus.value == UserStatus.LOGGED_IN){
