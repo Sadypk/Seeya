@@ -45,7 +45,7 @@ class AppConst{
 
 
   static TextStyle titleText2 = TextStyle(fontSize: 18, fontWeight: FontWeight.w500, fontFamily: 'Stag');
-  static TextStyle titleText2Purple = TextStyle(fontSize: 18, fontWeight: FontWeight.w500, fontFamily: 'Stag');
+  static TextStyle titleText2Purple = TextStyle(fontSize: 18, fontWeight: FontWeight.w500, fontFamily: 'Stag', color: AppConst.themePurple);
 
   static TextStyle header = TextStyle(fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'Stag', letterSpacing: 0.3);
   static TextStyle header2 = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: 'Stag', letterSpacing: 0.3);

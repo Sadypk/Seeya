@@ -94,11 +94,13 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(
-      //     'Scan receipt'
-      //   ),
-      // ),
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          'Scan receipt'
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [

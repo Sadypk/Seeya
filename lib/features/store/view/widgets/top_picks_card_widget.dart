@@ -3,13 +3,16 @@ import 'package:seeya/features/store/models/storeModel.dart';
 
 class TopPicksCardWidget extends StatelessWidget {
   final StoreModel storeModel;
-  TopPicksCardWidget({this.storeModel});
+  final double height;
+  final double width;
+  final double fontSize;
+  TopPicksCardWidget({this.storeModel, this.width, this.height, this.fontSize});
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(right: 15),
-      height: 130,
-      width: 130,
+      height: height??130,
+      width: width??130,
       child: Stack(
         children: [
           Positioned(
@@ -19,8 +22,8 @@ class TopPicksCardWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               elevation: 2,
               child: Container(
-                height: 120,
-                width: 130,
+                height: height!=null?height-10:120,
+                width: width??130,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -37,14 +40,14 @@ class TopPicksCardWidget extends StatelessWidget {
             bottom: 0,
               left: 10,
               child: Container(
-                width: 110,
+                width: width!=null?width-20:110,
                 height: 20,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: Colors.purpleAccent,
                 ),
                 child: Center(
-                  child: Text('${storeModel.promotionCashback}% Cashbacks', style: TextStyle(color: Colors.white, fontSize: 11),),
+                  child: Text('${storeModel.promotionCashback}% Cashbacks', style: TextStyle(color: Colors.white, fontSize: fontSize??11),),
                 ),
               )
           )
