@@ -1,11 +1,12 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/online_orders/view/online_orders_screen.dart';
 import 'package:seeya/features/redeem_balance/view/redeem_balance.dart';
-import 'package:seeya/features/scan_receipt/view/select_store_screen.dart';
+import 'package:seeya/features/scan_receipt/view/55_scan_receipts.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 import 'package:seeya/main_app/util/screenLoader.dart';
@@ -104,8 +105,8 @@ class _HomeState extends State<Home> {
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(w(50)),
-                            topLeft: Radius.circular(w(50))),
+                            topRight: Radius.circular(12),
+                            topLeft: Radius.circular(12)),
                         boxShadow: [AppConst.shadowBottomNavBar]),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -114,23 +115,35 @@ class _HomeState extends State<Home> {
                         Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(w(50)),
-                                  topLeft: Radius.circular(w(50)))
+                                  topRight: Radius.circular(12),
+                                  topLeft: Radius.circular(12))
                           ),
                           elevation: 0,
                           child: Container(
                             width: double.infinity,
                             height: h(150),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(width: w(30),),
-                                Text(
-                                  'Choose an option',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: h(50),
-                                      color: AppConst.black),
+                                Row(
+                                  children: [
+                                    SizedBox(width: 20,),
+                                    Text(
+                                      'Choose an option',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18,
+                                          fontFamily: 'Stag',
+                                          color: Color(0xff252525)),
+                                    ),
+                                  ],
                                 ),
+                                Row(
+                                  children: [
+                                    FaIcon(FontAwesomeIcons.times, size: 16,),
+                                    SizedBox(width: 20,)
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -144,26 +157,68 @@ class _HomeState extends State<Home> {
                                 ListTile(
                                   onTap: (){
                                     Get.back();
-                                    Get.to(SelectStoreScreen());
+                                    Get.to(ScanReceipts());
                                   },
-                                  title: Text('Scan Receipt'),
-                                  leading: Icon(Icons.upload_rounded),
+                                  title: Text('Scan Receipt', style: TextStyle(fontFamily: 'open', fontSize: 14, fontWeight: FontWeight.w600),),
+                                  leading: Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        AppConst.shadowBasic
+                                      ],
+                                      color: Colors.white,
+                                      border: Border.all(color: Color(0xff707070), width: 0.01)
+                                    ),
+                                    child: Center(
+                                      child: Image.asset('assets/images/plus-button-1.png'),
+                                    ),
+                                  ),
                                 ),
                                 ListTile(
                                   onTap: (){
                                     Get.back();
                                     Get.to(OnlineOrdersScreen());
                                   },
-                                  title: Text('Order Online'),
-                                  leading: Icon(Icons.camera_alt),
+                                  title: Text('Order Online', style: TextStyle(fontFamily: 'open', fontSize: 14, fontWeight: FontWeight.w600),),
+                                  leading: Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          AppConst.shadowBasic
+                                        ],
+                                        color: Colors.white,
+                                        border: Border.all(color: Color(0xff707070), width: 0.01)
+                                    ),
+                                    child: Center(
+                                      child: Image.asset('assets/images/plus-button-2.png'),
+                                    ),
+                                  )
                                 ),
                                 ListTile(
                                   onTap: (){
                                     Get.back();
                                     Get.to(RedeemBalanceScreen());
                                   },
-                                  title: Text('Redeem Cash'),
-                                  leading: Icon(Icons.attach_money_sharp),
+                                  title: Text('Redeem Cash', style: TextStyle(fontFamily: 'open', fontSize: 14, fontWeight: FontWeight.w600),),
+                                  leading: Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          AppConst.shadowBasic
+                                        ],
+                                        color: Colors.white,
+                                        border: Border.all(color: Color(0xff707070), width: 0.01)
+                                    ),
+                                    child: Center(
+                                      child: Image.asset('assets/images/plus-button-3.png'),
+                                    ),
+                                  )
                                 )
                               ],
                             ),

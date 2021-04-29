@@ -31,3 +31,38 @@ class StoreShopNowTile extends StatelessWidget {
     );
   }
 }
+
+class StoreShopNowTile2 extends StatelessWidget {
+  final String label;
+  StoreShopNowTile2({this.label});
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CircleImageWidget(image: 'https://i0.wp.com/deltacollegian.net/wp-content/uploads/2017/05/adidas.png?fit=880%2C660',),
+            SizedBox(width: 8,),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: TextStyle(fontSize: 14, fontFamily: 'Stag', ),),
+                Text('10% Cashback', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w600, fontFamily: 'OpenSans', color: Color(0xffEE1717)),)
+              ],
+            )
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text('200', style: AppConst.titleText2Purple,),
+            Text('You earned 35.00', style: TextStyle(fontSize: 8, color: Color(0xff252525), fontFamily: 'Stag', letterSpacing: 0.3, fontWeight: FontWeight.w600))
+          ],
+        )
+      ],
+    );
+  }
+}
