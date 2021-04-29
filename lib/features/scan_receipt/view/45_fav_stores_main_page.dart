@@ -8,6 +8,7 @@ import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/scan_receipt/view/41_scan_specific_receipts.dart';
 import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
+import 'package:seeya/main_app/models/45_model.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
@@ -105,7 +106,7 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
             SizedBox(height: 20,),
             InkWell(
               onTap: (){
-                Get.to(()=>FavouriteGroceryStores(title: 'Grocery',stores: NewDataViewModel.grocery.stores, products: NewDataViewModel.grocery.products));
+                Get.to(()=>FavouriteGroceryStores(title: 'Grocery',stores: NewDataViewModel.grocery.stores, products: NewDataViewModel.grocery.products, catalogs: NewDataViewModel.grocery.catalogs));
               },
               child: customTile('Grocery', NewDataViewModel.grocery.itemCount)
             ),
@@ -115,7 +116,7 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
 
             InkWell(
               onTap: (){
-                Get.to(()=>FavouriteGroceryStores(title: 'Fresh',stores: NewDataViewModel.fresh.stores, products: NewDataViewModel.fresh.products));
+                Get.to(()=>FavouriteGroceryStores(title: 'Fresh',stores: NewDataViewModel.fresh.stores, products: NewDataViewModel.fresh.products, catalogs: NewDataViewModel.fresh.catalogs,));
 
               },
               child: customTile('Fresh Items', NewDataViewModel.fresh.itemCount)),
@@ -125,7 +126,7 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
 
             InkWell(
               onTap: (){
-                Get.to(()=>FavouriteGroceryStores(title: 'Pharmacy',stores: NewDataViewModel.pharmacy.stores, products: NewDataViewModel.pharmacy.products));
+                Get.to(()=>FavouriteGroceryStores(title: 'Pharmacy',stores: NewDataViewModel.pharmacy.stores, products: NewDataViewModel.pharmacy.products, catalogs: NewDataViewModel.pharmacy.catalogs,));
 
               },
               child: customTile('Pharmacy', NewDataViewModel.pharmacy.itemCount)),
@@ -134,7 +135,7 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
 
             InkWell(
               onTap: (){
-                Get.to(()=>FavouriteGroceryStores(title: 'Restaurant',stores: NewDataViewModel.restaurant.stores, products: NewDataViewModel.restaurant.products));
+                Get.to(()=>FavouriteGroceryStores(title: 'Restaurant',stores: NewDataViewModel.restaurant.stores, products: NewDataViewModel.restaurant.products, catalogs: NewDataViewModel.restaurant.catalogs));
 
               },
               child: customTile('Restaurant', NewDataViewModel.restaurant.itemCount)),
@@ -189,19 +190,51 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
                       ),
                       SizedBox(height: 10,),
                       Expanded(
-                        child: ListView.builder(
-                            itemCount: 20,
-                            itemBuilder: (BuildContext context, int index){
-                              return SpecialOfferTile(
-                                data: SpecialOfferTileData(
-                                  image: StringResources.demoImage,
-                                  label: 'label label',
-                                  title: 'title',
-                                  subtitle1: 'subtitle 1',
-                                  subtitle2: 'subtitle 2'
-                                )
-                              );
-                            }
+                        child: TabBarView(
+                          children: [
+                            Builder(
+                              builder: (_){
+                                List<dynamic> data = [];
+                                data.addAll(NewDataViewModel.grocery.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                                data.addAll(NewDataViewModel.fresh.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                                data.addAll(NewDataViewModel.pharmacy.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                                data.addAll(NewDataViewModel.restaurant.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                                data.addAll(NewDataViewModel.grocery.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
+                                data.addAll(NewDataViewModel.fresh.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
+                                data.addAll(NewDataViewModel.pharmacy.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
+                                data.addAll(NewDataViewModel.restaurant.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
+                                return MehMowh(data: SpecialOfferTileData.parsedList(data));
+                              },
+                            ),
+                            Builder(builder: (_){
+                              List<dynamic> data = [];
+                              data.addAll(NewDataViewModel.grocery.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                              data.addAll(NewDataViewModel.grocery.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
+
+                              return MehMowh(data: SpecialOfferTileData.parsedList(data));
+                            }),
+                            Builder(builder: (_){
+                              List<dynamic> data = [];
+                              data.addAll(NewDataViewModel.fresh.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                              data.addAll(NewDataViewModel.fresh.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
+
+                              return MehMowh(data: SpecialOfferTileData.parsedList(data));
+                            }),
+                            Builder(builder: (_){
+                              List<dynamic> data = [];
+                              data.addAll(NewDataViewModel.restaurant.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                              data.addAll(NewDataViewModel.restaurant.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
+
+                              return MehMowh(data: SpecialOfferTileData.parsedList(data));
+                            }),
+                            Builder(builder: (_){
+                              List<dynamic> data = [];
+                              data.addAll(NewDataViewModel.pharmacy.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                              data.addAll(NewDataViewModel.pharmacy.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
+
+                              return MehMowh(data: SpecialOfferTileData.parsedList(data));
+                            }),
+                          ],
                         ),
                       )
                     ],
@@ -211,6 +244,23 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class MehMowh extends StatelessWidget {
+  final List<SpecialOfferTileData> data;
+
+  const MehMowh({Key key, this.data}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: data.length,
+        itemBuilder: (BuildContext context, int index){
+          return SpecialOfferTile(
+              data: data[index]
+          );
+        }
     );
   }
 }

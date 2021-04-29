@@ -45,7 +45,7 @@ class ProductModel {
     this.id,
     this.name,
     this.logo,
-    this.storeID,
+    this.store,
     this.cashback,
     this.expiryDate,
     this.businesstype,
@@ -54,7 +54,7 @@ class ProductModel {
   String id;
   String name;
   String logo;
-  String storeID;
+  StoreModel store;
   num cashback;
   DateTime expiryDate;
   String businesstype;
@@ -63,7 +63,7 @@ class ProductModel {
     id: json["_id"],
     name: json["name"],
     logo: json["logo"],
-    storeID: json["store"]['_id'],
+    store: json["store"],
     cashback: json["cashback"],
     expiryDate: json["expiry_date"] == null ? null : DateTime.fromMillisecondsSinceEpoch(int.parse(json["expiry_date"])),
     businesstype: json["businesstype"]['_id'],
@@ -74,6 +74,7 @@ class StoreModel {
   StoreModel({
   this.id,
   this.name,
+  this.logo,
   this.businesstype,
   this.defaultCashback,
   this.promotionCashback,
@@ -83,6 +84,7 @@ class StoreModel {
 
   String id;
   String name;
+  String logo;
   String businesstype;
   num defaultCashback;
   num promotionCashback;
@@ -92,6 +94,7 @@ class StoreModel {
   factory StoreModel.fromJson(Map<String, dynamic> json) => StoreModel(
     id: json["_id"],
     name: json["name"],
+    logo: json["logo"],
     businesstype: json["businesstype"]['_id'],
     defaultCashback: json["default_cashback"],
     promotionCashback: json["promotion_cashback"],

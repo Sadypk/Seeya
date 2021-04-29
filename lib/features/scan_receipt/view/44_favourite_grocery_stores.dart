@@ -18,8 +18,9 @@ class FavouriteGroceryStores extends StatefulWidget {
   final String title;
   final List<StoreModel> stores;
   final List<ProductModel> products;
+  final List<CatalogModel> catalogs;
 
-  const FavouriteGroceryStores({Key key,@required this.title,@required this.stores,@required this.products}) : super(key: key);
+  const FavouriteGroceryStores({Key key,@required this.title,@required this.stores,@required this.products, @required this.catalogs}) : super(key: key);
   @override
   _FavouriteGroceryStoresState createState() => _FavouriteGroceryStoresState();
 }

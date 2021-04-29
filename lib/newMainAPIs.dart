@@ -168,6 +168,7 @@ class NewApi{
           businesstype{
             _id
           }
+          logo
           default_cashback
           promotion_cashback
           promotion_cashback_status
@@ -205,6 +206,7 @@ class NewApi{
           businesstype{
             _id
           }
+          logo
           default_cashback
           promotion_cashback
           promotion_cashback_status
@@ -239,6 +241,7 @@ class NewApi{
         stores{
           _id
           name
+          logo
           businesstype{
             _id
           }
@@ -276,6 +279,7 @@ class NewApi{
         stores{
           _id
           name
+          logo
           businesstype{
             _id
           }
