@@ -150,7 +150,7 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
                           children: [
-                            StoreShopNowTile(label: 'Adidas'),
+                            StoreShopNowTile(title: 'Adidas'),
                             Divider(height: 20,)
                           ],
                         ),

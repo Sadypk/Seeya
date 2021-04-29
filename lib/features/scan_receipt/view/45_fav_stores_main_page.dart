@@ -3,16 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:seeya/features/chat/model/ddModel.dart';
-import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
-import 'package:seeya/features/scan_receipt/view/41_scan_specific_receipts.dart';
 import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
-import 'package:seeya/main_app/models/45_model.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
-import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
-import 'package:seeya/main_app/view/widgets/gradient_button.dart';
 import 'package:seeya/newDataViewModel.dart';
 import 'package:seeya/newMainAPIs.dart';
 

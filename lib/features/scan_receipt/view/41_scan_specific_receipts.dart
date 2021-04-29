@@ -94,7 +94,7 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
                       },
                       child: Column(
                         children: [
-                          StoreShopNowTile(label: 'Adidas',),
+                          StoreShopNowTile(title: 'Adidas',),
                           Divider(color: Colors.grey[200], thickness: 1, height: 20,),
                         ],
                       ),

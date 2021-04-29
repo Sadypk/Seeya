@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:seeya/main_app/resources/app_const.dart';
 
 class SquareImageWidget extends StatelessWidget {
   final String image;
@@ -25,18 +24,20 @@ class SquareImageWidget extends StatelessWidget {
           )
         ],
       ),
+      padding: EdgeInsets.symmetric(vertical: 6),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Icon(
-            Icons.home,
-            color: AppConst.themePurple,
-          ),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 10,
-              fontFamily: 'Stag'
+          Expanded(child: CachedNetworkImage(imageUrl: image)),
+          SizedBox(height: 4),
+          Expanded(
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 10,
+                fontFamily: 'Stag'
+              ),
             ),
           )
         ],
