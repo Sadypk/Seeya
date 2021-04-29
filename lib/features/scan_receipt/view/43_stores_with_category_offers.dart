@@ -5,16 +5,16 @@ import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
+import 'package:seeya/main_app/models/45_model.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:seeya/main_app/view/widgets/custom_outline_button.dart';
-import 'package:seeya/newDataViewModel.dart';
 import '44_favourite_grocery_stores.dart';
 
 class StoresWithCategoryOffers extends StatefulWidget {
   final String title;
-
-  const StoresWithCategoryOffers({Key key, this.title}) : super(key: key);
+  final List<StoreModel> stores;
+  const StoresWithCategoryOffers({Key key,@required this.title ,@required this.stores}) : super(key: key);
   @override
   _StoresWithCategoryOffersState createState() => _StoresWithCategoryOffersState();
 }
@@ -39,7 +39,7 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
         children: [
           SizedBox(height: 20,),
           DefaultTabController(
-              length: 5,
+              length: 3,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
@@ -68,38 +68,25 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
                       labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                       tabs: [
                         Tab(
-                          text: "Recent",
+                          text: "All",
                         ),
                         Tab(
-                          text: "Grocery",
+                          text: "Cashback",
                         ),
                         Tab(
-                          text: "Fresh",
-                        ),
-                        Tab(
-                          text: "Restaurant",
-                        ),
-                        Tab(
-                          text: "Pharmacy",
-                        ),
+                          text: "Welcome offer",
+                        )
                       ],
                     ),
                     SizedBox(height: 10,),
                     Container(
                       height: 200,
-                      child: ListView.builder(
-                          itemCount: 2,
-                          itemBuilder: (BuildContext context, int index){
-                            return SpecialOfferTile(
-                              data: SpecialOfferTileData(
-                                image: StringResources.demoImage,
-                                label: 'label label',
-                                title: 'title',
-                                subtitle1: 'subtitle 1',
-                                subtitle2: 'subtitle 2'
-                              )
-                            );
-                          }
+                      child: TabBarView(
+                        children: [
+                          PewPew(data: SpecialOfferTileData.parsedList(widget.stores)),
+                          PewPew(data: SpecialOfferTileData.parsedList(widget.stores.where((element) => element.promotionCashbackStatus == 'active' && element.promotionCashbackDate.startDate.isBefore(DateTime.now()) && element.promotionCashbackDate.endDate.isAfter(DateTime.now())))),
+                          PewPew(data: SpecialOfferTileData.parsedList(widget.stores.where((element) => element.promotionWelcomeOfferStatus == 'active' && element.promotionWelcomeOfferDate.startDate.isBefore(DateTime.now()) && element.promotionWelcomeOfferDate.endDate.isAfter(DateTime.now())))),
+                        ],
                       ),
                     )
                   ],
@@ -112,7 +99,7 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
             children: [
               CustomOutlineButton(
                 onTap: (){
-                  Get.to(FavouriteGroceryStores());
+                  // Get.to(FavouriteGroceryStores());
                 },
                 label: 'View all offers',
                 height: 28,
@@ -144,13 +131,14 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
           Container(
             child: Expanded(
                 child: ListView.builder(
-                  itemCount: 3,
+                  itemCount: widget.stores.length,
                     itemBuilder: (BuildContext context, int index){
+                    StoreModel store = widget.stores[index];
                       return Container(
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
                           children: [
-                            StoreShopNowTile(title: 'Adidas'),
+                            StoreShopNowTile(title: store.name, image: store.logo,subtitle: store.promotionCashbackStatus == 'active' && store.promotionCashbackDate.startDate.isAfter(DateTime.now()) && store.promotionCashbackDate.endDate.isBefore(DateTime.now()) ? '${store.promotionCashback} % Cashback' : null,),
                             Divider(height: 20,)
                           ],
                         ),
@@ -162,5 +150,21 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
         ],
       ),
     );
+  }
+}
+
+class PewPew extends StatelessWidget {
+  final List<SpecialOfferTileData> data;
+  PewPew({this.data});
+  @override
+  Widget build(BuildContext context) {
+    return data.length > 0 ? ListView.builder(
+        itemCount: data.length > 2 ? 2 : data.length,
+        itemBuilder: (BuildContext context, int index){
+          return SpecialOfferTile(
+            data: data[index]
+          );
+        }
+    ) : Center(child: Text('Nothing Avaialble'));
   }
 }

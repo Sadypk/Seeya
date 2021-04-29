@@ -189,10 +189,10 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
                             Builder(
                               builder: (_){
                                 List<dynamic> data = [];
-                                data.addAll(NewDataViewModel.grocery.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
-                                data.addAll(NewDataViewModel.fresh.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
-                                data.addAll(NewDataViewModel.pharmacy.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
-                                data.addAll(NewDataViewModel.restaurant.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                                data.addAll(NewDataViewModel.grocery.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.startDate.isBefore(DateTime.now()) && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                                data.addAll(NewDataViewModel.fresh.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.startDate.isBefore(DateTime.now()) && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                                data.addAll(NewDataViewModel.restaurant.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.startDate.isBefore(DateTime.now()) && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                                data.addAll(NewDataViewModel.pharmacy.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.startDate.isBefore(DateTime.now()) && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
                                 data.addAll(NewDataViewModel.grocery.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
                                 data.addAll(NewDataViewModel.fresh.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
                                 data.addAll(NewDataViewModel.pharmacy.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
@@ -202,28 +202,28 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
                             ),
                             Builder(builder: (_){
                               List<dynamic> data = [];
-                              data.addAll(NewDataViewModel.grocery.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                              data.addAll(NewDataViewModel.grocery.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.startDate.isBefore(DateTime.now()) && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
                               data.addAll(NewDataViewModel.grocery.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
 
                               return MehMowh(data: SpecialOfferTileData.parsedList(data));
                             }),
                             Builder(builder: (_){
                               List<dynamic> data = [];
-                              data.addAll(NewDataViewModel.fresh.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                              data.addAll(NewDataViewModel.fresh.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.startDate.isBefore(DateTime.now()) && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
                               data.addAll(NewDataViewModel.fresh.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
 
                               return MehMowh(data: SpecialOfferTileData.parsedList(data));
                             }),
                             Builder(builder: (_){
                               List<dynamic> data = [];
-                              data.addAll(NewDataViewModel.restaurant.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                              data.addAll(NewDataViewModel.restaurant.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.startDate.isBefore(DateTime.now()) && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
                               data.addAll(NewDataViewModel.restaurant.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
 
                               return MehMowh(data: SpecialOfferTileData.parsedList(data));
                             }),
                             Builder(builder: (_){
                               List<dynamic> data = [];
-                              data.addAll(NewDataViewModel.pharmacy.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
+                              data.addAll(NewDataViewModel.pharmacy.stores.where((element) => element.promotionCashbackStatus=='active' && element.promotionCashbackDate.startDate.isBefore(DateTime.now()) && element.promotionCashbackDate.endDate.isAfter(DateTime.now())));
                               data.addAll(NewDataViewModel.pharmacy.products.where((element) => element.expiryDate.isAfter(DateTime.now())));
 
                               return MehMowh(data: SpecialOfferTileData.parsedList(data));

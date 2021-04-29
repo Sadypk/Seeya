@@ -161,6 +161,9 @@ class NewApi{
           businesstype{
             _id
           }
+          catalog{
+            _id
+          }
         }
         stores{
           _id
@@ -173,6 +176,12 @@ class NewApi{
           promotion_cashback
           promotion_cashback_status
           promotion_cashback_date{
+            start_date
+            end_date
+          }
+          promotion_welcome_offer
+          promotion_welcome_offer_status
+          promotion_welcome_offer_date{
             start_date
             end_date
           }
@@ -194,6 +203,9 @@ class NewApi{
             _id
             name
           }
+          catalog{
+            _id
+          }
           cashback
           expiry_date
           businesstype{
@@ -211,6 +223,12 @@ class NewApi{
           promotion_cashback
           promotion_cashback_status
           promotion_cashback_date{
+            start_date
+            end_date
+          }
+          promotion_welcome_offer
+          promotion_welcome_offer_status
+          promotion_welcome_offer_date{
             start_date
             end_date
           }
@@ -232,6 +250,9 @@ class NewApi{
             _id
             name
           }
+          catalog{
+            _id
+          }
           cashback
           expiry_date
           businesstype{
@@ -249,6 +270,12 @@ class NewApi{
           promotion_cashback
           promotion_cashback_status
           promotion_cashback_date{
+            start_date
+            end_date
+          }
+          promotion_welcome_offer
+          promotion_welcome_offer_status
+          promotion_welcome_offer_date{
             start_date
             end_date
           }
@@ -270,6 +297,9 @@ class NewApi{
             _id
             name
           }
+          catalog{
+            _id
+          }
           cashback
           expiry_date
           businesstype{
@@ -287,6 +317,12 @@ class NewApi{
           promotion_cashback
           promotion_cashback_status
           promotion_cashback_date{
+            start_date
+            end_date
+          }
+          promotion_welcome_offer
+          promotion_welcome_offer_status
+          promotion_welcome_offer_date{
             start_date
             end_date
           }

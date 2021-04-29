@@ -34,6 +34,10 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
       text: "Recent",
     ));
     tabs.addAll(widget.catalogs.map((e) => Tab(text: e.name)).toList());
+    tabViews.add(PewPew(data: SpecialOfferTileData.parsedList(widget.products)));
+    widget.catalogs.forEach((element) {
+      tabViews.add(PewPew(data: SpecialOfferTileData.parsedList(widget.products.where((pro) => pro.catId == element.id))));
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -52,7 +56,7 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
       body: Column(
         children: [
           Container(
-            height: 100,
+            height: 105,
             margin: EdgeInsets.only(left: 20),
             child: ListView.builder(
                 itemCount: widget.catalogs.length,
@@ -60,7 +64,7 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
                 itemBuilder: (BuildContext context, int index){
                   return InkWell(
                     onTap: (){
-                      Get.to(()=>StoresWithCategoryOffers(title: 'Demo'));
+                      Get.to(()=>StoresWithCategoryOffers(title: widget.catalogs[index].name,stores: widget.stores));
                     },
                     child: Container(
                         margin: EdgeInsets.only(right: 16, top: 25, bottom: 25),
@@ -89,6 +93,7 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
                     ),
                     SizedBox(height: 20,),
                     ButtonsTabBar(
+                      physics: AlwaysScrollableScrollPhysics(),
                       backgroundColor: Color(0xff252525),
                       unselectedBackgroundColor: Colors.white,
                       unselectedLabelStyle: TextStyle(color: Color(0xff252525)),
@@ -103,7 +108,9 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
                     SizedBox(height: 10,),
                     Container(
                       height: 200,
-                      child: ,
+                      child: TabBarView(
+                        children: tabViews,
+                      ),
                     )
                   ],
                 ),
@@ -179,11 +186,15 @@ class PewPew extends StatelessWidget {
   const PewPew({Key key, this.data}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return data.length > 0 ? ListView.builder(
         itemCount: data.length > 2 ? 2 : data.length,
         itemBuilder: (BuildContext context, int index){
           return SpecialOfferTile(data: data[index]);
         }
+    ) : Center(
+      child: Text(
+        'Nothing available'
+      ),
     );
   }
 }
