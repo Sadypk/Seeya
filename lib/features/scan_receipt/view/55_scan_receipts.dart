@@ -105,7 +105,7 @@ class _ScanReceiptsState extends State<ScanReceipts> {
                   children: [
                     CustomOutlineButton(
                       onTap: (){
-                        Get.to(TheBossCameraScreen());
+                        Get.to(TheBossCameraScreen(storeModel: StoreModel(),));
                       },
                       label: 'View all offers',
                       height: 28,

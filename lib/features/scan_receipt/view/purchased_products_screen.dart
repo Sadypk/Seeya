@@ -7,7 +7,7 @@ import 'package:seeya/features/home_screen/view_models/top_products_view_model.d
 import 'package:seeya/features/scan_receipt/view_model/purchased_product_view_model.dart';
 import 'package:seeya/features/store/models/cart_model.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
-import 'package:seeya/features/store/view/widgets/product_card_widget_old.dart';
+import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 import 'package:seeya/home.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 
@@ -84,7 +84,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
 
   _buildBottomDrawer()=> AnimatedPositioned(
     duration: _duration,
-    top: bottomDrawerIsOpen ? expandedGap : initialGap,
+    top: bottomDrawerIsOpen ? expandedGap : Get.height-100,
     bottom: 0,
     left: 0,
     right: 0,
@@ -134,7 +134,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
                 ],
               ),
             ),
-            bottomDrawerIsOpen ? GridListWidget() : HorizontalListWidget(),
+            bottomDrawerIsOpen ? GridListWidget() : SizedBox(),
             SizedBox(height: 5,),
             submitTextField,
             SizedBox(height: 5,),
@@ -150,154 +150,134 @@ var canSubmit = false.obs;
 var submitTextField = Obx((){
   return Container(
     padding: EdgeInsets.only(left: 10),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Flexible(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey[300], width: 1),
-              boxShadow: [
-                BoxShadow(
-                    color: Color(0xff000000).withOpacity(0.2), blurRadius: 20),
-                BoxShadow(
-                    color: Color(0xfffafafa).withOpacity(0.2), blurRadius: 20),
-              ],
-            ),
-            child: TextFormField(
-              controller: amountController.value,
-              onChanged: (v){if(v.length>0) {
-                canSubmit.value = true;
-                }else{
-                canSubmit.value = false;
-                }
-              },
-              decoration: InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.cyan),
-                  ),
-                  hintText: 'Enter Bill Amount',
-                  hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)
+    child: Flexible(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey[300], width: 1),
+          boxShadow: [
+            BoxShadow(
+                color: Color(0xff000000).withOpacity(0.2), blurRadius: 20),
+            BoxShadow(
+                color: Color(0xfffafafa).withOpacity(0.2), blurRadius: 20),
+          ],
+        ),
+        child: TextFormField(
+          controller: amountController.value,
+          onChanged: (v){if(v.length>0) {
+            canSubmit.value = true;
+          }else{
+            canSubmit.value = false;
+          }
+          },
+          decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
               ),
-            ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.cyan),
+              ),
+              hintText: 'Enter Bill Amount',
+              hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)
           ),
         ),
-        TextButton(
-            onPressed: canSubmit.value?(){
-              Get.offAll(Home());
-            }:(){},
-            child: Container(
-              height: 45,
-              width: 100,
-              decoration: BoxDecoration(
-                  color: canSubmit.value?Colors.blue:Colors.grey,
-                  borderRadius: BorderRadius.circular(3)
-              ),
-              child: Center(
-                child: Text('Submit', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),),
-              ),
-            ))
-      ],
+      ),
     ),
   );
 });
 
-class HorizontalListWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    PurchasedProductViewModel vm = Get.find();
-    return Expanded(
-      child: ListView.builder(
-        shrinkWrap: true,
-        padding: EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
-        itemCount: vm.purchasedList.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (BuildContext context, int index){
-          var isSelected = false.obs;
-          return new Obx((){
-            return vm.purchasedList[index].product!=null?ProductCardWidget(
-              productModel: vm.purchasedList[index].product,
-              iconButton: IconButton(
-                icon: Icon(!isSelected.value?Icons.add_circle_outline_rounded:FontAwesomeIcons.checkCircle, color: !isSelected.value?Colors.red:Colors.green, size: 22,),
-                onPressed: (){
-                  isSelected.value = true;
-                  vm.purchasedList[index].count++;
-                },
-              ),
-              quantityController: vm.purchasedList[index].count>0?Container(
-                child: Row(
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: InkWell(
-                        onTap: (){
-                          if(vm.purchasedList[index].count>1){
-                            vm.purchasedList[index].count--;
-                          }
-                          // vm.cartItemsWithQuantity.add(CartModel(count: 0));
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(3), bottomLeft: Radius.circular(3))
-                          ),
-                          padding: EdgeInsets.all(5),
-                          child: Center(
-                            child: Icon(Icons.remove, color: Colors.white, size: 12,),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                        ),
-                        padding: EdgeInsets.all(5),
-                        child: Center(
-                          child: Text(vm.purchasedList[index].count.toString(), style: TextStyle(color: Colors.white, fontSize: 12),),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: InkWell(
-                        onTap: (){
-                          vm.purchasedList[index].count++;
-                          print(vm.purchasedList[index].count);
-                          // vm.cartItemsWithQuantity.add(CartModel(count: 0));
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.only(topRight: Radius.circular(3), bottomRight: Radius.circular(3))
-                          ),
-                          padding: EdgeInsets.all(5),
-                          child: Center(
-                            child: Icon(Icons.add, color: Colors.white, size: 12,),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ):SizedBox(),
-            ):SizedBox();
-          });
-        },
-      ),
-    );
-  }
-}
+// class HorizontalListWidget extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     PurchasedProductViewModel vm = Get.find();
+//     return Expanded(
+//       child: ListView.builder(
+//         shrinkWrap: true,
+//         padding: EdgeInsets.symmetric(
+//           horizontal: 20,
+//         ),
+//         itemCount: vm.purchasedList.length,
+//         scrollDirection: Axis.horizontal,
+//         itemBuilder: (BuildContext context, int index){
+//           var isSelected = false.obs;
+//           return new Obx((){
+//             return vm.purchasedList[index].product!=null?ProductCardWidget(
+//               productModel: vm.purchasedList[index].product,
+//               iconButton: IconButton(
+//                 icon: Icon(!isSelected.value?Icons.add_circle_outline_rounded:FontAwesomeIcons.checkCircle, color: !isSelected.value?Colors.red:Colors.green, size: 22,),
+//                 onPressed: (){
+//                   isSelected.value = true;
+//                   vm.purchasedList[index].count++;
+//                 },
+//               ),
+//               quantityController: vm.purchasedList[index].count>0?Container(
+//                 child: Row(
+//                   children: [
+//                     Flexible(
+//                       flex: 1,
+//                       child: InkWell(
+//                         onTap: (){
+//                           if(vm.purchasedList[index].count>1){
+//                             vm.purchasedList[index].count--;
+//                           }
+//                           // vm.cartItemsWithQuantity.add(CartModel(count: 0));
+//                         },
+//                         child: Container(
+//                           decoration: BoxDecoration(
+//                               color: Colors.black,
+//                               borderRadius: BorderRadius.only(topLeft: Radius.circular(3), bottomLeft: Radius.circular(3))
+//                           ),
+//                           padding: EdgeInsets.all(5),
+//                           child: Center(
+//                             child: Icon(Icons.remove, color: Colors.white, size: 12,),
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                     Flexible(
+//                       flex: 1,
+//                       child: Container(
+//                         decoration: BoxDecoration(
+//                           color: Colors.black,
+//                         ),
+//                         padding: EdgeInsets.all(5),
+//                         child: Center(
+//                           child: Text(vm.purchasedList[index].count.toString(), style: TextStyle(color: Colors.white, fontSize: 12),),
+//                         ),
+//                       ),
+//                     ),
+//                     Flexible(
+//                       flex: 1,
+//                       child: InkWell(
+//                         onTap: (){
+//                           vm.purchasedList[index].count++;
+//                           print(vm.purchasedList[index].count);
+//                           // vm.cartItemsWithQuantity.add(CartModel(count: 0));
+//                         },
+//                         child: Container(
+//                           decoration: BoxDecoration(
+//                               color: Colors.black,
+//                               borderRadius: BorderRadius.only(topRight: Radius.circular(3), bottomRight: Radius.circular(3))
+//                           ),
+//                           padding: EdgeInsets.all(5),
+//                           child: Center(
+//                             child: Icon(Icons.add, color: Colors.white, size: 12,),
+//                           ),
+//                         ),
+//                       ),
+//                     )
+//                   ],
+//                 ),
+//               ):SizedBox(),
+//             ):SizedBox();
+//           });
+//         },
+//       ),
+//     );
+//   }
+// }
 
 class GridListWidget extends StatelessWidget {
   @override
@@ -316,82 +296,10 @@ class GridListWidget extends StatelessWidget {
               crossAxisSpacing: 10,
             childAspectRatio: ((MediaQuery.of(context).size.width/2)/220),
           ),
-          itemCount: vm.purchasedList.length,
+          itemCount: 6,
           itemBuilder: (BuildContext context, int index){
             var isSelected = false.obs;
-            return new Obx((){
-              return vm.purchasedList[index].product!=null?ProductCardWidget(
-                productModel: vm.purchasedList[index].product,
-                iconButton: IconButton(
-                  icon: Icon(!isSelected.value?Icons.add_circle_outline_rounded:FontAwesomeIcons.checkCircle, color: !isSelected.value?Colors.red:Colors.green, size: 22,),
-                  onPressed: (){
-                    isSelected.value = true;
-                    vm.purchasedList[index].count++;
-                  },
-                ),
-                quantityController: vm.purchasedList[index].count>0?Container(
-                  child: Row(
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        child: InkWell(
-                          onTap: (){
-                            if(vm.purchasedList[index].count>1){
-                              vm.purchasedList[index].count--;
-                              vm.purchasedList.add(CartModel(count: 0));
-                            }
-                            // vm.cartItemsWithQuantity.add(CartModel(count: 0));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.only(topLeft: Radius.circular(3), bottomLeft: Radius.circular(3))
-                            ),
-                            padding: EdgeInsets.all(5),
-                            child: Center(
-                              child: Icon(Icons.remove, color: Colors.white, size: 12,),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                          ),
-                          padding: EdgeInsets.all(5),
-                          child: Center(
-                            child: Text(vm.purchasedList[index].count.toString(), style: TextStyle(color: Colors.white, fontSize: 12),),
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        child: InkWell(
-                          onTap: (){
-                            vm.purchasedList[index].count++;
-                            print(vm.purchasedList[index].count);
-                            vm.purchasedList.add(CartModel(count: 0));
-                            // vm.cartItemsWithQuantity.add(CartModel(count: 0));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.only(topRight: Radius.circular(3), bottomRight: Radius.circular(3))
-                            ),
-                            padding: EdgeInsets.all(5),
-                            child: Center(
-                              child: Icon(Icons.add, color: Colors.white, size: 12,),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ):SizedBox(),
-              ):SizedBox();
-            });
+            return ProductCardWidget();
           },
         ),
       ),
