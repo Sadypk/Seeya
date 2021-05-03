@@ -7,6 +7,7 @@ import 'dart:io';
 
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/mainRepoWithAllApi.dart';
+import 'package:seeya/main_app/resources/string_resources.dart';
 
 
 RxBool flashOn = false.obs;
@@ -94,11 +95,16 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          'Scan receipt'
+          StringResources.cameraViewAppBarTitle,
+          style: TextStyle(
+            fontFamily: 'Stag',
+            fontWeight: FontWeight.w500
+          ),
         ),
       ),
       body: SafeArea(
@@ -145,147 +151,170 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
     );
   }
 
-  _buildCameraButtons() => Container(
-    color: Colors.black,
-    height: 100,
-    width: Get.width,
-    child: Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
+  _buildCameraButtons() => Column(
+    children: [
+      SizedBox(height: 8),
+      GestureDetector(
+        onTap: (){},
+        child: Text(
+          StringResources.cameraViewBtnAddLater,
+          style: TextStyle(
+              fontSize: 12,
+              fontFamily: 'open',fontWeight: FontWeight.w600,
+              color: Colors.white
+          ),
+        ),
+      ),
 
-        Obx(()=>SizedBox(
-          height: 100,
-          width: 50,
-          child: longReceipt.value ?
-          Stack(
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                height: 100,
-                width: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Colors.white,
-                        width: 2
-                    )
-                ),
-                child: images.length > 0 ? Image.file(images.last) : SizedBox.expand(),
-              ),
-              Positioned(
-                top: 0,
-                right: 0,
+      Container(
+        color: Colors.black,
+        height: 100,
+        width: Get.width,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+
+            Obx(()=>SizedBox(
+              height: 100,
+              width: 50,
+              child: longReceipt.value ?
+              Stack(
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    height: 100,
+                    width: 50,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Colors.white,
+                            width: 2
+                        )
+                    ),
+                    child: images.length > 0 ? Image.file(images.last) : SizedBox.expand(),
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.redAccent
+                      ),
+                      padding: EdgeInsets.all(6),
+                      child: Text(
+                        '${images.length}',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
+                  :
+              Column(
+                children: [
+                  IconButton(
+                    onPressed: (){
+                      flashOn.value = !flashOn.value;
+                      controller.setFlashMode(flashOn.value?FlashMode.always:FlashMode.off);
+                    },
+                    icon: Icon(Icons.flash_auto, color: Colors.white,),
+                  ),
+                  SizedBox(height: 5,),
+                  Text(StringResources.cameraViewBtnFlash, style: TextStyle(color: Colors.white,fontSize: 12,fontFamily: 'open', fontWeight: FontWeight.w600),)
+                ],
+              )
+            )),
+
+            Obx(()=>SizedBox(
+              height: 70,
+              width: 70,
+              child: InkWell(
+                onTap: () async{
+                    camLoading.value = !camLoading.value;
+
+                  XFile image;
+                  try{
+                    image = await controller.takePicture();
+                  }catch(e){
+                    print(e.toString());
+                  }
+
+                  File file = File(image.path);
+
+
+                  if(longReceipt.value){
+
+                      camLoading.value = !camLoading.value;
+                      images.add(file);
+                  }else{
+                    images.add(file);
+                    Get.off(PurchasedProductsScreen(storeModel: widget.storeModel,), arguments: images);
+                  }
+                },
                 child: Container(
+                  height: 70,
+                  width: 70,
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.redAccent
+                      border: Border.all(
+                          color: Colors.white,
+                          width: 2
+                      )
                   ),
-                  padding: EdgeInsets.all(6),
-                  child: Text(
-                    '${images.length}',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold
+                  child: camLoading.value ? CircularProgressIndicator() : Container(
+                    height: 70,
+                    width: 70,
+                    margin: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white
                     ),
                   ),
                 ),
-              )
-            ],
-          )
-              :
-          IconButton(
-            onPressed: (){
-              flashOn.value = !flashOn.value;
-              controller.setFlashMode(flashOn.value?FlashMode.always:FlashMode.off);
-            },
-            icon: Icon(!flashOn.value?Icons.flash_off_rounded:Icons.flash_on_rounded, color: Colors.white,),
-          ),
-        )),
+              ),
+            )),
 
-        Obx(()=>SizedBox(
-          height: 70,
-          width: 70,
-          child: InkWell(
-            onTap: () async{
-                camLoading.value = !camLoading.value;
-
-              XFile image;
-              try{
-                image = await controller.takePicture();
-              }catch(e){
-                print(e.toString());
-              }
-
-              File file = File(image.path);
-
-
-              if(longReceipt.value){
-
-                  camLoading.value = !camLoading.value;
-                  images.add(file);
-              }else{
-                images.add(file);
+            Obx(()=>longReceipt.value?InkWell(
+              onTap: (){
                 Get.off(PurchasedProductsScreen(storeModel: widget.storeModel,), arguments: images);
-              }
-            },
-            child: Container(
-              height: 70,
-              width: 70,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                      color: Colors.white,
-                      width: 2
-                  )
-              ),
-              child: camLoading.value ? CircularProgressIndicator() : Container(
-                height: 70,
-                width: 70,
-                margin: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white
-                ),
-              ),
-            ),
-          ),
-        )),
-
-        Obx(()=>longReceipt.value?InkWell(
-          onTap: (){
-            Get.off(PurchasedProductsScreen(storeModel: widget.storeModel,), arguments: images);
-          },
-          borderRadius: BorderRadius.circular(6),
-          child: Container(
-            width: 90,
-            height: 50,
-            decoration: BoxDecoration(
-                color: Colors.blueGrey,
-                borderRadius: BorderRadius.circular(6)
-            ),
-            child: Center(
-              child: Text(
-                'Done',
-                style: TextStyle(
-                    color: Colors.white
-                ),
-              ),
-            ),
-          ),
-        ):Column(
-          children: [
-            IconButton(
-              onPressed: (){
-                longReceipt.value = !longReceipt.value;
               },
-              icon: Icon(Icons.receipt_long_rounded, color: Colors.white,),
-            ),
-            SizedBox(height: 5,),
-            Text('Long Receipt', style: TextStyle(color: Colors.white),)
+              borderRadius: BorderRadius.circular(6),
+              child: Container(
+                width: 90,
+                height: 50,
+                decoration: BoxDecoration(
+                    color: Colors.blueGrey,
+                    borderRadius: BorderRadius.circular(6)
+                ),
+                child: Center(
+                  child: Text(
+                    'Done',
+                    style: TextStyle(
+                        color: Colors.white
+                    ),
+                  ),
+                ),
+              ),
+            ):Column(
+              children: [
+                IconButton(
+                  onPressed: (){
+                    longReceipt.value = !longReceipt.value;
+                  },
+                  icon: Icon(Icons.receipt_long_rounded, color: Colors.white,),
+                ),
+                SizedBox(height: 5,),
+                Text(StringResources.cameraViewBtnLongBill, style: TextStyle(color: Colors.white,fontSize: 12,fontFamily: 'open', fontWeight: FontWeight.w600),)
+              ],
+            ))
           ],
-        ))
-      ],
-    ),
+        ),
+      ),
+    ],
   );
 }

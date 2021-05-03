@@ -21,6 +21,14 @@ class StringResources{
 
   static const String demoImage = 'https://demo.plugins360.com/wp-content/uploads/2017/12/demo.png';
 
+
+
+
+  static const String cameraViewAppBarTitle = 'Add your bill';
+  static const String cameraViewBtnAddLater = 'In a hurry? Add bill later';
+  static const String cameraViewBtnLongBill = 'Click long bill';
+  static const String cameraViewBtnFlash = 'Flash';
+
   
   
 
