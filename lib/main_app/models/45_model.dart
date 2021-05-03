@@ -45,16 +45,18 @@ class ProductModel {
     this.id,
     this.name,
     this.logo,
-    this.storeID,
+    this.store,
     this.cashback,
     this.expiryDate,
     this.businesstype,
+    this.catId,
   });
 
   String id;
   String name;
+  String catId;
   String logo;
-  String storeID;
+  StoreModel store;
   num cashback;
   DateTime expiryDate;
   String businesstype;
@@ -62,8 +64,9 @@ class ProductModel {
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
     id: json["_id"],
     name: json["name"],
+    catId: json["catalog"]['_id'],
     logo: json["logo"],
-    storeID: json["store"]['_id'],
+    store: json["store"],
     cashback: json["cashback"],
     expiryDate: json["expiry_date"] == null ? null : DateTime.fromMillisecondsSinceEpoch(int.parse(json["expiry_date"])),
     businesstype: json["businesstype"]['_id'],
@@ -74,35 +77,47 @@ class StoreModel {
   StoreModel({
   this.id,
   this.name,
+  this.logo,
   this.businesstype,
   this.defaultCashback,
   this.promotionCashback,
   this.promotionCashbackStatus,
   this.promotionCashbackDate,
+  this.promotionWelcomeOffer,
+  this.promotionWelcomeOfferStatus,
+  this.promotionWelcomeOfferDate,
   });
 
   String id;
   String name;
+  String logo;
   String businesstype;
   num defaultCashback;
   num promotionCashback;
   String promotionCashbackStatus;
-  PromotionCashbackDate promotionCashbackDate;
+  OfferDateModel promotionCashbackDate;
+  num promotionWelcomeOffer;
+  String promotionWelcomeOfferStatus;
+  OfferDateModel promotionWelcomeOfferDate;
 
   factory StoreModel.fromJson(Map<String, dynamic> json) => StoreModel(
     id: json["_id"],
     name: json["name"],
+    logo: json["logo"],
     businesstype: json["businesstype"]['_id'],
     defaultCashback: json["default_cashback"],
     promotionCashback: json["promotion_cashback"],
     promotionCashbackStatus: json["promotion_cashback_status"],
-    promotionCashbackDate: PromotionCashbackDate.fromJson(json["promotion_cashback_date"]),
+    promotionCashbackDate: OfferDateModel.fromJson(json["promotion_cashback_date"]),
+    promotionWelcomeOffer: json["promotion_welcome_offer"],
+    promotionWelcomeOfferStatus: json["promotion_welcome_offer_status"],
+    promotionWelcomeOfferDate: OfferDateModel.fromJson(json["promotion_welcome_offer_date"]),
   );
 }
 
 
-class PromotionCashbackDate {
-  PromotionCashbackDate({
+class OfferDateModel {
+  OfferDateModel({
   this.startDate,
   this.endDate,
   });
@@ -110,7 +125,7 @@ class PromotionCashbackDate {
   DateTime startDate;
   DateTime endDate;
 
-  factory PromotionCashbackDate.fromJson(Map<String, dynamic> json) => PromotionCashbackDate(
+  factory OfferDateModel.fromJson(Map<String, dynamic> json) => OfferDateModel(
     startDate: json["start_date"] == null ? null : DateTime.fromMillisecondsSinceEpoch(int.parse(json["start_date"])),
     endDate: json["end_date"] == null ? null : DateTime.fromMillisecondsSinceEpoch(int.parse(json["end_date"])),
   );

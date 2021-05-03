@@ -127,7 +127,7 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
                   itemBuilder: (BuildContext context, int index){
                     return Column(
                       children: [
-                        StoreShopNowTile(label: 'Adidas',),
+                        StoreShopNowTile(title: 'Adidas',),
                         Divider(color: Colors.grey[200], thickness: 1, height: 20,),
                       ],
                     );

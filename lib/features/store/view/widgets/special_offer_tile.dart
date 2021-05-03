@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:seeya/main_app/models/45_model.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 
 class SpecialOfferTile extends StatelessWidget {
@@ -109,5 +110,54 @@ class SpecialOfferTileData{
 
 
     return SpecialOfferTileData(title: title, image: image, subtitle1: subTitle1, subtitle2: subTitle2, label: label);
+  }
+
+  static List<SpecialOfferTileData> parsedList(data){
+    List<SpecialOfferTileData> finalData = [];
+    data.forEach((element) {
+
+      String image = element.logo;
+      String title;
+      String subTitle1;
+      String subTitle2;
+      String label;
+      final today = DateTime.now();
+      if(element.runtimeType == ProductModel){
+        title = element.name;
+        subTitle1 = 'Cash back amount with selling price';
+        subTitle2 = 'From ${element.store.name}';
+        label = 'Expires in: ${element.expiryDate.difference(today).inDays} day';
+      }else{
+        num cashBack = 0;
+        if(element.promotionCashbackStatus == 'active'){
+          if(today.isAfter(element.promotionCashbackDate.startDate) && today.isBefore(element.promotionCashbackDate.endDate)){
+            cashBack = element.promotionCashback;
+            label = 'Expires in: ${element.promotionCashbackDate.endDate.difference(today).inDays} day';
+          }else{
+            cashBack = element.defaultCashback;
+            label = '';
+          }
+        }else{
+          cashBack = element.defaultCashback;
+          label = '';
+        }
+
+        title = '$cashBack % cash back on purchase';
+        subTitle1 = 'Was ${element.defaultCashback}';
+        subTitle2 = 'From ${element.name}';
+      }
+
+      SpecialOfferTileData temp = SpecialOfferTileData(
+          image: image,
+          title: title,
+          subtitle1: subTitle1,
+          subtitle2: subTitle2,
+          label: label
+      );
+      finalData.add(temp);
+    });
+
+    finalData.shuffle();
+    return finalData;
   }
 }
