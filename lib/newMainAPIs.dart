@@ -35,7 +35,7 @@ class NewApi{
     }
   }
 
-  static Future<void> getHomeFavShops() async{
+  static Future<int> getHomeFavShops() async{
     final _query = r'''query($lat : Float $lng: Float){
     getHomePageFavoriteShops(lat: $lat, lng:$lng){
       error
@@ -60,10 +60,15 @@ class NewApi{
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
       logger.i(result.data);
       if(!result.data['getHomePageFavoriteShops']['error']){
-        NewDataViewModel.homeFavStores = List.from(result.data['getHomePageFavoriteShops']['data'].map((type)=>HomeFavModel.fromJson(type)));
+        final data = List.from(result.data['getHomePageFavoriteShops']['data'].map((type)=>HomeFavModel.fromJson(type)));
+        NewDataViewModel.homeFavStores = data;
+        return data.length;
+      }else{
+        return 0;
       }
     }catch(e){
       print(e.toString());
+      return 0;
     }
   }
 

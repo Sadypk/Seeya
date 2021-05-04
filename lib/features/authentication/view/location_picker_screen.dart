@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:seeya/features/home_screen/view/all_offers_near_you.dart';
-import 'package:seeya/features/redeem_balance/view/redeem_balance.dart';
 import 'dart:async';
 import 'package:seeya/main_app/config/localStorage.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:get/get.dart';
@@ -19,6 +17,7 @@ import 'package:seeya/home.dart';
 import 'package:seeya/main_app/util/screenLoader.dart';
 import 'package:seeya/main_app/util/snack.dart';
 import 'package:seeya/main_app/view/widgets/gradient_button.dart';
+import 'package:seeya/newMainAPIs.dart';
 
 import 'widgets/waitingForMapLoadingWIdget.dart';
 import '../repository/maprepo.dart';
@@ -369,7 +368,11 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                                 if(LocalStorage.checkFirstTime()){
                                   Get.offAll(()=> AllOffersNearYou());
                                 }else{
-                                  Get.offAll(()=> Home());
+                                  if(await NewApi.getHomeFavShops() == 0){
+                                    Get.offAll(()=> AllOffersNearYou());
+                                  }else{
+                                    Get.offAll(()=> Home());
+                                  }
                                 }
                               }
                             }else if (UserViewModel.user.value.addresses.length == 4){
@@ -440,14 +443,17 @@ class AddressListScreen extends StatelessWidget {
           return Card(
             elevation: 20,
             child: ListTile(
-              onTap: () {
+              onTap: () async{
                 UserViewModel.setLocation(LatLng(address.location.lat, address.location.lng));
-                Get.offAll(()=> AllOffersNearYou());
-                // if(LocalStorage.checkFirstTime()){
-                //   Get.offAll(()=> AllOffersNearYou());
-                // }else{
-                //   Get.offAll(()=> Home());
-                // }
+                if(LocalStorage.checkFirstTime()){
+                  Get.offAll(()=> AllOffersNearYou());
+                }else{
+                  if(await NewApi.getHomeFavShops() == 0){
+                    Get.offAll(()=> AllOffersNearYou());
+                  }else{
+                    Get.offAll(()=> Home());
+                  }
+                }
               },
               title: Text(
                 address.address
