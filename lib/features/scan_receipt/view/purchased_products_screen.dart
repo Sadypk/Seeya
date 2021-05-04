@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,7 @@ import 'package:seeya/features/store/models/cart_model.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 import 'package:seeya/home.dart';
+import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 
 class PurchasedProductsScreen extends StatefulWidget {
@@ -40,6 +42,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       // extendBodyBehindAppBar: true,
       // appBar: AppBar(
       //   iconTheme: IconThemeData(
@@ -47,33 +50,35 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
       //   ),
       //   backgroundColor: Colors.transparent,
       // ),
-      body: Stack(
-        children: [
-          Container(
-            height: Get.height,
-            child: ListView.builder(
-              itemCount: images.length,
-              shrinkWrap: true,
-              itemBuilder: (_, index) => Image.file(images[index]),
-              // itemBuilder: (_, index) => AssetThumb(asset: assets[index],height: (Get.height * .7).toInt(), width: (Get.width).toInt()),
-            ),
-          ),
-          if(widget.storeModel!=null) _buildBottomDrawer(),
-          if(widget.storeModel==null)Positioned(
-            top: Get.height-100,
-            bottom: 0,
-            right: 0,
-            left: 0,
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 15),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20)),
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Container(
+              height: Get.height,
+              child: ListView.builder(
+                itemCount: images.length,
+                shrinkWrap: true,
+                itemBuilder: (_, index) => Image.file(images[index]),
+                // itemBuilder: (_, index) => AssetThumb(asset: assets[index],height: (Get.height * .7).toInt(), width: (Get.width).toInt()),
               ),
-              child: submitTextField,
             ),
-          )
-        ],
+            if(widget.storeModel!=null) _buildBottomDrawer(),
+            // if(widget.storeModel==null)Positioned(
+            //   top: Get.height-100,
+            //   bottom: 0,
+            //   right: 0,
+            //   left: 0,
+            //   child: Container(
+            //     padding: EdgeInsets.symmetric(vertical: 15),
+            //     decoration: BoxDecoration(
+            //       color: Colors.white,
+            //       borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20)),
+            //     ),
+            //     child: submitTextField,
+            //   ),
+            // )
+          ],
+        ),
       )
     );
   }
@@ -84,10 +89,10 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
 
   _buildBottomDrawer()=> AnimatedPositioned(
     duration: _duration,
-    top: bottomDrawerIsOpen ? expandedGap : Get.height-100,
+    top: bottomDrawerIsOpen ? expandedGap : Get.height-70,
     bottom: 0,
-    left: 0,
-    right: 0,
+    left: bottomDrawerIsOpen ?0:20,
+    right: bottomDrawerIsOpen ?0:20,
     child: GestureDetector(
       onTap: (){
         setState(() {
@@ -100,44 +105,26 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+            topLeft: Radius.circular(4),
+            topRight: Radius.circular(4),
           )
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Purchased products',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: (){
-                      setState(() {
-                        bottomDrawerIsOpen = !bottomDrawerIsOpen;
-                      });
-                    },
-                    child: Text(
-                      bottomDrawerIsOpen ? 'Collapse' : 'See all',
-                      style: TextStyle(
-                          decoration: TextDecoration.underline
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            bottomDrawerIsOpen ? GridListWidget() : SizedBox(),
-            SizedBox(height: 5,),
+            bottomDrawerIsOpen ? GridListWidget() : SizedBox(height: 8,),
             submitTextField,
-            SizedBox(height: 5,),
+            SizedBox(height: 8,),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: InkWell(
+                  onTap: (){
+                    setState(() {
+                      bottomDrawerIsOpen = !bottomDrawerIsOpen;
+                    });
+                  },
+                  child: Text('Earn extra cashback', style: TextStyle(fontSize: 10, fontFamily: 'Stag', color: AppConst.themePurple),)),
+            )
           ],
         ),
       ),
@@ -148,40 +135,44 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
 var amountController = TextEditingController().obs;
 var canSubmit = false.obs;
 var submitTextField = Obx((){
-  return Container(
-    padding: EdgeInsets.only(left: 10),
-    child: Flexible(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey[300], width: 1),
-          boxShadow: [
-            BoxShadow(
-                color: Color(0xff000000).withOpacity(0.2), blurRadius: 20),
-            BoxShadow(
-                color: Color(0xfffafafa).withOpacity(0.2), blurRadius: 20),
-          ],
-        ),
-        child: TextFormField(
-          controller: amountController.value,
-          onChanged: (v){if(v.length>0) {
-            canSubmit.value = true;
-          }else{
-            canSubmit.value = false;
-          }
-          },
-          decoration: InputDecoration(
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.cyan),
-              ),
-              hintText: 'Enter Bill Amount',
-              hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)
-          ),
+  return Flexible(
+    child: Container(
+      height: 35,
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: Colors.grey[300], width: 1),
+        boxShadow: [
+          BoxShadow(
+              color: Color(0xff000000).withOpacity(0.2), blurRadius: 1),
+          BoxShadow(
+              color: Color(0xfffafafa).withOpacity(0.2), blurRadius: 1),
+        ],
+      ),
+      child: TextFormField(
+        controller: amountController.value,
+        onChanged: (v){if(v.length>0) {
+          canSubmit.value = true;
+        }else{
+          canSubmit.value = false;
+        }
+        },
+        decoration: InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+            ),
+            suffix: InkWell(
+              child: Text('Submit', style: TextStyle(color: AppConst.themePurple, fontFamily: 'Stag', fontSize: 14),),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.cyan),
+            ),
+            hintText: ' Enter Bill Amount',
+            hintStyle: TextStyle(fontFamily: 'open', fontWeight: FontWeight.w400, fontSize: 10, color: Color(0xff777C87)),
+          prefixText: '₹',
+          prefixStyle: TextStyle(fontFamily: 'open', fontWeight: FontWeight.w400, fontSize: 10, color: Colors.black)
         ),
       ),
     ),
@@ -283,7 +274,7 @@ class GridListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PurchasedProductViewModel vm = Get.find();
-    return Expanded(
+    return Flexible(
       child: Container(
         // padding: EdgeInsets.symmetric(horizontal: 5),
         child: GridView.builder(
@@ -296,7 +287,7 @@ class GridListWidget extends StatelessWidget {
               crossAxisSpacing: 10,
             childAspectRatio: ((MediaQuery.of(context).size.width/2)/220),
           ),
-          itemCount: 6,
+          itemCount: 20,
           itemBuilder: (BuildContext context, int index){
             var isSelected = false.obs;
             return ProductCardWidget();

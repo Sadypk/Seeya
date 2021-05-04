@@ -13,7 +13,14 @@ class ScanReceipts extends StatefulWidget {
   _ScanReceiptsState createState() => _ScanReceiptsState();
 }
 
-class _ScanReceiptsState extends State<ScanReceipts> {
+class _ScanReceiptsState extends State<ScanReceipts> with SingleTickerProviderStateMixin{
+  TabController tabController;
+
+  @override
+  void initState() {
+    tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,17 +34,17 @@ class _ScanReceiptsState extends State<ScanReceipts> {
             margin: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                DefaultTabController(
-                  length: 2,
-                  child: TabBar(
-                      indicatorColor: AppConst.themePurple,
-                      labelStyle: AppConst.header2,
-                      unselectedLabelStyle: AppConst.header2,
-                      tabs: [
-                        Tab(text: 'My favourite',),
-                        Tab(text: 'Near me',),
-                      ]),
-                ),
+                TabBar(
+                  controller: tabController,
+                    indicatorColor: AppConst.themePurple,
+                    labelStyle: AppConst.header2,
+                    unselectedLabelStyle: AppConst.header2,
+                    tabs: [
+                      Tab(text: 'My favourite',),
+                      Tab(text: 'Near me',),
+                      // Text('My favourite', style: AppConst.header2,),
+                      // Text('Near me', style: AppConst.header2,)
+                    ]),
                 SizedBox(height: 15,),
                 Row(
                   children: [
