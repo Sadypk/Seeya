@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:seeya/features/home_screen/view/all_offers_near_you.dart';
+import 'package:seeya/features/redeem_balance/view/redeem_balance.dart';
 import 'dart:async';
-
+import 'package:seeya/main_app/config/localStorage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -175,7 +177,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   // }
 
   bool screenLoading = false;
-  String selected = '';
+  String selected = 'Home';
   @override
   Widget build(BuildContext context) {
     tagLocationSelectionCard(String label){
@@ -364,7 +366,11 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                                 Snack.top('Sorry', 'Something went wrong');
                               }else{
                                 UserViewModel.setLocation(LatLng(currentPosition.latitude, currentPosition.longitude));
-                                Get.offAll(Home());
+                                if(LocalStorage.checkFirstTime()){
+                                  Get.offAll(()=> AllOffersNearYou());
+                                }else{
+                                  Get.offAll(()=> Home());
+                                }
                               }
                             }else if (UserViewModel.user.value.addresses.length == 4){
                               Snack.top('Sorry', 'Can not add more addresses');
@@ -436,7 +442,12 @@ class AddressListScreen extends StatelessWidget {
             child: ListTile(
               onTap: () {
                 UserViewModel.setLocation(LatLng(address.location.lat, address.location.lng));
-                Get.offAll(()=> Home());
+                Get.offAll(()=> AllOffersNearYou());
+                // if(LocalStorage.checkFirstTime()){
+                //   Get.offAll(()=> AllOffersNearYou());
+                // }else{
+                //   Get.offAll(()=> Home());
+                // }
               },
               title: Text(
                 address.address

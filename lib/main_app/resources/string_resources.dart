@@ -29,6 +29,8 @@ class StringResources{
   static const String cameraViewBtnLongBill = 'Click long bill';
   static const String cameraViewBtnFlash = 'Flash';
 
+  static const String rupee = '₹';
+
   
   
 

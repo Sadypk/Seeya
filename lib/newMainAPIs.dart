@@ -1,5 +1,6 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:logger/logger.dart';
+import 'package:seeya/features/home_screen/view/all_offers_near_you.dart';
 import 'package:seeya/features/scan_receipt/view/45_fav_stores_main_page.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/main_app/config/gqlConfig.dart';
@@ -50,10 +51,9 @@ class NewApi{
 
     try{
 
-      //TODO static for now
       final variables = {
-        'lat' : 22.8259896,
-        'lng' : 89.5510924,
+        'lat' : UserViewModel.currentLocation.value.latitude,
+        'lng' : UserViewModel.currentLocation.value.longitude,
       };
 
      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
@@ -108,10 +108,9 @@ class NewApi{
 }''';
 
     try{
-      //TODO static for now
       final variables = {
-        "lat": 22.8259892,
-        "lng": 89.5510924,
+        "lat": UserViewModel.currentLocation.value.latitude,
+        "lng": UserViewModel.currentLocation.value.longitude,
         "bType": bType,
         "pSize": 100,
         "pNum": pNum ?? 1
@@ -334,10 +333,9 @@ class NewApi{
 
     try{
 
-      //TODO static for now
       final variables = {
-        'lat': 22.8259892,
-        'lng': 89.5510924
+        'lat': UserViewModel.currentLocation.value.latitude,
+        'lng': UserViewModel.currentLocation.value.longitude
       };
 
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
@@ -354,4 +352,135 @@ class NewApi{
       print("e.toString()");
     }
   }
+
+  static Future<List<BoomModel>> get39_AllOffersNearYouData() async{
+    final _query = r'''query($lat: Float $lng: Float){
+  getClaimRewardsPageData(lat: $lat lng: $lng){
+    error
+    msg
+    data{
+      stores{
+        _id
+        name
+        logo
+        flag
+        distance
+        default_welcome_offer
+        promotion_welcome_offer_status
+        promotion_welcome_offer
+        promotion_welcome_offer_date{
+          start_date
+          end_date
+        }
+        businesstype{
+          _id
+          name
+          image
+        }
+      }
+    }
+  }
+}''';
+
+    try{
+
+      final variables = {
+        'lat': UserViewModel.currentLocation.value.latitude,
+        'lng': UserViewModel.currentLocation.value.longitude
+      };
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
+      if(!result.data['getClaimRewardsPageData']['error']){
+        return List<BoomModel>.from(result.data['getClaimRewardsPageData']['data']['stores'].map((type) => BoomModel.fromJson(type)));
+
+      }else{
+        return null;
+      }
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+
+  static get39_BtnAddAll() async{
+    final _query = r'''mutation($data: [AddStoreToWalletInput]){
+  addMultipleStoreToWallet(addMultipleStoresToWallet:$data){
+    error
+    msg
+  }
+}''';
+
+    try{
+
+      List<Map<String, dynamic>> data = [];
+
+      offersNearYouStores.forEach((element) {
+
+        num offer = element.defaultWelcomeOffer;
+        final today = DateTime.now();
+        if(element.promotionWelcomeOfferStatus == 'active'){
+          if(element.promotionWelcomeOfferDate.startDate.isBefore(today) &&  element.promotionWelcomeOfferDate.endDate.isAfter(today)){
+            offer =element.promotionWelcomeOffer;
+          }
+        }
+
+        data.add({
+          'store' : element.id,
+          'balance' : offer,
+          'lat' : UserViewModel.currentLocation.value.latitude,
+          'lng' : UserViewModel.currentLocation.value.longitude,
+        });
+      });
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.mutate(MutationOptions(document: gql(_query),variables: {
+        'data' : data
+      }));
+      return result.data['addMultipleStoreToWallet'];
+    }catch(e){
+      print(e.toString());
+      print('hgere');
+      return null;
+    }
+  }
+}
+
+class BoomModel {
+  BoomModel({
+    this.id,
+    this.name,
+    this.logo,
+    this.flag,
+    this.distance,
+    this.defaultWelcomeOffer,
+    this.promotionWelcomeOfferStatus,
+    this.promotionWelcomeOffer,
+    this.promotionWelcomeOfferDate,
+    this.businesstypeId,
+  });
+
+  String id;
+  String name;
+  String logo;
+  String flag;
+  num distance;
+  num defaultWelcomeOffer;
+  String promotionWelcomeOfferStatus;
+  num promotionWelcomeOffer;
+  OfferDateModel promotionWelcomeOfferDate;
+  String businesstypeId;
+
+  factory BoomModel.fromJson(Map<String, dynamic> json) => BoomModel(
+    id: json["_id"],
+    name: json["name"],
+    logo: json["logo"],
+    flag: json["flag"],
+    distance: json["distance"],
+    defaultWelcomeOffer: json["default_welcome_offer"],
+    promotionWelcomeOfferStatus: json["promotion_welcome_offer_status"],
+    promotionWelcomeOffer: json["promotion_welcome_offer"],
+    promotionWelcomeOfferDate: OfferDateModel.fromJson(json["promotion_welcome_offer_date"]),
+    businesstypeId: json["businesstype"]['_id'],
+  );
 }

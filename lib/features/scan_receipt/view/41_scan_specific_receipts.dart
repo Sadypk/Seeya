@@ -41,7 +41,7 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
                   itemBuilder: (BuildContext context, int index){
                     return InkWell(
                       onTap: (){
-                        Get.to(StoresWithCategoryOffers());
+                        // Get.to(StoresWithCategoryOffers());
                       },
                       child: Container(
                           margin: EdgeInsets.only(right: 16, top: 25, bottom: 25),

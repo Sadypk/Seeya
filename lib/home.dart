@@ -45,7 +45,6 @@ class _HomeState extends State<Home> {
   GetSizeConfig getSizeConfig;
   @override
   void initState() {
-    // TODO: implement initState
     getSizeConfig = Get.find();
     super.initState();
   }
