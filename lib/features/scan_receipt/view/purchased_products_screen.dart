@@ -135,45 +135,43 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
 var amountController = TextEditingController().obs;
 var canSubmit = false.obs;
 var submitTextField = Obx((){
-  return Flexible(
-    child: Container(
-      height: 35,
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: Colors.grey[300], width: 1),
-        boxShadow: [
-          BoxShadow(
-              color: Color(0xff000000).withOpacity(0.2), blurRadius: 1),
-          BoxShadow(
-              color: Color(0xfffafafa).withOpacity(0.2), blurRadius: 1),
-        ],
-      ),
-      child: TextFormField(
-        controller: amountController.value,
-        onChanged: (v){if(v.length>0) {
-          canSubmit.value = true;
-        }else{
-          canSubmit.value = false;
-        }
-        },
-        decoration: InputDecoration(
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-            ),
-            suffix: InkWell(
-              child: Text('Submit', style: TextStyle(color: AppConst.themePurple, fontFamily: 'Stag', fontSize: 14),),
-            ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.cyan),
-            ),
-            hintText: ' Enter Bill Amount',
-            hintStyle: TextStyle(fontFamily: 'open', fontWeight: FontWeight.w400, fontSize: 10, color: Color(0xff777C87)),
-          prefixText: '₹',
-          prefixStyle: TextStyle(fontFamily: 'open', fontWeight: FontWeight.w400, fontSize: 10, color: Colors.black)
-        ),
+  return Container(
+    height: 35,
+    margin: EdgeInsets.symmetric(horizontal: 10),
+    padding: EdgeInsets.symmetric(horizontal: 10),
+    decoration: BoxDecoration(
+      color: Colors.grey[200],
+      borderRadius: BorderRadius.circular(4),
+      border: Border.all(color: Colors.grey[300], width: 1),
+      boxShadow: [
+        BoxShadow(
+            color: Color(0xff000000).withOpacity(0.2), blurRadius: 1),
+        BoxShadow(
+            color: Color(0xfffafafa).withOpacity(0.2), blurRadius: 1),
+      ],
+    ),
+    child: TextFormField(
+      controller: amountController.value,
+      onChanged: (v){if(v.length>0) {
+        canSubmit.value = true;
+      }else{
+        canSubmit.value = false;
+      }
+      },
+      decoration: InputDecoration(
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
+          suffix: InkWell(
+            child: Text('Submit', style: TextStyle(color: AppConst.themePurple, fontFamily: 'Stag', fontSize: 14),),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.cyan),
+          ),
+          hintText: ' Enter Bill Amount',
+          hintStyle: TextStyle(fontFamily: 'open', fontWeight: FontWeight.w400, fontSize: 10, color: Color(0xff777C87)),
+        prefixText: '₹',
+        prefixStyle: TextStyle(fontFamily: 'open', fontWeight: FontWeight.w400, fontSize: 10, color: Colors.black)
       ),
     ),
   );
@@ -276,7 +274,7 @@ class GridListWidget extends StatelessWidget {
     PurchasedProductViewModel vm = Get.find();
     return Flexible(
       child: Container(
-        // padding: EdgeInsets.symmetric(horizontal: 5),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: GridView.builder(
           shrinkWrap: true,
           padding: EdgeInsets.zero,

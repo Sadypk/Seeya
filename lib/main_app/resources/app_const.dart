@@ -40,6 +40,7 @@ class AppConst{
   static TextStyle appbarTextStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: 'Stag', letterSpacing: 0.3);
 
   static TextStyle titleText1 = TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'Stag');
+  static TextStyle titleText1_2 = TextStyle(fontSize: 16, fontWeight: FontWeight.w400, fontFamily: 'Stag');
   static TextStyle titleText1Purple = TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'Stag', color: themePurple);
   static TextStyle titleText1White = TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Stag', color: Colors.white,letterSpacing: .5);
 
@@ -60,6 +61,8 @@ class AppConst{
   static TextStyle descriptionTextPurple = TextStyle(fontSize: 10,fontWeight: FontWeight.w600, color: themePurple, fontFamily: 'open', letterSpacing: 0.3);
   static TextStyle descriptionTextRed = TextStyle(fontSize: 10, color: Color(0xffEE175B), fontFamily: 'Stag', letterSpacing: 0.3, fontWeight: FontWeight.w600);
   static TextStyle descriptionTextWhite = TextStyle(fontSize: 10, color: Colors.white, fontFamily: 'open', letterSpacing: 0.3);
+
+  static TextStyle descriptionTextOpen = TextStyle(fontSize: 12, color: black, fontFamily: 'open', letterSpacing: 0.3);
 
   //image paths
   static String referAndEarnImage = 'assets/images/Refer and earn illustration.png';
