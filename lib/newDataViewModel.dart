@@ -1,6 +1,7 @@
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/home_screen/models/homeFavStoreModel.dart';
 import 'package:seeya/main_app/models/45_model.dart';
+import 'package:seeya/main_app/models/businessTypes.dart';
 
 class NewDataViewModel{
   static List<BusinessType> businessTypes = [];

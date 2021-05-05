@@ -1,13 +1,12 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:seeya/features/home_screen/view/all_offers_near_you.dart';
-import 'package:seeya/features/scan_receipt/view/45_fav_stores_main_page.dart';
-import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/main_app/config/gqlConfig.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 import 'newDataViewModel.dart';
 import 'package:seeya/main_app/models/45_model.dart';
 import 'package:seeya/features/home_screen/models/homeFavStoreModel.dart';
+import 'package:seeya/main_app/models/businessTypes.dart';
 
 class NewApi{
   static var logger = Logger();
@@ -26,7 +25,7 @@ class NewApi{
     try{
      GraphQLClient client = GqlConfig.getClient();
       QueryResult result = await client.query(QueryOptions(document: gql(_query)));
-      logger.i(result.data);
+      // logger.i(result.data);
       if(!result.data['getAllBusinessTypes']['error']){
         NewDataViewModel.businessTypes = List.from(result.data['getAllBusinessTypes']['data'].map((type)=>BusinessType.fromJson(type)));
       }
@@ -58,9 +57,9 @@ class NewApi{
 
      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
-      logger.i(result.data);
+      // logger.i(result.data);
       if(!result.data['getHomePageFavoriteShops']['error']){
-        final data = List.from(result.data['getHomePageFavoriteShops']['data'].map((type)=>HomeFavModel.fromJson(type)));
+        List<HomeFavModel> data = List.from(result.data['getHomePageFavoriteShops']['data'].map((type)=>HomeFavModel.fromJson(type)));
         NewDataViewModel.homeFavStores = data;
         return data.length;
       }else{
@@ -343,9 +342,11 @@ class NewApi{
         'lng': UserViewModel.currentLocation.value.longitude
       };
 
+      print(variables);
+
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
-      logger.i(result.data);
+      // logger.i(result.data);
       if(!result.data['getFavoritePageData']['error']){
         NewDataViewModel.grocery = FavPageDataModel.fromJson(result.data['getFavoritePageData']['data']['Grocery']);
         NewDataViewModel.fresh = FavPageDataModel.fromJson(result.data['getFavoritePageData']['data']['Fresh']);

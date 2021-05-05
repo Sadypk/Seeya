@@ -114,4 +114,33 @@ class MapRepo{
       return true;
     }
   }
+
+  static Future<bool> deleteCustomerAddress(String addressID) async{
+    final mutationAddCustomerAddress = r'''
+mutation($id: ID){
+  deleteCustomerAddress(_id: $id){
+    error
+    msg
+  }
+}
+  ''';
+    try{
+
+      Map<String, dynamic> variables = {
+        'id' : addressID
+      };
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.mutate(MutationOptions(
+        document: gql(mutationAddCustomerAddress),
+        variables: variables
+      ));
+
+      return result.data['deleteCustomerAddress']['error'];
+
+    }catch(e){
+      print(e.toString());
+      return true;
+    }
+  }
 }

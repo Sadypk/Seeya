@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
+import 'package:seeya/main_app/models/businessTypes.dart';
 
 
 class NearestStoreViewModel extends GetxController{

@@ -1,4 +1,5 @@
 import 'package:seeya/main_app/models/addressModel.dart';
+import 'package:seeya/main_app/models/businessTypes.dart';
 
 class StoreModel {
   StoreModel({
@@ -49,25 +50,6 @@ class StoreModel {
 }
 
 
-class BusinessType {
-  BusinessType({
-    this.id,
-    this.name,
-  });
-
-  String id;
-  String name;
-
-  factory BusinessType.fromJson(Map<String, dynamic> json) => BusinessType(
-    id: json["_id"] ?? '',
-    name: json["name"] ?? '_',
-  );
-
-  Map<String, dynamic> toJson() => {
-    "_id": id == null ? null : id,
-    "name": name,
-  };
-}
 
 class StoreAddressModel {
   StoreAddressModel({

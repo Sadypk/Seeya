@@ -13,13 +13,15 @@ class FavPageDataModel {
   List<ProductModel> products;
   List<StoreModel> stores;
 
-  factory FavPageDataModel.fromJson(Map<String, dynamic> json) => FavPageDataModel(
-    id: json["_id"],
-    itemCount: json["item_count"],
-    catalogs: List<CatalogModel>.from(json["catalogs"].map((x) => CatalogModel.fromJson(x))),
-    products: List<ProductModel>.from(json["products"].map((x) => ProductModel.fromJson(x))),
-    stores: List<StoreModel>.from(json["stores"].map((x) => StoreModel.fromJson(x))),
-  );
+  factory FavPageDataModel.fromJson(Map<String, dynamic> json) {
+    return FavPageDataModel(
+      id: json["_id"],
+      itemCount: json["item_count"] ?? 0,
+      catalogs: List<CatalogModel>.from(json["catalogs"].map((x) => CatalogModel.fromJson(x))),
+      products: List<ProductModel>.from(json["products"].map((x) => ProductModel.fromJson(x))),
+      stores: List<StoreModel>.from(json["stores"].map((x) => StoreModel.fromJson(x))),
+    );
+  }
 }
 
 class CatalogModel {
@@ -61,16 +63,21 @@ class ProductModel {
   DateTime expiryDate;
   String businesstype;
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-    id: json["_id"],
-    name: json["name"],
-    catId: json["catalog"]['_id'],
-    logo: json["logo"],
-    store: json["store"],
-    cashback: json["cashback"],
-    expiryDate: json["expiry_date"] == null ? null : DateTime.fromMillisecondsSinceEpoch(int.parse(json["expiry_date"])),
-    businesstype: json["businesstype"]['_id'],
-  );
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+
+
+
+    return ProductModel(
+      id: json["_id"],
+      name: json["name"],
+      catId: json["catalog"]['_id'],
+      logo: json["logo"],
+      store: StoreModel.fromJson(json["store"]),
+      cashback: json["cashback"],
+      expiryDate: json["expiry_date"] == null ? null : DateTime.fromMillisecondsSinceEpoch(int.parse(json["expiry_date"])),
+      businesstype: json["businesstype"]['_id'],
+    );
+  }
 }
 
 class StoreModel {
@@ -100,19 +107,22 @@ class StoreModel {
   String promotionWelcomeOfferStatus;
   OfferDateModel promotionWelcomeOfferDate;
 
-  factory StoreModel.fromJson(Map<String, dynamic> json) => StoreModel(
-    id: json["_id"],
-    name: json["name"],
-    logo: json["logo"],
-    businesstype: json["businesstype"]['_id'],
-    defaultCashback: json["default_cashback"],
-    promotionCashback: json["promotion_cashback"],
-    promotionCashbackStatus: json["promotion_cashback_status"],
-    promotionCashbackDate: OfferDateModel.fromJson(json["promotion_cashback_date"]),
-    promotionWelcomeOffer: json["promotion_welcome_offer"],
-    promotionWelcomeOfferStatus: json["promotion_welcome_offer_status"],
-    promotionWelcomeOfferDate: OfferDateModel.fromJson(json["promotion_welcome_offer_date"]),
-  );
+  factory StoreModel.fromJson(Map<String, dynamic> json) {
+
+    return StoreModel(
+      id: json["_id"],
+      name: json["name"],
+      logo: json["logo"],
+      businesstype: json["businesstype"] == null ? null : json["businesstype"]['_id'],
+      defaultCashback: json["default_cashback"],
+      promotionCashback: json["promotion_cashback"],
+      promotionCashbackStatus: json["promotion_cashback_status"],
+      promotionCashbackDate: json["promotion_cashback_date"] == null ? null : OfferDateModel.fromJson(json["promotion_cashback_date"]),
+      promotionWelcomeOffer: json["promotion_welcome_offer"],
+      promotionWelcomeOfferStatus: json["promotion_welcome_offer_status"],
+      promotionWelcomeOfferDate: json["promotion_welcome_offer_date"] == null ? null : OfferDateModel.fromJson(json["promotion_welcome_offer_date"]),
+    );
+  }
 }
 
 

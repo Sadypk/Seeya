@@ -113,7 +113,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               InkWell(
-                  onTap: (){Get.to(FavStoresMainPage());},
+                  onTap: () async{
+                    // await NewApi.get45_FavStoreMainScreenData();
+                    //
+                    Get.to(FavStoresMainPage());
+                  },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 20),
                     child: Text('View All', style: AppConst.descriptionTextPurple,),
