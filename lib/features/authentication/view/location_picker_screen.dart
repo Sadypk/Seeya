@@ -46,10 +46,6 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     gMarker.add(Marker(
       markerId: MarkerId('gMarker'),
       position: latLng,
-      infoWindow: InfoWindow(
-        title: 'Title',
-        snippet: 'Subtitle'
-      ),
       icon: markerImage
     ));
     await getAddressFromLatLng(latLng);
@@ -82,7 +78,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   }
   BitmapDescriptor markerImage;
   Future<BitmapDescriptor> _getPinIcon(String image) async{
-    return await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 1.0), image);
+    return await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 1.0, size: Size(175,73)), image);
   }
 
   getData() async{
@@ -189,7 +185,6 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
         child: Container(
           height: 30,
           width: 65,
-          margin: EdgeInsets.only(right: 20),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(4),
@@ -341,7 +336,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                         Text('Tag this location', style: AppConst.header,),
                         SizedBox(height: 10,),
                         Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             tagLocationSelectionCard('Home'),
                             tagLocationSelectionCard('Work'),
@@ -418,58 +413,6 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
             // )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class AddressListScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Choose Address to continue',
-          style: TextStyle(
-            color: Colors.red
-          ),
-        ),
-      ),
-      body: ListView.builder(
-        itemCount: UserViewModel.user.value.addresses.length,
-        shrinkWrap: true,
-        itemBuilder: (_ ,index) {
-          AddressModel address = UserViewModel.user.value.addresses[index];
-          return Card(
-            elevation: 20,
-            child: ListTile(
-              onTap: () async{
-                UserViewModel.setLocation(LatLng(address.location.lat, address.location.lng));
-                if(LocalStorage.checkFirstTime()){
-                  Get.offAll(()=> AllOffersNearYou());
-                }else{
-                  if(await NewApi.getHomeFavShops() == 0){
-                    Get.offAll(()=> AllOffersNearYou());
-                  }else{
-                    Get.offAll(()=> Home());
-                  }
-                }
-              },
-              title: Text(
-                address.address
-              ),
-              subtitle: Text(
-                address.title
-              ),
-            ),
-          );
-        },
-      ),
-      floatingActionButton: CustomButton(
-        function: (){
-          Get.to(()=> LocationPickerScreen());
-        },
-        title: 'Add new Address',
       ),
     );
   }

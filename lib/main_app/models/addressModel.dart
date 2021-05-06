@@ -3,15 +3,18 @@ class AddressModel {
     this.address,
     this.location,
     this.status,
-    this.title
+    this.title,
+    this.id
   });
 
+  String id;
   String address;
   String title;
   bool status;
   LocationModel location;
 
   factory AddressModel.fromJson(Map<String, dynamic> json) => AddressModel(
+    id: json["_id"],
     address: json["address"] == null ? '' : json["address"],
     status: json["status"] == null ? '' : json["status"],
     title: json["title"] == null ? '' : json["title"],

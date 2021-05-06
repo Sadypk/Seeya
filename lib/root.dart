@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:seeya/features/authentication/repository/authRepo.dart';
 import 'package:seeya/features/authentication/view/phone_verification_screen.dart';
 import 'package:get/get.dart';
+import 'package:seeya/features/settings/view/21_manage_address.dart';
 // import 'package:seeya/features/scan_receipt/camera_awesome_files/camerawesome_plugin.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 import 'package:seeya/features/authentication/view/location_picker_screen.dart';
@@ -41,7 +42,7 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
           Get.to(()=>SignInScreen());
         }else{
           if(UserViewModel.user.value.addresses.length > 0){
-            Get.offAll(()=>AddressListScreen());
+            Get.offAll(()=>ManageAddressScreen());
             // Get.offAll(()=>Home());
           }else{
             Get.offAll(()=>LocationPickerScreen());

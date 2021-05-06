@@ -1,13 +1,14 @@
+import 'dart:math';
+
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:seeya/features/home_screen/view/all_offers_near_you.dart';
-import 'package:seeya/features/scan_receipt/view/45_fav_stores_main_page.dart';
-import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/main_app/config/gqlConfig.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 import 'newDataViewModel.dart';
 import 'package:seeya/main_app/models/45_model.dart';
 import 'package:seeya/features/home_screen/models/homeFavStoreModel.dart';
+import 'package:seeya/main_app/models/businessTypes.dart';
 
 class NewApi{
   static var logger = Logger();
@@ -26,7 +27,7 @@ class NewApi{
     try{
      GraphQLClient client = GqlConfig.getClient();
       QueryResult result = await client.query(QueryOptions(document: gql(_query)));
-      logger.i(result.data);
+      // logger.i(result.data);
       if(!result.data['getAllBusinessTypes']['error']){
         NewDataViewModel.businessTypes = List.from(result.data['getAllBusinessTypes']['data'].map((type)=>BusinessType.fromJson(type)));
       }
@@ -58,9 +59,9 @@ class NewApi{
 
      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
-      logger.i(result.data);
+      // logger.i(result.data);
       if(!result.data['getHomePageFavoriteShops']['error']){
-        final data = List.from(result.data['getHomePageFavoriteShops']['data'].map((type)=>HomeFavModel.fromJson(type)));
+        List<HomeFavModel> data = List.from(result.data['getHomePageFavoriteShops']['data'].map((type)=>HomeFavModel.fromJson(type)));
         NewDataViewModel.homeFavStores = data;
         return data.length;
       }else{
@@ -343,9 +344,11 @@ class NewApi{
         'lng': UserViewModel.currentLocation.value.longitude
       };
 
+      print(variables);
+
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
-      logger.i(result.data);
+      // logger.i(result.data);
       if(!result.data['getFavoritePageData']['error']){
         NewDataViewModel.grocery = FavPageDataModel.fromJson(result.data['getFavoritePageData']['data']['Grocery']);
         NewDataViewModel.fresh = FavPageDataModel.fromJson(result.data['getFavoritePageData']['data']['Fresh']);
@@ -449,6 +452,193 @@ class NewApi{
       return null;
     }
   }
+
+
+  static Future<List<BoomModel>> scanReceiptsFavStores([int pageNumber]) async{
+    final _query = r'''query($lat : Float $lng: Float $pageNumber: Int){
+  getScanReceiptPageMyFavoriteStoresData(
+    lat: $lat
+    lng: $lng
+    page_size: 100
+    page_number: $pageNumber
+  ){
+    error
+    msg
+    data{
+      name
+      logo
+      _id
+      default_cashback
+      default_welcome_offer
+      promotion_cashback
+      promotion_welcome_offer
+      promotion_cashback_status
+      promotion_welcome_offer_status
+      promotion_cashback_date{
+        start_date
+        end_date
+      }
+      promotion_welcome_offer_date{
+        start_date
+        end_date
+      }
+      businesstype{
+        _id
+      }
+    }
+  }
+}''';
+
+    try{
+
+      final variables = {
+        'lat': UserViewModel.currentLocation.value.latitude,
+        'lng': UserViewModel.currentLocation.value.longitude,
+        'pageNumber' : pageNumber ?? 1
+      };
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
+
+      if(!result.data['getScanReceiptPageMyFavoriteStoresData']['error']){
+        return List<BoomModel>.from(result.data['getScanReceiptPageMyFavoriteStoresData']['data'].map((type) => BoomModel.fromJson(type)));
+      }else{
+        return null;
+      }
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+
+  static Future<List<BoomModel>> scanReceiptNearMeStoreData([int, pageNumber, String businessType]) async{
+    final _query = r'''query($lat : Float $lng: Float $pageNumber: Int $businessType: ID){
+  getScanReceiptPageNearMeStoresData(
+    lat: $lat
+    lng: $lng
+    page_size: 100
+    page_number: $pageNumber
+    businesstype: $businessType
+  ){
+    error
+    msg
+    data{
+      name
+      logo
+      _id
+      default_cashback
+      default_welcome_offer
+      promotion_cashback
+      promotion_welcome_offer
+      promotion_cashback_status
+      promotion_welcome_offer_status
+      promotion_cashback_date{
+        start_date
+        end_date
+      }
+      promotion_welcome_offer_date{
+        start_date
+        end_date
+      }
+      businesstype{
+        _id
+      }
+    }
+  }
+}''';
+
+    try{
+
+      final variables = {
+        'lat': UserViewModel.currentLocation.value.latitude,
+        'lng': UserViewModel.currentLocation.value.longitude,
+        'pageNumber' : pageNumber ?? 1,
+        'businessType': businessType ?? ''
+      };
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
+
+      if(!result.data['getScanReceiptPageNearMeStoresData']['error']){
+        return List<BoomModel>.from(result.data['getScanReceiptPageNearMeStoresData']['data'].map((type) => BoomModel.fromJson(type)));
+      }else{
+        return null;
+      }
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+
+  static Future<List<BusinessType>> scanReceiptCategoryCountData([int, pageNumber, String businessType]) async{
+    final _query = r'''query($lat : Float $lng: Float){
+  getScanReceiptBannerPageCategoryCountData(
+    lat: $lat
+    lng: $lng
+  ){
+    error
+    msg
+    data{
+      _id
+      name
+      stores_count
+    }
+  }
+}''';
+
+    try{
+
+      final variables = {
+        'lat': UserViewModel.currentLocation.value.latitude,
+        'lng': UserViewModel.currentLocation.value.longitude
+      };
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
+
+      if(!result.data['getScanReceiptBannerPageCategoryCountData']['error']){
+        return List<BusinessType>.from(result.data['getScanReceiptBannerPageCategoryCountData']['data'].map((type) => BusinessType.fromJson(type)));
+      }else{
+        return null;
+      }
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+
+  static Future<List<CatalogModel>> getCatalogByBusinessID(String id) async{
+    final _query = r'''query($id: ID){
+  getAllCatalog(businesstype: $id){
+    error
+    msg
+    data{
+      _id
+      name
+      img
+    }
+  }
+}''';
+
+    try{
+
+      final variables = {
+        'id': id
+      };
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
+      if(!result.data['getAllCatalog']['error']){
+        return List<CatalogModel>.from(result.data['getAllCatalog']['data'].map((type) => CatalogModel.fromJson(type)));
+      }else{
+        return [];
+      }
+    }catch(e){
+      print(e.toString());
+      return [];
+    }
+  }
+
 }
 
 class BoomModel {
@@ -463,6 +653,10 @@ class BoomModel {
     this.promotionWelcomeOffer,
     this.promotionWelcomeOfferDate,
     this.businesstypeId,
+    this.defaultCashbackOffer,
+    this.promotionCashbackOfferStatus,
+    this.promotionCashbackOffer,
+    this.promotionCashbackOfferDate,
   });
 
   String id;
@@ -474,6 +668,10 @@ class BoomModel {
   String promotionWelcomeOfferStatus;
   num promotionWelcomeOffer;
   OfferDateModel promotionWelcomeOfferDate;
+  num defaultCashbackOffer;
+  String promotionCashbackOfferStatus;
+  num promotionCashbackOffer;
+  OfferDateModel promotionCashbackOfferDate;
   String businesstypeId;
 
   factory BoomModel.fromJson(Map<String, dynamic> json) => BoomModel(
@@ -485,7 +683,11 @@ class BoomModel {
     defaultWelcomeOffer: json["default_welcome_offer"],
     promotionWelcomeOfferStatus: json["promotion_welcome_offer_status"],
     promotionWelcomeOffer: json["promotion_welcome_offer"],
-    promotionWelcomeOfferDate: OfferDateModel.fromJson(json["promotion_welcome_offer_date"]),
+    promotionWelcomeOfferDate: json["promotion_welcome_offer_date"] == null ? null : OfferDateModel.fromJson(json["promotion_welcome_offer_date"]),
+    defaultCashbackOffer: json["default_cashback"],
+    promotionCashbackOfferStatus: json["promotion_cashback_status"],
+    promotionCashbackOffer: json["promotion_cashback"],
+    promotionCashbackOfferDate: json["promotion_cashback_date"] == null ? null : OfferDateModel.fromJson(json["promotion_cashback_date"]),
     businesstypeId: json["businesstype"]['_id'],
   );
 }

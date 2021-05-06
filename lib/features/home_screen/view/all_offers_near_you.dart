@@ -2,7 +2,7 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:seeya/features/home_screen/view/widgets/offer_list_tile.dart';
-import 'package:seeya/features/store/models/storeModel.dart';
+import 'package:seeya/main_app/models/businessTypes.dart';
 import 'package:seeya/home.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/resources/string_resources.dart';

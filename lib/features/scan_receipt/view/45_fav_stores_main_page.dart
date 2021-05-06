@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
@@ -80,7 +79,6 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    var storeList = NearestStoreViewModel().storeList;
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -113,7 +111,7 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
                 Get.to(()=>FavouriteGroceryStores(title: 'Fresh',stores: NewDataViewModel.fresh.stores, products: NewDataViewModel.fresh.products, catalogs: NewDataViewModel.fresh.catalogs,));
 
               },
-              child: customTile('Fresh Items', NewDataViewModel.fresh.itemCount)),
+              child: customTile('Fresh Items', NewDataViewModel.fresh.itemCount ?? 0)),
 
 
             Divider(color: Colors.grey[200], thickness: 1, height: 20,),
