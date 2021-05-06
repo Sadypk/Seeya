@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart';
 import 'package:seeya/features/scan_receipt/view/41_scan_specific_receipts.dart';
+import 'package:seeya/main_app/models/businessTypes.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
 import 'package:seeya/main_app/view/widgets/gradient_button.dart';
+import 'package:seeya/newMainAPIs.dart';
 
 class ScanYourReceipt extends StatefulWidget {
   @override
@@ -13,11 +16,13 @@ class ScanYourReceipt extends StatefulWidget {
 }
 
 class _ScanYourReceiptState extends State<ScanYourReceipt> {
-
-  Widget customTile(String label, int count){
+  List<BoomModel> favStores = [];
+  List<BoomModel> nearStores = [];
+  List<BusinessType> typesData = [];
+  Widget customTile(String label, int count, String id){
     return InkWell(
       onTap: (){
-        Get.to(ScanSpecificReceipt(type: label,));
+        Get.to(ScanSpecificReceipt(type: label, id: id, favStores: favStores.where((element) => element.businesstypeId == id).toList(), nearStores: nearStores.where((element) => element.businesstypeId == id).toList()));
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -26,7 +31,7 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CircleImageWidget(image: 'https://i0.wp.com/deltacollegian.net/wp-content/uploads/2017/05/adidas.png?fit=880%2C660',),
+              CircleImageWidget(image: 'https://i0.wp.com/deltacollegian.net/wp-content/uploads/2017/05/adidas.png?fit=880%2C660'),
               SizedBox(width: 8,),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,6 +66,23 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
       ),
     );
   }
+
+  bool dataLoading = true;
+  getData() async{
+    favStores = await NewApi.scanReceiptsFavStores();
+    nearStores = await NewApi.scanReceiptNearMeStoreData();
+    typesData = await NewApi.scanReceiptCategoryCountData();
+    setState(() {
+      dataLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,44 +94,61 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
           IconButton(icon: Icon(FeatherIcons.mapPin, size: 16,), onPressed: (){}),
         ],
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: ListView(
-          children: [
-            SizedBox(height: 25,),
-            GradientButton(
-              height: 40,
-              label: 'Upload receipts',
-              fontStyle: AppConst.descriptionTextWhite2,
-            ),
-            SizedBox(height: 25,),
-            Divider(color: Colors.grey[200], thickness: 1,),
-            customTile('Grocery', 58),
-            Divider(color: Colors.grey[200], thickness: 1, height: 20,),
-            customTile('Fresh Items', 37),
-            Divider(color: Colors.grey[200], thickness: 1, height: 20,),
-            customTile('Pharmacy', 26),
-            Divider(color: Colors.grey[200], thickness: 1, height: 20,),
-            customTile('Restaurant', 32),
-            Divider(color: Colors.grey[200], thickness: 1, height: 20,),
-            SizedBox(height: 15,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Stores offering cashback', style: AppConst.header2,),
-                Row(
+      body: dataLoading ? SpinKitDualRing(color: AppConst.themePurple) : DefaultTabController(
+        length: 2,
+        child: Container(
+          child: ListView(
+            children: [
+              SizedBox(height: 25,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: GradientButton(
+                  height: 40,
+                  label: 'Upload receipts',
+                  fontStyle: AppConst.descriptionTextWhite2,
+                ),
+              ),
+              SizedBox(height: 25,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Divider(color: Colors.grey[200], thickness: 1,),
+              ),
+              Wrap(
+                children: typesData.map((e) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      customTile(e.name, e.count,e.id),
+                      Divider(color: Colors.grey[200], thickness: 1, height: 20,),
+                    ],
+                  ),
+                )).toList(),
+              ),
+              SizedBox(height: 15,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Sort by', style: AppConst.descriptionText,),
-                    Icon(Icons.keyboard_arrow_down_outlined, size: 18, color: Colors.black87,)
+                    Text('Stores offering cashback', style: AppConst.header2,),
+                    Row(
+                      children: [
+                        Text('Sort by', style: AppConst.descriptionText,),
+                        Icon(Icons.keyboard_arrow_down_outlined, size: 18, color: Colors.black87,)
+                      ],
+                    )
                   ],
-                )
-              ],
-            ),
-            Divider(color: Colors.grey[200], thickness: 1, height: 20,),
-            SizedBox(height: 15,),
-            DefaultTabController(
-                length: 2,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Divider(color: Colors.grey[200], thickness: 1,),
+              ),
+              SizedBox(height: 15,),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: TabBar(
+                  labelColor: Colors.black,
                   labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: 'Stag', letterSpacing: 0.3, color: Color(0xff9D239A)),
                   unselectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: 'Stag', letterSpacing: 0.3, color: Colors.black54),
                   indicatorColor: AppConst.themePurple,
@@ -117,26 +156,45 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
                     Tab(text: 'My Favourites'),
                     Tab(text: 'Near me',)
                   ],
-                )
-            ),
-            SizedBox(height: 10,),
-            Container(
-              height: 500,
-              child: ListView.builder(
-                itemCount: 15,
-                  itemBuilder: (BuildContext context, int index){
-                    return Column(
-                      children: [
-                        StoreShopNowTile(title: 'Adidas',),
-                        Divider(color: Colors.grey[200], thickness: 1, height: 20,),
-                      ],
-                    );
-                  }
+                ),
               ),
-            )
-          ],
+              SizedBox(height: 10,),
+              SizedBox(
+                height: 500,
+                child: TabBarView(
+                  children: [
+                    BauBau(data: favStores),
+                    BauBau(data: nearStores)
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+class BauBau extends StatelessWidget {
+  final List<BoomModel> data;
+  const BauBau({Key key, @required this.data}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return data.length > 0 ? ListView.builder(
+        itemCount: data.length,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        itemBuilder: (BuildContext context, int index){
+          BoomModel _store = data[index];
+          return Column(
+            children: [
+              StoreShopNowTile(title: _store.name, image: _store.logo),
+              Divider(color: Colors.grey[200], thickness: 1, height: 20,),
+            ],
+          );
+        }
+    ) : Center(child: Text('None available'));
+  }
+}
+
