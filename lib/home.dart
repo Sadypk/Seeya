@@ -15,6 +15,7 @@ import 'features/home_screen/view/home_screen.dart';
 import 'features/my_offers_screen/view/my_offers_screen.dart';
 import 'features/profile_screen/view/profile_screen.dart';
 import 'features/search_screen/view/search_screen.dart';
+import 'features/wallet/view/68_my_wallet.dart';
 import 'main_app/util/over_scroll.dart';
 
 class Home extends StatefulWidget {
@@ -30,7 +31,7 @@ class _HomeState extends State<Home> {
   final _screens = [
     HomeScreen(),
     SearchScreen(),
-    MyOffersScreen(),
+    MyWalletScreen(),
     ProfileScreen()
   ];
   final _icons = [
