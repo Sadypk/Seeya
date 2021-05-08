@@ -87,11 +87,14 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 0,
         title: Text('Scan your receipt', style: AppConst.appbarTextStyle,),
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
-          IconButton(icon: Icon(Icons.search, size: 20,), onPressed: (){}),
-          IconButton(icon: Icon(FeatherIcons.mapPin, size: 16,), onPressed: (){}),
+          Icon(Icons.search, size: 20,),
+          SizedBox(width: 20,),
+          Icon(FeatherIcons.mapPin, size: 16,),
+          SizedBox(width: 20,),
         ],
       ),
       body: dataLoading ? SpinKitDualRing(color: AppConst.themePurple) : DefaultTabController(

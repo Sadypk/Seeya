@@ -44,11 +44,14 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 0,
         title: Text('Scan ${widget.type} receipt', style: AppConst.appbarTextStyle,),
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
-          IconButton(icon: Icon(Icons.search, size: 20,), onPressed: (){}),
-          IconButton(icon: Icon(FeatherIcons.mapPin, size: 16,), onPressed: (){}),
+          Icon(Icons.search, size: 20,),
+          SizedBox(width: 20,),
+          Icon(FeatherIcons.mapPin, size: 16,),
+          SizedBox(width: 20,),
         ],
       ),
       body: dataLoading ? SpinKitDualRing(color: AppConst.themePurple) : DefaultTabController(
@@ -65,7 +68,7 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
                   itemBuilder: (BuildContext context, int index){
                     return InkWell(
                       onTap: (){
-                        // Get.to(StoresWithCategoryOffers());
+                        Get.to(ScanGroceryReceiptsByCategories(data: catalogs[index], favStores: widget.favStores, nearStores: widget.nearStores));
                       },
                       child: Container(
                           margin: EdgeInsets.only(right: 16, top: 25, bottom: 25),
