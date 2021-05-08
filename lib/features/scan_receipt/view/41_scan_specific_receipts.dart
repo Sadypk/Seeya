@@ -7,6 +7,7 @@ import 'package:seeya/features/scan_receipt/view/40_scan_your_receipt.dart';
 import 'package:seeya/features/scan_receipt/view/42_scan_grocery_receipts_by_categories.dart';
 import 'package:seeya/features/scan_receipt/view/43_stores_with_category_offers.dart';
 import 'package:seeya/main_app/models/45_model.dart';
+import 'package:seeya/main_app/models/businessTypes.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
 import 'package:seeya/main_app/view/widgets/gradient_button.dart';
@@ -14,19 +15,20 @@ import 'package:seeya/main_app/view/widgets/square_image_widget.dart';
 import 'package:seeya/newMainAPIs.dart';
 
 class ScanSpecificReceipt extends StatefulWidget {
-  final String type;
-  final String id;
-  final List<BoomModel> favStores;
-  final List<BoomModel> nearStores;
-  ScanSpecificReceipt({this.type, this.id ,this.favStores, this.nearStores});
+  final BusinessType bType;
+  ScanSpecificReceipt({this.bType});
   @override
   _ScanSpecificReceiptState createState() => _ScanSpecificReceiptState();
 }
 
 class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
   List<CatalogModel> catalogs = [];
+  List<BoomModel> favStores = [];
+  List<BoomModel> nearStores = [];
   getData() async{
-    catalogs = await NewApi.getCatalogByBusinessID(widget.id);
+    catalogs = await NewApi.getCatalogByBusinessID(widget.bType.id);
+    favStores = await NewApi.scanReceiptsBannerFavStores(bType: widget.bType.id);
+    nearStores = await NewApi.scanReceiptBannerNearMeStoreData(bType: widget.bType.id);
     setState(() {
       dataLoading = false;
     });
@@ -45,7 +47,7 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
-        title: Text('Scan ${widget.type} receipt', style: AppConst.appbarTextStyle,),
+        title: Text('Scan ${widget.bType.name} receipt', style: AppConst.appbarTextStyle,),
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
           Icon(Icons.search, size: 20,),
@@ -68,7 +70,7 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
                   itemBuilder: (BuildContext context, int index){
                     return InkWell(
                       onTap: (){
-                        Get.to(ScanGroceryReceiptsByCategories(data: catalogs[index], favStores: widget.favStores, nearStores: widget.nearStores));
+                        Get.to(() =>ScanGroceryReceiptsByCategories(cType: catalogs[index]));
                       },
                       child: Container(
                           margin: EdgeInsets.only(right: 16, top: 25, bottom: 25),
@@ -121,8 +123,8 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
               height: 500,
               child: TabBarView(
                 children: [
-                  BauBau(data: widget.favStores),
-                  BauBau(data: widget.nearStores)
+                  BauBau(data: favStores),
+                  BauBau(data: nearStores)
                 ],
               ),
             )

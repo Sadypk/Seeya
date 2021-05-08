@@ -453,7 +453,6 @@ class NewApi{
     }
   }
 
-
   static Future<List<BoomModel>> scanReceiptsFavStores([int pageNumber]) async{
     final _query = r'''query($lat : Float $lng: Float $pageNumber: Int){
   getScanReceiptPageMyFavoriteStoresData(
@@ -561,6 +560,122 @@ class NewApi{
 
       if(!result.data['getScanReceiptPageNearMeStoresData']['error']){
         return List<BoomModel>.from(result.data['getScanReceiptPageNearMeStoresData']['data'].map((type) => BoomModel.fromJson(type)));
+      }else{
+        return null;
+      }
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+
+  static Future<List<BoomModel>> scanReceiptsBannerFavStores({String bType, String cType}) async{
+    final _query = r'''query($lat : Float $lng: Float $bType: ID $cType: ID){
+  getScanReceiptBannerPageMyFavoriteStoresData(
+    lat: $lat
+    lng: $lng
+    businesstype: $bType
+    catalog: $cType
+  ){
+    error
+    msg
+    data{
+      name
+      logo
+      _id
+      default_cashback
+      default_welcome_offer
+      promotion_cashback
+      promotion_welcome_offer
+      promotion_cashback_status
+      promotion_welcome_offer_status
+      promotion_cashback_date{
+        start_date
+        end_date
+      }
+      promotion_welcome_offer_date{
+        start_date
+        end_date
+      }
+      businesstype{
+        _id
+      }
+    }
+  }
+}''';
+
+    try{
+
+      final variables = {
+        'lat': UserViewModel.currentLocation.value.latitude,
+        'lng': UserViewModel.currentLocation.value.longitude,
+        'bType' : bType ?? '',
+        'cType' : cType ?? ''
+      };
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
+
+      if(!result.data['getScanReceiptBannerPageMyFavoriteStoresData']['error']){
+        return List<BoomModel>.from(result.data['getScanReceiptBannerPageMyFavoriteStoresData']['data'].map((type) => BoomModel.fromJson(type)));
+      }else{
+        return null;
+      }
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+
+  static Future<List<BoomModel>> scanReceiptBannerNearMeStoreData({String bType, String cType}) async{
+    final _query = r'''query($lat : Float $lng: Float $bType: ID $cType: ID){
+  getScanReceiptBannerPageNearMeStoresData(
+    lat: $lat
+    lng: $lng
+    businesstype: $bType
+    catalog: $cType
+  ){
+    error
+    msg
+    data{
+      name
+      logo
+      _id
+      default_cashback
+      default_welcome_offer
+      promotion_cashback
+      promotion_welcome_offer
+      promotion_cashback_status
+      promotion_welcome_offer_status
+      promotion_cashback_date{
+        start_date
+        end_date
+      }
+      promotion_welcome_offer_date{
+        start_date
+        end_date
+      }
+      businesstype{
+        _id
+      }
+    }
+  }
+}''';
+
+    try{
+
+      final variables = {
+        'lat': UserViewModel.currentLocation.value.latitude,
+        'lng': UserViewModel.currentLocation.value.longitude,
+        'bType' : bType ?? '',
+        'cType' : cType ?? ''
+      };
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
+
+      if(!result.data['getScanReceiptBannerPageNearMeStoresData']['error']){
+        return List<BoomModel>.from(result.data['getScanReceiptBannerPageNearMeStoresData']['data'].map((type) => BoomModel.fromJson(type)));
       }else{
         return null;
       }
