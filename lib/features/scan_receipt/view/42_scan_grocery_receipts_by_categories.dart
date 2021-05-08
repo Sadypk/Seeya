@@ -60,7 +60,7 @@ class _ScanGroceryReceiptsByCategoriesState extends State<ScanGroceryReceiptsByC
               Divider(color: Colors.grey[200], thickness: 1, height: 20,),
               SizedBox(height: 15,),
               TabBar(
-                labelColor: AppConst.themePurple,
+                labelColor: AppConst.black,
                 labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: 'Stag', letterSpacing: 0.3, color: Color(0xff9D239A)),
                 unselectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: 'Stag', letterSpacing: 0.3, color: Colors.black54),
                 indicatorColor: AppConst.themePurple,

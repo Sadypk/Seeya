@@ -14,7 +14,7 @@ class OfferCardsGradient extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        Get.to(AllOffersNearYou());
+        // Get.to(AllOffersNearYou());
       },
       child: Container(
         padding: EdgeInsets.only(left: 8,top: 12,bottom: 12),
