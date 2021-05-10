@@ -10,7 +10,7 @@ class FavPageDataModel {
   String id;
   int itemCount;
   List<CatalogModel> catalogs;
-  List<ProductModel> products;
+  List<ProductDamnModel> products;
   List<StoreModel> stores;
 
   factory FavPageDataModel.fromJson(Map<String, dynamic> json) {
@@ -18,7 +18,7 @@ class FavPageDataModel {
       id: json["_id"],
       itemCount: json["item_count"] ?? 0,
       catalogs: List<CatalogModel>.from(json["catalogs"].map((x) => CatalogModel.fromJson(x))),
-      products: List<ProductModel>.from(json["products"].map((x) => ProductModel.fromJson(x))),
+      products: List<ProductDamnModel>.from(json["products"].map((x) => ProductDamnModel.fromJson(x))),
       stores: List<StoreModel>.from(json["stores"].map((x) => StoreModel.fromJson(x))),
     );
   }
@@ -42,8 +42,8 @@ class CatalogModel {
   );
 }
 
-class ProductModel {
-  ProductModel({
+class ProductDamnModel {
+  ProductDamnModel({
     this.id,
     this.name,
     this.logo,
@@ -63,11 +63,11 @@ class ProductModel {
   DateTime expiryDate;
   String businesstype;
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) {
+  factory ProductDamnModel.fromJson(Map<String, dynamic> json) {
 
 
 
-    return ProductModel(
+    return ProductDamnModel(
       id: json["_id"],
       name: json["name"],
       catId: json["catalog"]['_id'],

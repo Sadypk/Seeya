@@ -122,7 +122,7 @@ class SpecialOfferTileData{
       String subTitle2;
       String label;
       final today = DateTime.now();
-      if(element.runtimeType == ProductModel){
+      if(element.runtimeType == ProductDamnModel){
         title = element.name;
         subTitle1 = 'Cash back amount with selling price';
         subTitle2 = 'From ${element.store.name}';

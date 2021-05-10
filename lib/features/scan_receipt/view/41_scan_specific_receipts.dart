@@ -14,6 +14,8 @@ import 'package:seeya/main_app/view/widgets/gradient_button.dart';
 import 'package:seeya/main_app/view/widgets/square_image_widget.dart';
 import 'package:seeya/newMainAPIs.dart';
 
+import '55_scan_receipts.dart';
+
 class ScanSpecificReceipt extends StatefulWidget {
   final BusinessType bType;
   ScanSpecificReceipt({this.bType});
@@ -85,6 +87,7 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: GradientButton(
+                onTap: () => Get.to(() => ScanReceipts()),
                 height: 40,
                 label: 'Upload receipts',
                 fontStyle: AppConst.descriptionTextWhite2,

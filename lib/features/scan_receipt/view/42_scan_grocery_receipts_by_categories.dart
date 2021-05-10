@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:seeya/features/scan_receipt/view/40_scan_your_receipt.dart';
 import 'package:seeya/main_app/models/45_model.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/view/widgets/gradient_button.dart';
 import 'package:seeya/newMainAPIs.dart';
+
+import '55_scan_receipts.dart';
 
 class ScanGroceryReceiptsByCategories extends StatefulWidget {
   final CatalogModel cType;
@@ -56,6 +59,7 @@ class _ScanGroceryReceiptsByCategoriesState extends State<ScanGroceryReceiptsByC
             children: [
               SizedBox(height: 25,),
               GradientButton(
+                onTap: () => Get.to(() => ScanReceipts()),
                 height: 40,
                 label: 'Upload receipts',
                 fontStyle: AppConst.descriptionTextWhite2,

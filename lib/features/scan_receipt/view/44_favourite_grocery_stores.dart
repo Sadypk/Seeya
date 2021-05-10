@@ -16,7 +16,7 @@ import 'package:seeya/main_app/models/45_model.dart';
 class FavouriteGroceryStores extends StatefulWidget {
   final String title;
   final List<StoreModel> stores;
-  final List<ProductModel> products;
+  final List<ProductDamnModel> products;
   final List<CatalogModel> catalogs;
 
   const FavouriteGroceryStores({Key key,@required this.title,@required this.stores,@required this.products, @required this.catalogs}) : super(key: key);

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
+import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
+import 'package:seeya/newMainAPIs.dart';
 
 class StoreShopNowTile extends StatelessWidget {
   final String title;
@@ -36,9 +38,20 @@ class StoreShopNowTile extends StatelessWidget {
 
 class StoreShopNowTile2 extends StatelessWidget {
   final String label;
-  StoreShopNowTile2({this.label});
+  final BoomModel boomModel;
+  StoreShopNowTile2({this.label, this.boomModel});
   @override
   Widget build(BuildContext context) {
+
+    num cashBack = 200;
+    final today = DateTime.now();
+    if(boomModel != null){
+      cashBack = boomModel.defaultCashbackOffer;
+      if(boomModel.promotionCashbackOfferStatus == 'active' && boomModel.promotionCashbackOfferDate.startDate.isBefore(today) && boomModel.promotionCashbackOfferDate.endDate.isAfter(today)){
+        cashBack = boomModel.promotionCashbackOffer;
+      }
+    }
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,12 +59,12 @@ class StoreShopNowTile2 extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleImageWidget(image: 'https://i0.wp.com/deltacollegian.net/wp-content/uploads/2017/05/adidas.png?fit=880%2C660',),
+            CircleImageWidget(image: boomModel == null ? 'https://i0.wp.com/deltacollegian.net/wp-content/uploads/2017/05/adidas.png?fit=880%2C660' : boomModel.logo,),
             SizedBox(width: 8,),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: TextStyle(fontSize: 14, fontFamily: 'Stag', ),),
+                Text(boomModel == null ? label : boomModel.name, style: TextStyle(fontSize: 14, fontFamily: 'Stag', ),),
                 Text('10% Cashback', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w600, fontFamily: 'OpenSans', color: Color(0xffEE1717)),)
               ],
             )
@@ -60,8 +73,8 @@ class StoreShopNowTile2 extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text('200', style: AppConst.titleText2Purple,),
-            Text('You earned 35.00', style: TextStyle(fontSize: 8, color: Color(0xff252525), fontFamily: 'Stag', letterSpacing: 0.3, fontWeight: FontWeight.w600))
+            Text('$cashBack ${StringResources.rupee}', style: AppConst.titleText2Purple,),
+            Text('You earned 35.00', style: TextStyle(fontSize: 10, color: Color(0xff252525), fontFamily: 'Stag', letterSpacing: 0.3, fontWeight: FontWeight.w600))
           ],
         )
       ],

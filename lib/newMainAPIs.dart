@@ -1,5 +1,7 @@
-import 'dart:math';
+import 'dart:io';
+import 'package:seeya/main_app/util/imagePicker.dart';
 
+import 'main_app/models/productModel.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:seeya/features/home_screen/view/all_offers_near_you.dart';
@@ -453,7 +455,7 @@ class NewApi{
     }
   }
 
-  static Future<List<BoomModel>> scanReceiptsFavStores([int pageNumber]) async{
+  static Future<List<BoomModel>> scanReceiptsFavStores({int pageNumber}) async{
     final _query = r'''query($lat : Float $lng: Float $pageNumber: Int){
   getScanReceiptPageMyFavoriteStoresData(
     lat: $lat
@@ -510,7 +512,7 @@ class NewApi{
     }
   }
 
-  static Future<List<BoomModel>> scanReceiptNearMeStoreData([int, pageNumber, String businessType]) async{
+  static Future<List<BoomModel>> scanReceiptNearMeStoreData({int, pageNumber, String businessType}) async{
     final _query = r'''query($lat : Float $lng: Float $pageNumber: Int $businessType: ID){
   getScanReceiptPageNearMeStoresData(
     lat: $lat
@@ -751,6 +753,105 @@ class NewApi{
     }catch(e){
       print(e.toString());
       return [];
+    }
+  }
+
+  static Future<List<ProductModel>> getCashBackProducts(String id) async{
+    final _query = r'''query($storeId: ID){
+  getAllCashbackProducts(store: $storeId){
+    error
+    msg
+    data{
+      _id
+      name
+      logo
+      catalog{
+        _id
+        name
+        img
+      }
+      mrp
+      selling_price
+      cashback
+      cashback_percentage
+      details
+      status
+
+    }
+  }
+}''';
+
+    try{
+
+      final variables = {
+        'storeId': id
+      };
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
+      if(!result.data['getAllCashbackProducts']['error']){
+        return List<ProductModel>.from(result.data['getAllCashbackProducts']['data'].map((type) => ProductModel.fromJson(type)));
+      }else{
+        return [];
+      }
+    }catch(e){
+      print(e.toString());
+      return [];
+    }
+  }
+
+  static Future<bool> placeOrder({List<File> images, BoomModel store, var products, double total}) async{
+    final mutation = r'''
+    mutation($image: String $storeId: ID $products: [OrderProduct] $total: Float $cashback: Float){
+      placeOrder(orderInput:{
+        order_type: "receipt"
+        receipt: $image
+        store: $storeId
+        products: $products
+        total: $total
+        cashback_percentage: $cashback
+        lat: 22.22
+        lng: 22.21
+      }){
+        error
+        msg
+      }
+    }
+    ''';
+
+    try{
+
+      List<String> imageLinks = [];
+
+      for (File image in images) {
+        imageLinks.add(await ImageHelper.uploadImage(image));
+      }
+
+      double cashBack = store.defaultCashbackOffer.toDouble();
+      final today = DateTime.now();
+      if(store.promotionCashbackOfferStatus == 'active' && store.promotionCashbackOfferDate.startDate.isBefore(today) && store.promotionCashbackOfferDate.endDate.isAfter(today)){
+        cashBack = store.promotionCashbackOffer.toDouble();
+      }
+
+      // TODO sending only one image
+
+      final variables = {
+        'image' : imageLinks[0],
+        'products' : List.from(products.map((e) => e.toJson())),
+        'storeId' : store.id,
+        'total' : total,
+        'cashback' : cashBack
+      };
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(mutation),variables: variables));
+
+      print(result.data);
+
+      return result.data['placeOrder']['error'];
+    }catch(e){
+      print(e.toString());
+      return true;
     }
   }
 
