@@ -1,9 +1,11 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:seeya/main_app/config/gqlConfig.dart';
 import 'package:seeya/main_app/models/userModel.dart';
+import 'package:seeya/main_app/util/fcmHandler.dart';
 import 'package:seeya/main_app/util/snack.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 import 'package:seeya/features/chat/repository/streachatConfig.dart';
+import 'package:seeya/newMainAPIs.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 
@@ -61,6 +63,8 @@ class AuthRepo{
         UserViewModel.setToken(result.data['customerLoginOrSignUp']['token']);
         UserViewModel.setUser(UserModel.fromJson(result.data['customerLoginOrSignUp']['data']));
         UserViewModel.changeUserStatus(UserStatus.LOGGED_IN);
+        await NewApi.addFirebaseToken(FCMHandler.fcmToken);
+
         // TODO turned of chat for faster login
         /*try{
           print('set user');

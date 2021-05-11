@@ -15,6 +15,32 @@ import 'package:seeya/main_app/models/businessTypes.dart';
 class NewApi{
   static var logger = Logger();
 
+  static Future<bool> addFirebaseToken(String token) async{
+    final mutation = r'''
+    mutation($token: String){
+      addFirebaseTokenToCustomer(firebase_token: $token){
+        error
+        msg
+      }
+    }
+    ''';
+
+    final data = {
+      'token' : token
+    };
+
+    try{
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      final response = await client.mutate(MutationOptions(document: gql(mutation), variables: data));
+
+      return response.data['addFirebaseTokenToStore']['error'];
+    }catch(e){
+      return true;
+    }
+  }
+
+
   static Future<void> getAllCategories() async{
     final _query = r'''query{
      getAllBusinessTypes{
