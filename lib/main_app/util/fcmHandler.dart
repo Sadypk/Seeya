@@ -7,7 +7,7 @@ class FCMHandler{
     print('FCM INITIALIZED');
     FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
     FirebaseMessaging.onBackgroundMessage(_backgroundMessageHandler);
-    await _firebaseMessaging.requestPermission(
+    _firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
