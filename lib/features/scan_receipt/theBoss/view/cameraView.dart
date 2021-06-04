@@ -8,6 +8,7 @@ import 'dart:io';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/mainRepoWithAllApi.dart';
 import 'package:seeya/main_app/resources/string_resources.dart';
+import 'package:seeya/newMainAPIs.dart';
 
 
 RxBool flashOn = false.obs;
@@ -17,7 +18,7 @@ RxList images = <File>[].obs;
 
 
 class TheBossCameraScreen extends StatefulWidget {
-  final StoreModel storeModel;
+  final BoomModel storeModel;
   TheBossCameraScreen({this.storeModel});
   static List<CameraDescription> cameras;
   @override
@@ -35,7 +36,12 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
     camLoading.value = false;
     images.clear();
     super.initState();
-    controller = CameraController(TheBossCameraScreen.cameras[0], ResolutionPreset.high, enableAudio: false);
+    controller = CameraController(
+        TheBossCameraScreen.cameras[0],
+        ResolutionPreset.high,
+        enableAudio: false,
+      imageFormatGroup: ImageFormatGroup.jpeg
+    );
     controller.initialize().then((_) {
       if (!mounted) {
         return;
@@ -235,12 +241,13 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
               width: 70,
               child: InkWell(
                 onTap: () async{
-                    camLoading.value = !camLoading.value;
-
+                  camLoading.value = !camLoading.value;
+                  print('here??');
                   XFile image;
                   try{
                     image = await controller.takePicture();
                   }catch(e){
+                    print('e.toString()');
                     print(e.toString());
                   }
 
@@ -253,6 +260,7 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
                       images.add(file);
                   }else{
                     images.add(file);
+                    camLoading.value = !camLoading.value;
                     Get.off(PurchasedProductsScreen(storeModel: widget.storeModel,), arguments: images);
                   }
                 },

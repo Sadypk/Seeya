@@ -10,6 +10,8 @@ import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
 import 'package:seeya/main_app/view/widgets/gradient_button.dart';
 import 'package:seeya/newMainAPIs.dart';
 
+import '55_scan_receipts.dart';
+
 class ScanYourReceipt extends StatefulWidget {
   @override
   _ScanYourReceiptState createState() => _ScanYourReceiptState();
@@ -19,10 +21,10 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
   List<BoomModel> favStores = [];
   List<BoomModel> nearStores = [];
   List<BusinessType> typesData = [];
-  Widget customTile(String label, int count, String id){
+  Widget customTile(BusinessType bType){
     return InkWell(
       onTap: (){
-        Get.to(ScanSpecificReceipt(type: label, id: id, favStores: favStores.where((element) => element.businesstypeId == id).toList(), nearStores: nearStores.where((element) => element.businesstypeId == id).toList()));
+        Get.to(() => ScanSpecificReceipt(bType: bType));
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -36,7 +38,7 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(label, style: TextStyle(fontSize: 22, fontFamily: 'Stag', ),),
+                  Text(bType.name, style: TextStyle(fontSize: 22, fontFamily: 'Stag', ),),
                   Text('Upto 35% Cashback', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w600, fontFamily: 'Stag', color: Color(0xffEE1717)),)
                 ],
               )
@@ -59,7 +61,7 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
               ],
             ),
             child: Center(
-              child: Text("$count", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400, color: AppConst.themePurple, fontFamily: 'Stag'),),
+              child: Text("${bType.count}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400, color: AppConst.themePurple, fontFamily: 'Stag'),),
             ),
           )
         ],
@@ -69,8 +71,8 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
 
   bool dataLoading = true;
   getData() async{
-    favStores = await NewApi.scanReceiptsFavStores();
-    nearStores = await NewApi.scanReceiptNearMeStoreData();
+    favStores = await NewApi.scanReceiptsBannerFavStores();
+    nearStores = await NewApi.scanReceiptBannerNearMeStoreData();
     typesData = await NewApi.scanReceiptCategoryCountData();
     setState(() {
       dataLoading = false;
@@ -83,15 +85,21 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
     getData();
   }
 
+
+  String filterValue;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 0,
         title: Text('Scan your receipt', style: AppConst.appbarTextStyle,),
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
-          IconButton(icon: Icon(Icons.search, size: 20,), onPressed: (){}),
-          IconButton(icon: Icon(FeatherIcons.mapPin, size: 16,), onPressed: (){}),
+          Icon(Icons.search, size: 20,),
+          SizedBox(width: 20,),
+          Icon(FeatherIcons.mapPin, size: 16,),
+          SizedBox(width: 20,),
         ],
       ),
       body: dataLoading ? SpinKitDualRing(color: AppConst.themePurple) : DefaultTabController(
@@ -103,6 +111,7 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GradientButton(
+                  onTap: () => Get.to(() => ScanReceipts()),
                   height: 40,
                   label: 'Upload receipts',
                   fontStyle: AppConst.descriptionTextWhite2,
@@ -118,7 +127,7 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
-                      customTile(e.name, e.count,e.id),
+                      customTile(e),
                       Divider(color: Colors.grey[200], thickness: 1, height: 20,),
                     ],
                   ),
@@ -131,11 +140,38 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Stores offering cashback', style: AppConst.header2,),
-                    Row(
-                      children: [
-                        Text('Sort by', style: AppConst.descriptionText,),
-                        Icon(Icons.keyboard_arrow_down_outlined, size: 18, color: Colors.black87,)
-                      ],
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        isDense: true,
+                        hint: Text('Sort by', style: AppConst.descriptionText,),
+                        value: filterValue,
+                        onChanged: (String value){
+                          setState(() {
+                            filterValue = value;
+                          });
+                          if(filterValue == 'lowToHigh'){
+                            setState(() {
+                              favStores.sort((a,b) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                              nearStores.sort((a,b) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                            });
+                          }else if(filterValue == 'highToLow'){
+                            setState(() {
+                              favStores.sort((b,a) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                              nearStores.sort((b,a) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                            });
+                          }
+                        },
+                        items: [
+                          DropdownMenuItem(
+                            value: 'lowToHigh',
+                            child: Text('Low to High',style: AppConst.descriptionText),
+                          ),
+                          DropdownMenuItem(
+                            value: 'highToLow',
+                            child: Text('High to Low',style: AppConst.descriptionText),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),

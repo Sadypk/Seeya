@@ -22,7 +22,7 @@ class _NearestStoresMainPageState extends State<NearestStoresMainPage> {
   Widget customTile(String label, int count){
     return InkWell(
       onTap: (){
-        Get.to(ScanSpecificReceipt(type: label,));
+        // Get.to(ScanSpecificReceipt(type: label,));
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

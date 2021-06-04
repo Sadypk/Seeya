@@ -7,26 +7,30 @@ import 'package:seeya/features/scan_receipt/view/40_scan_your_receipt.dart';
 import 'package:seeya/features/scan_receipt/view/42_scan_grocery_receipts_by_categories.dart';
 import 'package:seeya/features/scan_receipt/view/43_stores_with_category_offers.dart';
 import 'package:seeya/main_app/models/45_model.dart';
+import 'package:seeya/main_app/models/businessTypes.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
 import 'package:seeya/main_app/view/widgets/gradient_button.dart';
 import 'package:seeya/main_app/view/widgets/square_image_widget.dart';
 import 'package:seeya/newMainAPIs.dart';
 
+import '55_scan_receipts.dart';
+
 class ScanSpecificReceipt extends StatefulWidget {
-  final String type;
-  final String id;
-  final List<BoomModel> favStores;
-  final List<BoomModel> nearStores;
-  ScanSpecificReceipt({this.type, this.id ,this.favStores, this.nearStores});
+  final BusinessType bType;
+  ScanSpecificReceipt({this.bType});
   @override
   _ScanSpecificReceiptState createState() => _ScanSpecificReceiptState();
 }
 
 class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
   List<CatalogModel> catalogs = [];
+  List<BoomModel> favStores = [];
+  List<BoomModel> nearStores = [];
   getData() async{
-    catalogs = await NewApi.getCatalogByBusinessID(widget.id);
+    catalogs = await NewApi.getCatalogByBusinessID(widget.bType.id);
+    favStores = await NewApi.scanReceiptsBannerFavStores(bType: widget.bType.id);
+    nearStores = await NewApi.scanReceiptBannerNearMeStoreData(bType: widget.bType.id);
     setState(() {
       dataLoading = false;
     });
@@ -40,15 +44,20 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
 
   bool dataLoading = true;
 
+  String filterValue;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan ${widget.type} receipt', style: AppConst.appbarTextStyle,),
+        titleSpacing: 0,
+        title: Text('Scan ${widget.bType.name} receipt', style: AppConst.appbarTextStyle,),
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
-          IconButton(icon: Icon(Icons.search, size: 20,), onPressed: (){}),
-          IconButton(icon: Icon(FeatherIcons.mapPin, size: 16,), onPressed: (){}),
+          Icon(Icons.search, size: 20,),
+          SizedBox(width: 20,),
+          Icon(FeatherIcons.mapPin, size: 16,),
+          SizedBox(width: 20,),
         ],
       ),
       body: dataLoading ? SpinKitDualRing(color: AppConst.themePurple) : DefaultTabController(
@@ -65,7 +74,7 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
                   itemBuilder: (BuildContext context, int index){
                     return InkWell(
                       onTap: (){
-                        // Get.to(StoresWithCategoryOffers());
+                        Get.to(() =>ScanGroceryReceiptsByCategories(cType: catalogs[index]));
                       },
                       child: Container(
                           margin: EdgeInsets.only(right: 16, top: 25, bottom: 25),
@@ -80,6 +89,7 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: GradientButton(
+                onTap: () => Get.to(() => ScanReceipts()),
                 height: 40,
                 label: 'Upload receipts',
                 fontStyle: AppConst.descriptionTextWhite2,
@@ -92,11 +102,38 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Stores offering cashback', style: AppConst.header2,),
-                  Row(
-                    children: [
-                      Text('Sort by', style: AppConst.descriptionText,),
-                      Icon(Icons.keyboard_arrow_down_outlined, size: 18, color: Colors.black87,)
-                    ],
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      isDense: true,
+                      hint: Text('Sort by', style: AppConst.descriptionText,),
+                      value: filterValue,
+                      onChanged: (String value){
+                        setState(() {
+                          filterValue = value;
+                        });
+                        if(filterValue == 'lowToHigh'){
+                          setState(() {
+                            favStores.sort((a,b) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                            nearStores.sort((a,b) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                          });
+                        }else if(filterValue == 'highToLow'){
+                          setState(() {
+                            favStores.sort((b,a) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                            nearStores.sort((b,a) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                          });
+                        }
+                      },
+                      items: [
+                        DropdownMenuItem(
+                          value: 'lowToHigh',
+                          child: Text('Low to High',style: AppConst.descriptionText),
+                        ),
+                        DropdownMenuItem(
+                          value: 'highToLow',
+                          child: Text('High to Low',style: AppConst.descriptionText),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -118,8 +155,8 @@ class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
               height: 500,
               child: TabBarView(
                 children: [
-                  BauBau(data: widget.favStores),
-                  BauBau(data: widget.nearStores)
+                  BauBau(data: favStores),
+                  BauBau(data: nearStores)
                 ],
               ),
             )

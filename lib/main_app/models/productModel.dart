@@ -10,6 +10,7 @@ class ProductModel {
     this.cashbackPercentage,
     this.details,
     this.status,
+    this.quantity
   });
 
   String id;
@@ -22,6 +23,7 @@ class ProductModel {
   int cashbackPercentage;
   String details;
   String status;
+  int quantity;
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
     id: json["_id"],
@@ -39,14 +41,10 @@ class ProductModel {
   Map<String, dynamic> toJson() => {
     "_id": id,
     "name": name,
-    "logo": logo,
-    "catalog": catalog.toJson(),
     "mrp": mrp,
     "selling_price": sellingPrice,
     "cashback": cashback,
-    "cashback_percentage": cashbackPercentage,
-    "details": details,
-    "status": status,
+    'quantity' : quantity ?? 1
   };
 }
 
