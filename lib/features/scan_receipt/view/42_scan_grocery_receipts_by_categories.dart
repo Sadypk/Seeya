@@ -37,6 +37,8 @@ class _ScanGroceryReceiptsByCategoriesState extends State<ScanGroceryReceiptsByC
     getData();
   }
 
+  String filterValue;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,11 +71,38 @@ class _ScanGroceryReceiptsByCategoriesState extends State<ScanGroceryReceiptsByC
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Stores offering cashback', style: AppConst.header2,),
-                  Row(
-                    children: [
-                      Text('Sort by', style: AppConst.descriptionText,),
-                      Icon(Icons.keyboard_arrow_down_outlined, size: 18, color: Colors.black87,)
-                    ],
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      isDense: true,
+                      hint: Text('Sort by', style: AppConst.descriptionText,),
+                      value: filterValue,
+                      onChanged: (String value){
+                        setState(() {
+                          filterValue = value;
+                        });
+                        if(filterValue == 'lowToHigh'){
+                          setState(() {
+                            favStores.sort((a,b) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                            nearStores.sort((a,b) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                          });
+                        }else if(filterValue == 'highToLow'){
+                          setState(() {
+                            favStores.sort((b,a) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                            nearStores.sort((b,a) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                          });
+                        }
+                      },
+                      items: [
+                        DropdownMenuItem(
+                          value: 'lowToHigh',
+                          child: Text('Low to High',style: AppConst.descriptionText),
+                        ),
+                        DropdownMenuItem(
+                          value: 'highToLow',
+                          child: Text('High to Low',style: AppConst.descriptionText),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),

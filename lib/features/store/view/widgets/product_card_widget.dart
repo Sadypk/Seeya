@@ -36,8 +36,8 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                 height: 98,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                      // image: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4GhnC7WBjYbPhpTgGZUcOwteW5QyOunmCmZdWdQBIX8OZXnAXn379CSmrtJo0RyuJqwM&usqp=CAU'),
-                        image: CachedNetworkImageProvider(widget.data.logo),
+                      image: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4GhnC7WBjYbPhpTgGZUcOwteW5QyOunmCmZdWdQBIX8OZXnAXn379CSmrtJo0RyuJqwM&usqp=CAU'),
+                        // image: CachedNetworkImageProvider(widget.data.logo),
                         fit: BoxFit.cover
                     )
                 ),
