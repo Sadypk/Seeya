@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:seeya/features/online_orders/view/online_orders_screen.dart';
 import 'package:seeya/features/redeem_balance/view/redeem_balance.dart';
 import 'package:seeya/features/scan_receipt/view/55_scan_receipts.dart';
+import 'package:seeya/features/near_you/view/71_near_you.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 import 'package:seeya/main_app/util/screenLoader.dart';
@@ -14,7 +15,6 @@ import 'package:seeya/main_app/util/screenLoader.dart';
 import 'features/home_screen/view/home_screen.dart';
 import 'features/my_offers_screen/view/my_offers_screen.dart';
 import 'features/profile_screen/view/profile_screen.dart';
-import 'features/search_screen/view/search_screen.dart';
 import 'features/wallet/view/68_my_wallet.dart';
 import 'main_app/util/over_scroll.dart';
 
@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
   int bottomIndex = 0 ;
   final _screens = [
     HomeScreen(),
-    SearchScreen(),
+    NearYou(),
     MyWalletScreen(),
     ProfileScreen()
   ];
@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           bottomNavBarItem(0, Icons.home_outlined, 'Home'),
-          bottomNavBarItem(1, Icons.search, 'Near'),
+          bottomNavBarItem(1, Icons.search, 'Near you'),
           InkWell(
             onTap: () {
               Get.bottomSheet(
