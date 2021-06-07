@@ -13,7 +13,7 @@ import 'main_app/util/size_config.dart';
 
 main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  TheBossCameraScreen.cameras = await availableCameras();
+  // TheBossCameraScreen.cameras = await availableCameras();
   await GetStorage.init();
   await Firebase.initializeApp();
   await FCMHandler.init();

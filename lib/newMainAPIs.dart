@@ -132,6 +132,7 @@ class NewApi{
         promotion_cashback_status
         promotion_cashback
         default_cashback
+        default_welcome_offer
         promotion_cashback_date{
           start_date
           end_date
@@ -212,6 +213,7 @@ class NewApi{
             start_date
             end_date
           }
+          default_welcome_offer
           promotion_welcome_offer
           promotion_welcome_offer_status
           promotion_welcome_offer_date{
@@ -259,6 +261,7 @@ class NewApi{
             start_date
             end_date
           }
+          default_welcome_offer
           promotion_welcome_offer
           promotion_welcome_offer_status
           promotion_welcome_offer_date{
@@ -306,6 +309,7 @@ class NewApi{
             start_date
             end_date
           }
+          default_welcome_offer
           promotion_welcome_offer
           promotion_welcome_offer_status
           promotion_welcome_offer_date{
@@ -353,6 +357,7 @@ class NewApi{
             start_date
             end_date
           }
+          default_welcome_offer
           promotion_welcome_offer
           promotion_welcome_offer_status
           promotion_welcome_offer_date{
@@ -713,7 +718,7 @@ class NewApi{
     }
   }
 
-  static Future<List<BusinessType>> scanReceiptCategoryCountData([int, pageNumber, String businessType]) async{
+  static Future<List<BusinessType>> scanReceiptCategoryCountData() async{
     final _query = r'''query($lat : Float $lng: Float){
   getScanReceiptBannerPageCategoryCountData(
     lat: $lat
@@ -878,6 +883,79 @@ class NewApi{
     }catch(e){
       print(e.toString());
       return true;
+    }
+  }
+
+
+  static Future<List<ProductModel>> getProducts({String bType, String catId, int pageNo}) async{
+    try{
+
+      final queryBusiness = r'''
+      query($bType: ID $lat: Float $lng: Float $page: Int){
+        getSpecialOfferViewAllPageProductsData(
+          lat : $lat
+          lng: $lng
+          businesstype: $bType
+          page: $page
+          pagesize: 20
+        ){
+          error
+          data{
+            _id
+            name
+            logo
+            mrp
+            selling_price
+            cashback
+            cashback_percentage
+            details
+            status
+          }
+        }
+      }
+      ''';
+
+      final queryCat = r'''
+      query($bType: ID $lat: Float $lng: Float $page: Int){
+        getSpecialOfferViewAllPageProductsData(
+          lat : $lat
+          lng: $lng
+          catalog: $bType
+          page: $page
+          pagesize: 20
+        ){
+          error
+          data{
+            _id
+            name
+            logo
+            mrp
+            selling_price
+            cashback
+            cashback_percentage
+            details
+            status
+          }
+        }
+      }
+      ''';
+
+      final variables = {
+        'lat': UserViewModel.currentLocation.value.latitude,
+        'lng': UserViewModel.currentLocation.value.longitude,
+        'bType': bType,
+        'page' : pageNo ?? 1
+      };
+
+      final query = bType == null ? queryCat : queryBusiness;
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(query),variables: variables));
+
+      return List.from(result.data['getSpecialOfferViewAllPageProductsData']['data'].map((product) => ProductModel.fromJson(product)));
+    }catch(e){
+      print(e.toString());
+      return [];
     }
   }
 

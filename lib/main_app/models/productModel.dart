@@ -29,7 +29,7 @@ class ProductModel {
     id: json["_id"],
     name: json["name"] ?? '',
     logo: json["logo"],
-    catalog: Catalog.fromJson(json["catalog"]),
+    catalog: json["catalog"] == null ? null : Catalog.fromJson(json["catalog"]),
     mrp: json["mrp"].toDouble(),
     sellingPrice: json["selling_price"].toDouble(),
     cashback: json["cashback"].toDouble(),

@@ -27,9 +27,11 @@ class FavouriteGroceryStores extends StatefulWidget {
 class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
   List<Tab> tabs = [];
   List<Widget> tabViews = [];
+  List<StoreModel> stores = [];
   @override
   void initState() {
     super.initState();
+    stores = widget.stores;
     tabs.add(Tab(
       text: "Recent",
     ));
@@ -39,6 +41,9 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
       tabViews.add(PewPew(data: SpecialOfferTileData.parsedList(widget.products.where((pro) => pro.catId == element.id))));
     });
   }
+
+  String filterValue;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,7 +122,7 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
               )
           ),
           SizedBox(height: 15,),
-          Row(
+          if(widget.products.length > 6)Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomOutlineButton(
@@ -138,12 +143,36 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('All restaurants near you', style: AppConst.header2,),
-                Row(
-                  children: [
-                    Text('Sort by', style: AppConst.descriptionText,),
-                    Icon(Icons.keyboard_arrow_down_outlined, size: 18, color: Colors.black87,)
-                  ],
-                )
+            DropdownButtonHideUnderline(
+              child: DropdownButton(
+                isDense: true,
+                hint: Text('Sort by', style: AppConst.descriptionText,),
+                value: filterValue,
+                onChanged: (String value){
+                  setState(() {
+                    filterValue = value;
+                  });
+                  if(filterValue == 'lowToHigh'){
+                    setState(() {
+                      stores.sort((a,b) => a.defaultCashback.compareTo(b.defaultCashback));
+                    });
+                  }else if(filterValue == 'highToLow'){
+                    setState(() {
+                      stores.sort((b,a) => a.defaultCashback.compareTo(b.defaultCashback));
+                    });
+                  }
+                },
+                items: [
+                  DropdownMenuItem(
+                    value: 'lowToHigh',
+                    child: Text('Low to High',style: AppConst.descriptionText),
+                  ),
+                  DropdownMenuItem(
+                    value: 'highToLow',
+                    child: Text('High to Low',style: AppConst.descriptionText),
+                  ),
+                ],
+              ))
               ],
             ),
           ),
@@ -154,9 +183,9 @@ class _FavouriteGroceryStoresState extends State<FavouriteGroceryStores> {
           Container(
             child: Expanded(
                 child: ListView.builder(
-                    itemCount: widget.stores.length,
+                    itemCount: stores.length,
                     itemBuilder: (BuildContext context, int index){
-                      StoreModel store = widget.stores[index];
+                      StoreModel store = stores[index];
                       return Container(
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
