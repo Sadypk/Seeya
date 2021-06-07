@@ -45,6 +45,8 @@ class _HomeScreenFromGradientCardState extends State<HomeScreenFromGradientCard>
     getData();
   }
 
+  int limit = 2;
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +69,7 @@ class _HomeScreenFromGradientCardState extends State<HomeScreenFromGradientCard>
           Expanded(
             flex: 1,
             child: ListView.builder(
-              itemCount: topData.length > 6 ? 6 : topData.length,
+              itemCount: topData.length > limit ? limit : topData.length,
               padding: EdgeInsets.symmetric(horizontal: 12,vertical: 4),
               itemBuilder: (_, index) {
                 final data = topData[index];
@@ -157,9 +159,12 @@ class _HomeScreenFromGradientCardState extends State<HomeScreenFromGradientCard>
               children: [
                 CustomOutlineButton(
                   onTap: (){
-                    // Get.to(FavouriteGroceryStores());
+                    setState(() {
+                      limit = 6;
+                    });
                   },
-                  label: 'View all Stores (${topData.length})',
+                  // label: 'View all Stores (${topData.length})',
+                  label: 'View all Stores (6)',
                   height: 28,
                   width: 160,
                   fontStyle: TextStyle(fontSize: 12, fontFamily: 'Stag'),
@@ -178,35 +183,35 @@ class _HomeScreenFromGradientCardState extends State<HomeScreenFromGradientCard>
                     children: [
                       Text('All restaurants near you', style: AppConst.header2,),
                       DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            isDense: true,
-                            hint: Text('Sort by', style: AppConst.descriptionText,),
-                            value: filterValue,
-                            onChanged: (String value){
+                        child: DropdownButton(
+                          isDense: true,
+                          hint: Text('Sort by', style: AppConst.descriptionText,),
+                          value: filterValue,
+                          onChanged: (String value){
+                            setState(() {
+                              filterValue = value;
+                            });
+                            if(filterValue == 'lowToHigh'){
                               setState(() {
-                                filterValue = value;
+                                bottomData.sort((a,b) => a.calculated_distance.compareTo(b.calculated_distance));
                               });
-                              if(filterValue == 'lowToHigh'){
-                                setState(() {
-                                  bottomData.sort((a,b) => a.calculated_distance.compareTo(b.calculated_distance));
-                                });
-                              }else if(filterValue == 'highToLow'){
-                                setState(() {
-                                  bottomData.sort((b,a) => a.calculated_distance.compareTo(b.calculated_distance));
-                                });
-                              }
-                            },
-                            items: [
-                              DropdownMenuItem(
-                                value: 'lowToHigh',
-                                child: Text('Low to High',style: AppConst.descriptionText),
-                              ),
-                              DropdownMenuItem(
-                                value: 'highToLow',
-                                child: Text('High to Low',style: AppConst.descriptionText),
-                              ),
-                            ],
-                          ))
+                            }else if(filterValue == 'highToLow'){
+                              setState(() {
+                                bottomData.sort((b,a) => a.calculated_distance.compareTo(b.calculated_distance));
+                              });
+                            }
+                          },
+                          items: [
+                            DropdownMenuItem(
+                              value: 'lowToHigh',
+                              child: Text('Low to High',style: AppConst.descriptionText),
+                            ),
+                            DropdownMenuItem(
+                              value: 'highToLow',
+                              child: Text('High to Low',style: AppConst.descriptionText),
+                            ),
+                          ],
+                        ))
                     ],
                   ),
                 ),

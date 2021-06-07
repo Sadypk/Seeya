@@ -7,7 +7,7 @@ import 'package:seeya/main_app/resources/string_resources.dart';
 class ProductCardWidget extends StatefulWidget {
   final ProductModel data;
   final bool isSelected;
-  const ProductCardWidget({Key key, this.data, this.isSelected}) : super(key: key);
+  const ProductCardWidget({Key key, this.data, this.isSelected = false}) : super(key: key);
   @override
   _ProductCardWidgetState createState() => _ProductCardWidgetState();
 }
