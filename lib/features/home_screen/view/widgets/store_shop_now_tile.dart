@@ -65,8 +65,23 @@ class StoreShopNowTile2 extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(boomModel == null ? label : boomModel.name, style: TextStyle(fontSize: 14, fontFamily: 'Stag', ),),
-                Text('10% Cashback', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w600, fontFamily: 'OpenSans', color: Color(0xffEE1717)),)
-              ],
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Text('10% Cashback', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w600, fontFamily: 'OpenSans', color: Color(0xffEE1717)),),
+                ),
+                Container(
+                  width: 70,
+                  height: 15,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.purpleAccent,
+                  ),
+                  child: Center(
+                    child: Text(boomModel == null ? label : '${boomModel.store_type} order', style: TextStyle(color: Colors.white, fontSize: 10),),
+                  ),
+                )
+                  ],
             )
           ],
         ),
@@ -74,7 +89,16 @@ class StoreShopNowTile2 extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text('$cashBack ${StringResources.rupee}', style: AppConst.titleText2Purple,),
-            Text('You earned 35.00', style: TextStyle(fontSize: 10, color: Color(0xff252525), fontFamily: 'Stag', letterSpacing: 0.3, fontWeight: FontWeight.w600))
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Text('You earned 35.00', style: TextStyle(fontSize: 10, color: Color(0xff252525), fontFamily: 'Stag', letterSpacing: 0.3, fontWeight: FontWeight.w600)),
+            ),
+            Row(
+              children: [
+                Icon(Icons.location_on_outlined,color: Colors.purpleAccent,size: 15,),
+                Text(boomModel == null ? label : '${(boomModel.calculated_distance/1000).toStringAsFixed(2)} km', style: TextStyle(fontSize: 10, color: Color(0xff252525), fontFamily: 'Stag', letterSpacing: 0.3, fontWeight: FontWeight.w600)),
+              ],
+            )
           ],
         )
       ],

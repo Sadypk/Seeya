@@ -62,12 +62,12 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
           ),
         ),
 
-        if(widget.isSelected)Positioned(
+        Positioned(
           bottom: 34,
           right: 16,
           child: Icon(
-            Icons.check_circle,
-            color: Colors.green,
+            widget.isSelected?Icons.check_circle:Icons.add_circle_outline,
+            color: widget.isSelected?AppConst.themePurple:Colors.red,
           ),
         )
       ],

@@ -899,6 +899,8 @@ class BoomModel {
     this.promotionCashbackOfferStatus,
     this.promotionCashbackOffer,
     this.promotionCashbackOfferDate,
+    this.calculated_distance,
+    this.store_type
   });
 
   String id;
@@ -915,6 +917,8 @@ class BoomModel {
   num promotionCashbackOffer;
   OfferDateModel promotionCashbackOfferDate;
   String businesstypeId;
+  double calculated_distance;
+  String store_type;
 
   factory BoomModel.fromJson(Map<String, dynamic> json) => BoomModel(
     id: json["_id"],
@@ -931,5 +935,7 @@ class BoomModel {
     promotionCashbackOffer: json["promotion_cashback"],
     promotionCashbackOfferDate: json["promotion_cashback_date"] == null ? null : OfferDateModel.fromJson(json["promotion_cashback_date"]),
     businesstypeId: json["businesstype"]['_id'],
+    calculated_distance: json["calculated_distance"] == null ? null : json["calculated_distance"],
+    store_type: json["store_type"] == null ? null : json["store_type"],
   );
 }
