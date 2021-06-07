@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view/all_offers_near_you.dart';
+import 'package:seeya/features/scan_receipt/view/homeScreenFromGradientCard.dart';
+import 'package:seeya/main_app/models/businessTypes.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
+import 'package:seeya/newDataViewModel.dart';
 
 class OfferCardsGradient extends StatelessWidget {
   final String title;
   final String description;
   final Color begin;
   final Color end;
-  OfferCardsGradient({this.description, this.title, this.end, this.begin});
+  final BusinessType data;
+  OfferCardsGradient({this.description, this.title, this.end, this.begin, this.data});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        // Get.to(AllOffersNearYou());
+        Get.to(() => HomeScreenFromGradientCard(data: data));
       },
       child: Container(
         padding: EdgeInsets.only(left: 8,top: 12,bottom: 12),

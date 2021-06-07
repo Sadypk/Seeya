@@ -10,6 +10,7 @@ import 'package:seeya/features/home_screen/view_models/top_products_view_model.d
 import 'package:seeya/features/products/view/top_products_screen.dart';
 import 'package:seeya/features/scan_receipt/view/40_scan_your_receipt.dart';
 import 'package:seeya/features/scan_receipt/view/45_fav_stores_main_page.dart';
+import 'package:seeya/features/scan_receipt/view/homeScreenFromGradientCard.dart';
 import 'package:seeya/features/settings/view/21_manage_address.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/46_nearest_stores_main_page.dart';
@@ -137,7 +138,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     CircleImageWidget(image: e.logo),
                     SizedBox(height: 12),
-                    Text(e.name, style: AppConst.descriptionText2),
+                    Text(
+                      '${e.name.length > 10 ? e.name.substring(0,9)+'...' : e.name}',
+                      style: AppConst.descriptionText2),
                     Text('${e.defaultCashback}% cashback', style: AppConst.descriptionTextPurple),
                   ],
                 ),
@@ -253,25 +256,6 @@ class _HomeScreenState extends State<HomeScreen> {
     //   },
     // );
 
-    final gradients = [
-      {
-        'begin' : Color(0xff664FB0),
-        'end' : Color(0xffDA58D7),
-      },
-      {
-        'begin' : Color(0xff8D67E5),
-        'end' : Color(0xffD590C1),
-      },
-      {
-        'begin' : Color(0xffEF6DA0),
-        'end' : Color(0xffEE8E6B),
-      },
-      {
-        'begin' : Color(0xff83EAF1),
-        'end' : Color(0xff63A4FF),
-      },
-    ];
-
     var gradientCards = Container(
       height: 90,
       padding: EdgeInsets.only(left: 20),
@@ -281,10 +265,11 @@ class _HomeScreenState extends State<HomeScreen> {
       scrollDirection: Axis.horizontal,
        itemCount: NewDataViewModel.businessTypes.length,
        itemBuilder:(_, index)=> OfferCardsGradient(
-           title: NewDataViewModel.businessTypes[index].name,
-           description: 'Get all offer now',
-           begin: gradients[index]['begin'],
-           end: gradients[index]['end']
+         title: NewDataViewModel.businessTypes[index].name,
+         description: 'Get all offer now',
+         begin: gradients[index]['begin'],
+         end: gradients[index]['end'],
+         data: NewDataViewModel.businessTypes[index],
        )
       ),
     );
@@ -447,3 +432,22 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+final gradients = [
+  {
+    'begin' : Color(0xff664FB0),
+    'end' : Color(0xffDA58D7),
+  },
+  {
+    'begin' : Color(0xff8D67E5),
+    'end' : Color(0xffD590C1),
+  },
+  {
+    'begin' : Color(0xffEF6DA0),
+    'end' : Color(0xffEE8E6B),
+  },
+  {
+    'begin' : Color(0xff83EAF1),
+    'end' : Color(0xff63A4FF),
+  },
+];

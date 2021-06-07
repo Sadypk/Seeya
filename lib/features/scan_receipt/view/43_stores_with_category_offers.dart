@@ -20,9 +20,18 @@ class StoresWithCategoryOffers extends StatefulWidget {
 }
 
 class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
+  List<StoreModel> stores = [];
+  String filterValue;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    stores = widget.stores;
+  }
+
   @override
   Widget build(BuildContext context) {
-    var storeList = NearestStoreViewModel().storeList;
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -84,8 +93,8 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
                       child: TabBarView(
                         children: [
                           PewPew(data: SpecialOfferTileData.parsedList(widget.stores)),
-                          PewPew(data: SpecialOfferTileData.parsedList(widget.stores.where((element) => element.promotionCashbackStatus == 'active' && element.promotionCashbackDate.startDate.isBefore(DateTime.now()) && element.promotionCashbackDate.endDate.isAfter(DateTime.now())))),
-                          PewPew(data: SpecialOfferTileData.parsedList(widget.stores.where((element) => element.promotionWelcomeOfferStatus == 'active' && element.promotionWelcomeOfferDate.startDate.isBefore(DateTime.now()) && element.promotionWelcomeOfferDate.endDate.isAfter(DateTime.now())))),
+                          PewPew(data: SpecialOfferTileData.parsedList(widget.stores.where((element) => element.defaultCashback > 0 || element.promotionCashbackStatus == 'active' && element.promotionCashbackDate.startDate.isBefore(DateTime.now()) && element.promotionCashbackDate.endDate.isAfter(DateTime.now())))),
+                          PewPew(data: SpecialOfferTileData.parsedList(widget.stores.where((element) => element.defaultWelcomeOffer > 0 || element.promotionWelcomeOfferStatus == 'active' && element.promotionWelcomeOfferDate.startDate.isBefore(DateTime.now()) && element.promotionWelcomeOfferDate.endDate.isAfter(DateTime.now())))),
                         ],
                       ),
                     )
@@ -94,7 +103,7 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
               )
           ),
           SizedBox(height: 15,),
-          Row(
+          if(widget.stores.length > 6 )Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomOutlineButton(
@@ -115,12 +124,36 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('All restaurants near you', style: AppConst.header2,),
-                Row(
-                  children: [
-                    Text('Sort by', style: AppConst.descriptionText,),
-                    Icon(Icons.keyboard_arrow_down_outlined, size: 18, color: Colors.black87,)
-                  ],
-                )
+            DropdownButtonHideUnderline(
+              child: DropdownButton(
+                isDense: true,
+                hint: Text('Sort by', style: AppConst.descriptionText,),
+                value: filterValue,
+                onChanged: (String value){
+                  setState(() {
+                    filterValue = value;
+                  });
+                  if(filterValue == 'lowToHigh'){
+                    setState(() {
+                      stores.sort((a,b) => a.defaultCashback.compareTo(b.defaultCashback));
+                    });
+                  }else if(filterValue == 'highToLow'){
+                    setState(() {
+                      stores.sort((b,a) => a.defaultCashback.compareTo(b.defaultCashback));
+                    });
+                  }
+                },
+                items: [
+                  DropdownMenuItem(
+                    value: 'lowToHigh',
+                    child: Text('Low to High',style: AppConst.descriptionText),
+                  ),
+                  DropdownMenuItem(
+                    value: 'highToLow',
+                    child: Text('High to Low',style: AppConst.descriptionText),
+                  ),
+                ],
+              ))
               ],
             ),
           ),
@@ -131,9 +164,9 @@ class _StoresWithCategoryOffersState extends State<StoresWithCategoryOffers> {
           Container(
             child: Expanded(
                 child: ListView.builder(
-                  itemCount: widget.stores.length,
+                  itemCount: stores.length,
                     itemBuilder: (BuildContext context, int index){
-                    StoreModel store = widget.stores[index];
+                    StoreModel store = stores[index];
                       return Container(
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
@@ -159,7 +192,7 @@ class PewPew extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return data.length > 0 ? ListView.builder(
-        itemCount: data.length > 2 ? 2 : data.length,
+        itemCount: data.length > 6 ? 6 : data.length,
         itemBuilder: (BuildContext context, int index){
           return SpecialOfferTile(
             data: data[index]

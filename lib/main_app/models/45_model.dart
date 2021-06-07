@@ -87,12 +87,14 @@ class StoreModel {
   this.logo,
   this.businesstype,
   this.defaultCashback,
+  this.defaultWelcomeOffer,
   this.promotionCashback,
   this.promotionCashbackStatus,
   this.promotionCashbackDate,
   this.promotionWelcomeOffer,
   this.promotionWelcomeOfferStatus,
   this.promotionWelcomeOfferDate,
+  this.calculated_distance,
   });
 
   String id;
@@ -100,21 +102,25 @@ class StoreModel {
   String logo;
   String businesstype;
   num defaultCashback;
+  num defaultWelcomeOffer;
   num promotionCashback;
   String promotionCashbackStatus;
   OfferDateModel promotionCashbackDate;
   num promotionWelcomeOffer;
   String promotionWelcomeOfferStatus;
   OfferDateModel promotionWelcomeOfferDate;
+  num calculated_distance;
 
   factory StoreModel.fromJson(Map<String, dynamic> json) {
 
     return StoreModel(
       id: json["_id"],
       name: json["name"],
+      calculated_distance: json["calculated_distance"] ?? 0.0,
       logo: json["logo"],
       businesstype: json["businesstype"] == null ? null : json["businesstype"]['_id'],
       defaultCashback: json["default_cashback"],
+      defaultWelcomeOffer: json["default_welcome_offer"],
       promotionCashback: json["promotion_cashback"],
       promotionCashbackStatus: json["promotion_cashback_status"],
       promotionCashbackDate: json["promotion_cashback_date"] == null ? null : OfferDateModel.fromJson(json["promotion_cashback_date"]),

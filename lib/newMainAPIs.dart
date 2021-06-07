@@ -132,6 +132,7 @@ class NewApi{
         promotion_cashback_status
         promotion_cashback
         default_cashback
+        default_welcome_offer
         promotion_cashback_date{
           start_date
           end_date
@@ -212,6 +213,7 @@ class NewApi{
             start_date
             end_date
           }
+          default_welcome_offer
           promotion_welcome_offer
           promotion_welcome_offer_status
           promotion_welcome_offer_date{
@@ -259,6 +261,7 @@ class NewApi{
             start_date
             end_date
           }
+          default_welcome_offer
           promotion_welcome_offer
           promotion_welcome_offer_status
           promotion_welcome_offer_date{
@@ -306,6 +309,7 @@ class NewApi{
             start_date
             end_date
           }
+          default_welcome_offer
           promotion_welcome_offer
           promotion_welcome_offer_status
           promotion_welcome_offer_date{
@@ -353,6 +357,7 @@ class NewApi{
             start_date
             end_date
           }
+          default_welcome_offer
           promotion_welcome_offer
           promotion_welcome_offer_status
           promotion_welcome_offer_date{
