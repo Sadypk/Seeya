@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,6 +7,7 @@ import 'package:seeya/features/profile_screen/view/profile_edit.dart';
 import 'package:seeya/main_app/models/userModel.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
+import 'package:seeya/newMainAPIs.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -14,6 +16,9 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   UserModel user;
+
+  List<ReceiptOrderModel> orders = [];
+
 
   @override
   void initState() {
@@ -225,84 +230,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         Row(children: [Text('Fast Orders', style: AppConst.titleText1,),],),
         Divider(height: 40, color: Colors.grey[300], thickness: 1,),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Samsung home appliance', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'Stag', color: Color(0xff777C87))),
-                  SizedBox(height: 10,),
-                  Text('Cashback balance', style: AppConst.descriptionText,),
-                ],
-              ),
-              Text('1,500 ₹', style: AppConst.titleText1Purple,),
-            ],
-          ),
+
+        FutureBuilder<List<ReceiptOrderModel>>(
+          future: NewApi.getCustomerOrders(),
+          initialData: [],
+          builder: (_, AsyncSnapshot<List<ReceiptOrderModel>> snapshot){
+            orders = snapshot.data;
+            if(snapshot.data.length > 0 ) return ReceiptOrderListTile(data: snapshot.data[0]);
+
+            return SizedBox();
+          },
         ),
-        SizedBox(height: 15,),
-        Row(children: [Text('Refrigerator x1, Air condition x1', style: TextStyle(fontSize: 10, color: Color(0xff777C87), fontFamily: 'Stag', letterSpacing: 0.3),),],),
-        SizedBox(height: 15,),
-        Row(
-          children: [
-            Flexible(
-              child: Container(
-                height: 30,
-                padding: EdgeInsets.all(1),
-                decoration: BoxDecoration(
-                  gradient: AppConst.gradient1,
-                  borderRadius: BorderRadius.circular(3)
-                ),
-                child: Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(3)
-                    ),
-                    child: Center(
-                      child: Text('Go to store', style: AppConst.descriptionText,),
-                    ),
-                  ),
-                ),
-              )
-            ),
-            SizedBox(width: 20,),
-            Flexible(
-                child: Container(
-                  height: 30,
-                  padding: EdgeInsets.all(1),
-                  decoration: BoxDecoration(
-                      gradient: AppConst.gradient1,
-                      borderRadius: BorderRadius.circular(3)
-                  ),
-                  child: Center(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(3)
-                      ),
-                      child: Center(
-                        child: Text('Support', style: AppConst.descriptionText,),
-                      ),
-                    ),
-                  ),
-                )
-            ),
-          ],
-        ),
+
         SizedBox(height: 20,),
-        Container(
-          // height: 28,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            // boxShadow: [AppConst.shadowBasic],
-            borderRadius: BorderRadius.circular(3),
-            border: Border.all(color: Colors.grey[300], width: 1)
-          ),
-          child: Center(
-            child: Text('View all orders', style: AppConst.descriptionTextPurple,),
+        GestureDetector(
+          onTap: () => Get.to(()=> ViewAllReceiptOrders(data: orders)),
+          child: Container(
+            // height: 28,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              // boxShadow: [AppConst.shadowBasic],
+              borderRadius: BorderRadius.circular(3),
+              border: Border.all(color: Colors.grey[300], width: 1)
+            ),
+            child: Center(
+              child: Text('View all orders', style: AppConst.descriptionTextPurple,),
+            ),
           ),
         )
       ],
@@ -355,6 +309,123 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class ReceiptOrderListTile extends StatelessWidget {
+  final ReceiptOrderModel data;
+  const ReceiptOrderListTile({this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(data.store.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'Stag', color: Color(0xff777C87))),
+                  SizedBox(height: 10,),
+                  Text('Cashback balance', style: AppConst.descriptionText,),
+                ],
+              ),
+              Text('${data.totalCashback} ₹', style: AppConst.titleText1Purple,),
+            ],
+          ),
+        ),
+        SizedBox(height: 15,),
+        Wrap(
+          children: data.products.map((e) => Text('${e.name} x${e.quantity},', style: TextStyle(fontSize: 10, color: Color(0xff777C87), fontFamily: 'Stag', letterSpacing: 0.3),)).toList(),
+        ),
+        SizedBox(height: 15,),
+        Row(
+          children: [
+            Flexible(
+                child: Container(
+                  height: 30,
+                  padding: EdgeInsets.all(1),
+                  decoration: BoxDecoration(
+                      gradient: AppConst.gradient1,
+                      borderRadius: BorderRadius.circular(3)
+                  ),
+                  child: Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(3)
+                      ),
+                      child: Center(
+                        child: Text('Go to store', style: AppConst.descriptionText,),
+                      ),
+                    ),
+                  ),
+                )
+            ),
+            SizedBox(width: 20,),
+            Flexible(
+                child: Container(
+                  height: 30,
+                  padding: EdgeInsets.all(1),
+                  decoration: BoxDecoration(
+                      gradient: AppConst.gradient1,
+                      borderRadius: BorderRadius.circular(3)
+                  ),
+                  child: Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(3)
+                      ),
+                      child: Center(
+                        child: Text('Support', style: AppConst.descriptionText,),
+                      ),
+                    ),
+                  ),
+                )
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class ViewAllReceiptOrders extends StatelessWidget {
+  final List<ReceiptOrderModel> data;
+  const ViewAllReceiptOrders({this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 0,
+        title: Text('All Orders', style: AppConst.appbarTextStyle,),
+        iconTheme: IconThemeData(color: Colors.white),
+        actions: [
+          Icon(CupertinoIcons.search, color: Colors.white),
+          SizedBox(width: 20,)
+        ],
+      ),
+      body: ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 12),
+        shrinkWrap: true,
+        itemCount: data.length,
+        itemBuilder: (_, index) => Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Card(
+            margin: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ReceiptOrderListTile(data: data[index]),
+            )),
         ),
       ),
     );
