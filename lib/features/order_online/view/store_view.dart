@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:seeya/features/order_online/model/get_chat_orderList.dart';
 import 'package:seeya/features/order_online/repo/get_chat_orderList_repo.dart';
 import 'package:seeya/features/order_online/repo/get_store_products.dart';
+import 'package:seeya/features/order_online/view/cart_page.dart';
 import 'package:seeya/features/order_online/view/order_details.dart';
 import 'package:seeya/features/scan_receipt/view/purchased_products_screen.dart';
 import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
@@ -339,8 +340,11 @@ class _StoreViewState extends State<StoreView> {
                                 Container(
                                   height: 450,
                                   child: TabBarView(
-                                    children: [
-                                      products.length > 0
+                                    children:  catalog.map((cat) {
+
+                                      List<ProductModel> categoryProducts = products.where((element) => element.catalog.id == cat.id).toList();
+
+                                      return categoryProducts.length > 0
                                           ? Expanded(
                                         child: GridView.builder(
                                           shrinkWrap: true,
@@ -354,25 +358,21 @@ class _StoreViewState extends State<StoreView> {
                                                 .size
                                                 .width / 2) / 195),
                                           ),
-                                          itemCount: products.length,
+                                          itemCount: categoryProducts.length,
                                           itemBuilder: (BuildContext context,
                                               int index) {
                                             return Obx(() {
-                                              bool isSelected = PurchasedProductsScreen
-                                                  .products
-                                                  .contains(products[index]);
+                                              bool isSelected = PurchasedProductsScreen.products.contains(categoryProducts[index]);
                                               return GestureDetector(
                                                   onTap: () {
                                                     if (isSelected) {
-                                                      PurchasedProductsScreen.products
-                                                          .remove(products[index]);
+                                                      PurchasedProductsScreen.products.remove(categoryProducts[index]);
                                                     } else {
-                                                      PurchasedProductsScreen.products
-                                                          .add(products[index]);
+                                                      PurchasedProductsScreen.products.add(categoryProducts[index]);
                                                     }
                                                   },
                                                   child: ProductCardWidget(
-                                                      data: products[index],
+                                                      data: categoryProducts[index],
                                                       isSelected: isSelected));
                                             });
                                           },
@@ -382,8 +382,9 @@ class _StoreViewState extends State<StoreView> {
                                         child: Center(
                                           child: Text('No Product Found'),
                                         ),
-                                      ),
-                                    ],
+                                      );
+
+                                    }).toList()
                                   ),
                                 ),
                               ],
@@ -398,9 +399,10 @@ class _StoreViewState extends State<StoreView> {
               ),
             ),
           ),
+
           GestureDetector(
             onTap: (){
-              Get.to(()=>OrderDetails(data: widget.data,));
+              Get.to(()=>CartPage(data: widget.data,));
             },
             child: Container(
               decoration: BoxDecoration(

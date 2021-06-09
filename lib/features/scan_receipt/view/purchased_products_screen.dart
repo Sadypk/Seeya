@@ -17,7 +17,7 @@ import 'package:seeya/main_app/util/snack.dart';
 import 'package:seeya/newMainAPIs.dart';
 
 class PurchasedProductsScreen extends StatefulWidget {
-  static var products = [].obs;
+  static var products = <ProductModel>[].obs;
 
 
   final BoomModel storeModel;

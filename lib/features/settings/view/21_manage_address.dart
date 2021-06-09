@@ -28,6 +28,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
   Widget build(BuildContext context) {
     locationTiles (AddressModel address) => GestureDetector(
       onTap: () async{
+
         UserViewModel.setLocation(LatLng(address.location.lat, address.location.lng));
         if(LocalStorage.checkFirstTime()){
           Get.offAll(()=> AllOffersNearYou());
@@ -116,7 +117,10 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
               SizedBox(height: 10,),
               Expanded(child: ListView.builder(
                   itemCount: UserViewModel.user.value.addresses.length,
-                  itemBuilder: (BuildContext context, int index) => locationTiles(UserViewModel.user.value.addresses[index])))
+                  itemBuilder: (BuildContext context, int index){
+                    UserViewModel.setLocationIndex(index);
+                    return locationTiles(UserViewModel.user.value.addresses[index]);
+                  }))
             ],
           ),
         ),

@@ -14,6 +14,9 @@ class UserViewModel{
 
   static var currentLocation = LatLng(0.0, 0.0).obs;
   static setLocation(LatLng latLng) => currentLocation.value = latLng;
+
+  static var locationIndex = 0.obs;
+  static setLocationIndex(int data) => locationIndex.value = data;
 }
 
 enum UserStatus{
