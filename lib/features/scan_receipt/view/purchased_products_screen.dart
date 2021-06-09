@@ -73,14 +73,11 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: ListView.builder(
-            itemCount: 100,
-            shrinkWrap: true,
-            itemBuilder: (_, index) => Image.file(images[0]),
-            // itemBuilder: (_, index) => AssetThumb(asset: assets[index],height: (Get.height * .7).toInt(), width: (Get.width).toInt()),
-          ),
+        body: ListView.builder(
+          itemCount: 100,
+          shrinkWrap: true,
+          itemBuilder: (_, index) => Image.file(images[0]),
+          // itemBuilder: (_, index) => AssetThumb(asset: assets[index],height: (Get.height * .7).toInt(), width: (Get.width).toInt()),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: widget.storeModel!=null  ? _buildBottomDrawer() : SizedBox(),

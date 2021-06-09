@@ -4,14 +4,15 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:seeya/features/store/view/46_nearest_stores_main_page.dart';
 import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 import 'package:seeya/main_app/models/45_model.dart';
+import 'package:seeya/main_app/models/businessTypes.dart';
 import 'package:seeya/main_app/models/productModel.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/newMainAPIs.dart';
 
 class NearestStoresGroceryReceipts extends StatefulWidget {
-  final String typeCode;
+  final BusinessType type;
 
-  const NearestStoresGroceryReceipts({Key key, this.typeCode}) : super(key: key);
+  const NearestStoresGroceryReceipts({Key key, this.type}) : super(key: key);
   @override
   _NearestStoresGroceryReceiptsState createState() => _NearestStoresGroceryReceiptsState();
 }
@@ -22,7 +23,7 @@ class _NearestStoresGroceryReceiptsState extends State<NearestStoresGroceryRecei
   bool dataLoad = true;
 
   getData() async{
-    catalogs = await NewApi.getCatalogByBusinessID(widget.typeCode);
+    catalogs = await NewApi.getCatalogByBusinessID(widget.type.id);
     _tabController = TabController(length: catalogs.length, vsync: this);
     setState(() {
       dataLoad = false;
@@ -41,7 +42,7 @@ class _NearestStoresGroceryReceiptsState extends State<NearestStoresGroceryRecei
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nearest grocery stores', style: AppConst.appbarTextStyle,),
+        title: Text('Nearest ${widget.type.name} stores', style: AppConst.appbarTextStyle,),
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
           IconButton(icon: Icon(Icons.search, size: 20,), onPressed: (){}),

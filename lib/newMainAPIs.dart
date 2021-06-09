@@ -486,13 +486,11 @@ class NewApi{
     }
   }
 
-  static Future<List<BoomModel>> scanReceiptsFavStores({int pageNumber}) async{
-    final _query = r'''query($lat : Float $lng: Float $pageNumber: Int){
+  static Future<List<BoomModel>> scanReceiptsFavStores() async{
+    final _query = r'''query($lat : Float $lng: Float){
   getScanReceiptPageMyFavoriteStoresData(
     lat: $lat
     lng: $lng
-    page_size: 100
-    page_number: $pageNumber
   ){
     error
     msg
@@ -525,8 +523,7 @@ class NewApi{
 
       final variables = {
         'lat': UserViewModel.currentLocation.value.latitude,
-        'lng': UserViewModel.currentLocation.value.longitude,
-        'pageNumber' : pageNumber ?? 1
+        'lng': UserViewModel.currentLocation.value.longitude
       };
 
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
@@ -543,14 +540,11 @@ class NewApi{
     }
   }
 
-  static Future<List<BoomModel>> scanReceiptNearMeStoreData({int, pageNumber, String businessType}) async{
-    final _query = r'''query($lat : Float $lng: Float $pageNumber: Int $businessType: ID){
+  static Future<List<BoomModel>> scanReceiptNearMeStoreData() async{
+    final _query = r'''query($lat : Float $lng: Float){
   getScanReceiptPageNearMeStoresData(
     lat: $lat
     lng: $lng
-    page_size: 100
-    page_number: $pageNumber
-    businesstype: $businessType
   ){
     error
     msg
@@ -583,9 +577,7 @@ class NewApi{
 
       final variables = {
         'lat': UserViewModel.currentLocation.value.latitude,
-        'lng': UserViewModel.currentLocation.value.longitude,
-        'pageNumber' : pageNumber ?? 1,
-        'businessType': businessType ?? ''
+        'lng': UserViewModel.currentLocation.value.longitude
       };
 
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
@@ -831,6 +823,48 @@ class NewApi{
     }
   }
 
+
+  static Future<List<ReceiptOrderModel>> getCustomerOrders() async{
+    final _query = r'''
+    query{
+      getAllOrdersByCustomer{
+        error
+        msg
+        data{
+          _id
+          store{
+            _id
+            name
+            address{
+              address
+            }
+          }
+          order_type
+          total_cashback
+          status
+          products{
+            _id
+            name
+            quantity
+          }
+        }
+      }
+    }
+    
+    ''';
+
+    try{
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(_query)));
+
+      return List.from(result.data['getAllOrdersByCustomer']['data'].map((json) => ReceiptOrderModel.fromJson(json)));
+    }catch(e){
+      print(e.toString());
+      return [];
+    }
+
+  }
+
   static Future<bool> placeOrder({List<File> images, BoomModel store, var products, double total}) async{
     final mutation = r'''
     mutation($image: String $storeId: ID $products: [OrderProduct] $total: Float $cashback: Float){
@@ -885,7 +919,6 @@ class NewApi{
       return true;
     }
   }
-
 
   static Future<List<ProductModel>> getProducts({String bType, String catId, int pageNo}) async{
     try{
@@ -943,12 +976,13 @@ class NewApi{
       final variables = {
         'lat': UserViewModel.currentLocation.value.latitude,
         'lng': UserViewModel.currentLocation.value.longitude,
-        'bType': bType,
+        'bType': bType ?? catId,
         'page' : pageNo ?? 1
       };
 
-      final query = bType == null ? queryCat : queryBusiness;
 
+
+      final query = bType == null ? queryCat : queryBusiness;
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(document: gql(query),variables: variables));
 
@@ -1015,5 +1049,68 @@ class BoomModel {
     businesstypeId: json["businesstype"]['_id'],
     calculated_distance: json["calculated_distance"] == null ? null : json["calculated_distance"],
     store_type: json["store_type"] == null ? null : json["store_type"],
+  );
+}
+
+class ReceiptOrderModel {
+  ReceiptOrderModel({
+    this.id,
+    this.store,
+    this.orderType,
+    this.totalCashback,
+    this.status,
+    this.products,
+  });
+
+  String id;
+  MeowStore store;
+  String orderType;
+  int totalCashback;
+  String status;
+  List<MeowProduct> products;
+
+  factory ReceiptOrderModel.fromJson(Map<String, dynamic> json) => ReceiptOrderModel(
+    id: json["_id"],
+    store: MeowStore.fromJson(json["store"]),
+    orderType: json["order_type"],
+    totalCashback: json["total_cashback"],
+    status: json["status"],
+    products: List<MeowProduct>.from(json["products"].map((x) => MeowProduct.fromJson(x))),
+  );
+}
+
+class MeowStore{
+  MeowStore({
+    this.id,
+    this.name,
+    this.address
+});
+
+  String id;
+  String name;
+  String address;
+
+  factory MeowStore.fromJson(Map<String, dynamic> json) => MeowStore(
+    id: json["_id"],
+    name: json["name"],
+    address: json["address"]['address'],
+  );
+}
+
+class MeowProduct{
+  MeowProduct({
+    this.id,
+    this.name,
+    this.quantity
+});
+
+  String id;
+  String name;
+  num quantity;
+
+  factory MeowProduct.fromJson(Map<String, dynamic> json) => MeowProduct(
+    id: json["_id"],
+    name: json["name"],
+    quantity: json["quantity"],
   );
 }

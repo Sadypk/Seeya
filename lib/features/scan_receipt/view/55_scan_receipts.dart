@@ -28,10 +28,13 @@ class _ScanReceiptsState extends State<ScanReceipts> with SingleTickerProviderSt
   List<BoomModel> restaurant = [];
 
   bool dataLoad = true;
+
+  TabController _tabController;
+  bool fabView = true;
   getData() async{
 
     nearStores = await NewApi.scanReceiptNearMeStoreData();
-    favStores = await NewApi.scanReceiptNearMeStoreData();
+    favStores = await NewApi.scanReceiptsFavStores();
 
     allStores.addAll(nearStores);
     allStores.addAll(favStores);
@@ -40,6 +43,18 @@ class _ScanReceiptsState extends State<ScanReceipts> with SingleTickerProviderSt
     fresh.addAll(allStores.where((element) => element.businesstypeId == '5fdf434058a42e05d4bc2044'));
     restaurant.addAll(allStores.where((element) => element.businesstypeId == '5fe0bfef4657be045655cf4a'));
     pharmacy.addAll(allStores.where((element) => element.businesstypeId == '5fe22e111df87913f06a4cc9'));
+
+    _tabController = TabController(length: 2, vsync: this)..addListener(() {
+      if(_tabController.index == 0){
+        setState(() {
+          fabView = true;
+        });
+      }else{
+        setState(() {
+          fabView = false;
+        });
+      }
+    });
 
     setState(() {
       dataLoad = false;
@@ -65,120 +80,177 @@ class _ScanReceiptsState extends State<ScanReceipts> with SingleTickerProviderSt
       ),
       body: dataLoad ? SpinKitDualRing(color: AppConst.themePurple) : ListView(
         children: [
-          DefaultTabController(
-            length: 2,
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  TabBar(
-                      labelColor: Colors.black,
-                      indicatorColor: AppConst.themePurple,
-                      labelStyle: AppConst.header2,
-                      unselectedLabelStyle: AppConst.header2,
-                      tabs: [
-                        Tab(text: 'My favourite',),
-                        Tab(text: 'Near me',),
-                      ]),
-                  SizedBox(height: 15,),
-                  Row(
-                    children: [
-                      Text('Recently visited stores', style: AppConst.header2,),
-                    ],
-                  ),
-                  Divider(height: 20,),
-                  SizedBox(height: 10,),
-                  SizedBox(
-                    height: Get.height * .31,
-                    child: TabBarView(
+          TabBar(
+            controller: _tabController,
+              labelColor: Colors.black,
+              indicatorColor: AppConst.themePurple,
+              labelStyle: AppConst.header2,
+              unselectedLabelStyle: AppConst.header2,
+              tabs: [
+                Tab(text: 'My favourite',),
+                Tab(text: 'Near me',),
+              ]),
+          SizedBox(height: 15,),
+          SizedBox(
+            height: Get.height * .8,
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          Text('Recently visited stores', style: AppConst.header2,),
+                        ],
+                      ),
+                    ),
+                    Divider(height: 20,),
+                    SizedBox(height: 10,),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      height: Get.height * .31,
+                      child: LauLau(data: favStores)
+                    ),
+                    SizedBox(height: 20,),
+                    favStores.length > 6 ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        LauLau(data: favStores),
-                        LauLau(data: nearStores),
+                        CustomOutlineButton(
+                          onTap: (){
+                          },
+                          label: 'View all offers',
+                          height: 28,
+                          width: 160,
+                          fontStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, fontFamily: 'Stag'),
+                        )
+                      ],
+                    ) : SizedBox(),
+                    SizedBox(height: 25,),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Special offers made for you', style: AppConst.titleText1,),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: InkWell(
+                                onTap: (){},
+                                child: Text('View All', style: AppConst.descriptionTextPurple,)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20,),
+                    DefaultTabController(
+                      length: 5,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          children: [
+                            ButtonsTabBar(
+                              physics: AlwaysScrollableScrollPhysics(),
+                              backgroundColor: Color(0xff252525),
+                              unselectedBackgroundColor: Colors.white,
+                              unselectedLabelStyle: TextStyle(color: Color(0xff252525)),
+                              radius: 20,
+                              borderColor: Color(0xff707070),
+                              unselectedBorderColor: Color(0xff707070),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                              borderWidth: 1,
+                              labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                              tabs: [
+                                Tab(
+                                  text: "Recent",
+                                ),
+                                Tab(
+                                  text: "Grocery",
+                                ),
+                                Tab(
+                                  text: "Fresh",
+                                ),
+                                Tab(
+                                  text: "Restaurant",
+                                ),
+                                Tab(
+                                  text: "Pharmacy",
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15,),
+                            Container(
+                              height: 500,
+                              child: TabBarView(
+                                children: [
+                                  KhauKhau(data: allStores),
+                                  KhauKhau(data: groceries),
+                                  KhauKhau(data: fresh),
+                                  KhauKhau(data: restaurant),
+                                  KhauKhau(data: pharmacy),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                DefaultTabController(
+                  length: 5,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        ButtonsTabBar(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          backgroundColor: Color(0xff252525),
+                          unselectedBackgroundColor: Colors.white,
+                          unselectedLabelStyle: TextStyle(color: Color(0xff252525)),
+                          radius: 20,
+                          borderColor: Color(0xff707070),
+                          unselectedBorderColor: Color(0xff707070),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          borderWidth: 1,
+                          labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          tabs: [
+                            Tab(
+                              text: "Recent",
+                            ),
+                            Tab(
+                              text: "Grocery",
+                            ),
+                            Tab(
+                              text: "Fresh",
+                            ),
+                            Tab(
+                              text: "Restaurant",
+                            ),
+                            Tab(
+                              text: "Pharmacy",
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15,),
+                        Container(
+                          height: 500,
+                          child: TabBarView(
+                            children: [
+                              KhauKhau(data: allStores),
+                              KhauKhau(data: groceries),
+                              KhauKhau(data: fresh),
+                              KhauKhau(data: restaurant),
+                              KhauKhau(data: pharmacy),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 20,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomOutlineButton(
-                        onTap: (){
-                        },
-                        label: 'View all offers',
-                        height: 28,
-                        width: 160,
-                        fontStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, fontFamily: 'Stag'),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 25,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Special offers made for you', style: AppConst.titleText1,),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: InkWell(
-                            onTap: (){},
-                            child: Text('View All', style: AppConst.descriptionTextPurple,)),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20,),
-                ],
-              ),
-            ),
-          ),
-          DefaultTabController(
-            length: 5,
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  ButtonsTabBar(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    backgroundColor: Color(0xff252525),
-                    unselectedBackgroundColor: Colors.white,
-                    unselectedLabelStyle: TextStyle(color: Color(0xff252525)),
-                    radius: 20,
-                    borderColor: Color(0xff707070),
-                    unselectedBorderColor: Color(0xff707070),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                    borderWidth: 1,
-                    labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                    tabs: [
-                      Tab(
-                        text: "Recent",
-                      ),
-                      Tab(
-                        text: "Grocery",
-                      ),
-                      Tab(
-                        text: "Fresh",
-                      ),
-                      Tab(
-                        text: "Restaurant",
-                      ),
-                      Tab(
-                        text: "Pharmacy",
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 15,),
-                  Container(
-                    height: 500,
-                    child: TabBarView(
-                      children: [
-                        KhauKhau(data: allStores),
-                        KhauKhau(data: groceries),
-                        KhauKhau(data: fresh),
-                        KhauKhau(data: restaurant),
-                        KhauKhau(data: pharmacy),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                )
+              ],
             ),
           )
         ],
@@ -228,7 +300,7 @@ class LauLau extends StatelessWidget {
             crossAxisCount: 3,
           childAspectRatio: .9
         ),
-        itemCount: data.length,
+        itemCount: data.length > 6 ? 6 : data.length,
         itemBuilder: (_, index) => GestureDetector(
           onTap: (){
             Get.to(() => TheBossCameraScreen(storeModel: data[index]));

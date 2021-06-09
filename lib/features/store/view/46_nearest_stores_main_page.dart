@@ -106,25 +106,25 @@ class _NearestStoresMainPageState extends State<NearestStoresMainPage> {
               SizedBox(height: 20,),
               InkWell(
                 onTap: (){
-                  Get.to(()=>NearestStoresGroceryReceipts(typeCode: topData[0].id));
+                  Get.to(()=>NearestStoresGroceryReceipts(type: topData[0]));
                 },
                 child: customTile(topData[0].name, topData[0].count)),
               Divider(color: Colors.grey[200], thickness: 1, height: 20,),
               InkWell(
                   onTap: (){
-                    Get.to(()=>NearestStoresGroceryReceipts(typeCode: topData[1].id));
+                    Get.to(()=>NearestStoresGroceryReceipts(type: topData[1]));
                   },
                   child: customTile(topData[1].name, topData[1].count)),
               Divider(color: Colors.grey[200], thickness: 1, height: 20,),
               InkWell(
                   onTap: (){
-                    Get.to(()=>NearestStoresGroceryReceipts(typeCode: topData[2].id));
+                    Get.to(()=>NearestStoresGroceryReceipts(type: topData[2]));
                   },
                   child: customTile(topData[2].name, topData[2].count)),
               Divider(color: Colors.grey[200], thickness: 1, height: 20,),
               InkWell(
                   onTap: (){
-                    Get.to(()=>NearestStoresGroceryReceipts(typeCode: topData[3].id));
+                    Get.to(()=>NearestStoresGroceryReceipts(type: topData[3]));
                   },
                   child: customTile(topData[3].name, topData[3].count)),
               Divider(color: Colors.grey[200], thickness: 1, height: 20,),
