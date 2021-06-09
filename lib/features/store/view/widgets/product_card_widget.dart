@@ -30,41 +30,46 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 98,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4GhnC7WBjYbPhpTgGZUcOwteW5QyOunmCmZdWdQBIX8OZXnAXn379CSmrtJo0RyuJqwM&usqp=CAU'),
-                    // image: CachedNetworkImageProvider(widget.data.logo),
-                    fit: BoxFit.cover
-                )
+          Expanded(
+            flex: 98,
+            child: Container(
+              // height: 98,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4GhnC7WBjYbPhpTgGZUcOwteW5QyOunmCmZdWdQBIX8OZXnAXn379CSmrtJo0RyuJqwM&usqp=CAU'),
+                      // image: CachedNetworkImageProvider(widget.data.logo),
+                      fit: BoxFit.cover
+                  )
+              ),
             ),
           ),
           Divider(thickness: 1, color: Colors.grey[300],),
-          Container(
-            height: 55,
-            padding: EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Text(widget.data.name, style: TextStyle(fontSize: 12, fontFamily: 'Stag', color: Color(0xff333333)),),
-                ),
-                Text('10% Cashback', style: TextStyle(color: Color(0xffEE175B), fontSize: 8, fontWeight: FontWeight.w600),),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(widget.data.sellingPrice.toString()+StringResources.rupee, style: AppConst.titleText1Purple,),
-                    Icon(
-                      widget.isSelected?Icons.check_circle:Icons.add_circle_outline,
-                      color: widget.isSelected?AppConst.themePurple:Colors.red,
-                    )
-                  ],
-                )
-              ],
+          Expanded(
+            flex: 55,
+            child: Container(
+              padding: EdgeInsets.only(left: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    child: Text(widget.data.name, style: TextStyle(fontSize: 12, fontFamily: 'Stag', color: Color(0xff333333)),),
+                  ),
+                  Text('10% Cashback', style: TextStyle(color: Color(0xffEE175B), fontSize: 8, fontWeight: FontWeight.w600),),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(widget.data.sellingPrice.toString()+StringResources.rupee, style: AppConst.titleText1Purple,),
+                      Icon(
+                        widget.isSelected?Icons.check_circle:Icons.add_circle_outline,
+                        color: widget.isSelected?AppConst.themePurple:Colors.red,
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           )
         ],

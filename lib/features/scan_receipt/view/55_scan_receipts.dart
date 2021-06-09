@@ -20,12 +20,17 @@ class _ScanReceiptsState extends State<ScanReceipts> with SingleTickerProviderSt
 
   List<BoomModel> nearStores = [];
   List<BoomModel> favStores = [];
-
   List<BoomModel> allStores = [];
-  List<BoomModel> groceries = [];
-  List<BoomModel> fresh = [];
-  List<BoomModel> pharmacy = [];
-  List<BoomModel> restaurant = [];
+
+  List<BoomModel> favGroceries = [];
+  List<BoomModel> favFresh = [];
+  List<BoomModel> favPharmacy = [];
+  List<BoomModel> favRestaurant = [];
+
+  List<BoomModel> nearGroceries = [];
+  List<BoomModel> nearFresh = [];
+  List<BoomModel> nearPharmacy = [];
+  List<BoomModel> nearRestaurant = [];
 
   bool dataLoad = true;
 
@@ -33,16 +38,20 @@ class _ScanReceiptsState extends State<ScanReceipts> with SingleTickerProviderSt
   bool fabView = true;
   getData() async{
 
-    nearStores = await NewApi.scanReceiptNearMeStoreData();
     favStores = await NewApi.scanReceiptsFavStores();
+    nearStores = await NewApi.scanReceiptNearMeStoreData();
+    allStores = await NewApi.getScanReceiptPageSpecialOffersStoresData();
 
-    allStores.addAll(nearStores);
-    allStores.addAll(favStores);
 
-    groceries.addAll(allStores.where((element) => element.businesstypeId == '5fde415692cc6c13f9e879fd'));
-    fresh.addAll(allStores.where((element) => element.businesstypeId == '5fdf434058a42e05d4bc2044'));
-    restaurant.addAll(allStores.where((element) => element.businesstypeId == '5fe0bfef4657be045655cf4a'));
-    pharmacy.addAll(allStores.where((element) => element.businesstypeId == '5fe22e111df87913f06a4cc9'));
+    favGroceries.addAll(allStores.where((element) => element.businesstypeId == '5fde415692cc6c13f9e879fd'));
+    favFresh.addAll(allStores.where((element) => element.businesstypeId == '5fdf434058a42e05d4bc2044'));
+    favRestaurant.addAll(allStores.where((element) => element.businesstypeId == '5fe0bfef4657be045655cf4a'));
+    favPharmacy.addAll(allStores.where((element) => element.businesstypeId == '5fe22e111df87913f06a4cc9'));
+
+    nearGroceries.addAll(allStores.where((element) => element.businesstypeId == '5fde415692cc6c13f9e879fd'));
+    nearFresh.addAll(allStores.where((element) => element.businesstypeId == '5fdf434058a42e05d4bc2044'));
+    nearPharmacy.addAll(allStores.where((element) => element.businesstypeId == '5fe0bfef4657be045655cf4a'));
+    nearRestaurant.addAll(allStores.where((element) => element.businesstypeId == '5fe22e111df87913f06a4cc9'));
 
     _tabController = TabController(length: 2, vsync: this)..addListener(() {
       if(_tabController.index == 0){
@@ -185,10 +194,10 @@ class _ScanReceiptsState extends State<ScanReceipts> with SingleTickerProviderSt
                               child: TabBarView(
                                 children: [
                                   KhauKhau(data: allStores),
-                                  KhauKhau(data: groceries),
-                                  KhauKhau(data: fresh),
-                                  KhauKhau(data: restaurant),
-                                  KhauKhau(data: pharmacy),
+                                  KhauKhau(data: favGroceries),
+                                  KhauKhau(data: favFresh),
+                                  KhauKhau(data: favRestaurant),
+                                  KhauKhau(data: favPharmacy),
                                 ],
                               ),
                             ),
@@ -234,15 +243,14 @@ class _ScanReceiptsState extends State<ScanReceipts> with SingleTickerProviderSt
                           ],
                         ),
                         SizedBox(height: 15,),
-                        Container(
-                          height: 500,
+                        Expanded(
                           child: TabBarView(
                             children: [
-                              KhauKhau(data: allStores),
-                              KhauKhau(data: groceries),
-                              KhauKhau(data: fresh),
-                              KhauKhau(data: restaurant),
-                              KhauKhau(data: pharmacy),
+                              KhauKhau(data: nearStores),
+                              KhauKhau(data: nearGroceries),
+                              KhauKhau(data: nearFresh),
+                              KhauKhau(data: nearRestaurant),
+                              KhauKhau(data: nearPharmacy),
                             ],
                           ),
                         ),

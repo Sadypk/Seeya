@@ -498,6 +498,7 @@ class NewApi{
       name
       logo
       _id
+      calculated_distance
       default_cashback
       default_welcome_offer
       promotion_cashback
@@ -552,6 +553,7 @@ class NewApi{
       name
       logo
       _id
+      calculated_distance
       default_cashback
       default_welcome_offer
       promotion_cashback
@@ -987,6 +989,93 @@ class NewApi{
       QueryResult result = await client.query(QueryOptions(document: gql(query),variables: variables));
 
       return List.from(result.data['getSpecialOfferViewAllPageProductsData']['data'].map((product) => ProductModel.fromJson(product)));
+    }catch(e){
+      print(e.toString());
+      return [];
+    }
+  }
+
+  static Future<List<BusinessType>> getSpecialOfferViewAllPageCategoryWithProductCountData() async{
+    try{
+
+      final query = r'''
+      query($lat: Float $lng: Float){
+  getSpecialOfferViewAllPageCategoryWithProductCountData(lat: $lat lng: $lng){
+    error
+    msg
+    data{
+      _id
+      name
+      products_count
+      image
+    }
+  }
+}
+      ''';
+
+      final variables = {
+        'lat': UserViewModel.currentLocation.value.latitude,
+        'lng': UserViewModel.currentLocation.value.longitude,
+      };
+
+
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(query),variables: variables));
+
+      return List.from(result.data['getSpecialOfferViewAllPageCategoryWithProductCountData']['data'].map((data) => BusinessType.fromJson(data)));
+    }catch(e){
+      print(e.toString());
+      return [];
+    }
+  }
+
+  static Future<List<BoomModel>> getScanReceiptPageSpecialOffersStoresData() async{
+    try{
+
+      final query = r'''
+query($lat: Float $lng: Float){
+  getScanReceiptPageSpecialOffersStoresData(lat: $lat lng: $lng){
+    error
+    msg
+    data{
+      name
+      logo
+      _id
+      calculated_distance
+      default_cashback
+      default_welcome_offer
+      promotion_cashback
+      promotion_welcome_offer
+      promotion_cashback_status
+      promotion_welcome_offer_status
+      promotion_cashback_date{
+        start_date
+        end_date
+      }
+      promotion_welcome_offer_date{
+        start_date
+        end_date
+      }
+      businesstype{
+        _id
+      }
+    }
+  }
+}
+      ''';
+
+      final variables = {
+        'lat': UserViewModel.currentLocation.value.latitude,
+        'lng': UserViewModel.currentLocation.value.longitude,
+      };
+
+
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(query),variables: variables));
+
+      return List.from(result.data['getScanReceiptPageSpecialOffersStoresData']['data'].map((data) => BoomModel.fromJson(data)));
     }catch(e){
       print(e.toString());
       return [];
