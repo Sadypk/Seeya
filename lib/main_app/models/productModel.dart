@@ -1,3 +1,47 @@
+class GetOrderOnlinePageProductsData {
+  GetOrderOnlinePageProductsData({
+    this.error,
+    this.msg,
+    this.data,
+  });
+
+  bool error;
+  String msg;
+  StoreData data;
+
+  factory GetOrderOnlinePageProductsData.fromJson(Map<String, dynamic> json) => GetOrderOnlinePageProductsData(
+    error: json["error"],
+    msg: json["msg"],
+    data: StoreData.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "error": error,
+    "msg": msg,
+    "data": data.toJson(),
+  };
+}
+
+class StoreData {
+  StoreData({
+    this.products,
+    this.walletAmount,
+  });
+
+  List<ProductModel> products;
+  int walletAmount;
+
+  factory StoreData.fromJson(Map<String, dynamic> json) => StoreData(
+    products: List<ProductModel>.from(json["products"].map((x) => ProductModel.fromJson(x))),
+    walletAmount: json["wallet_amount"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "products": List<dynamic>.from(products.map((x) => x.toJson())),
+    "wallet_amount": walletAmount,
+  };
+}
+
 class ProductModel {
   ProductModel({
     this.id,
@@ -10,7 +54,7 @@ class ProductModel {
     this.cashbackPercentage,
     this.details,
     this.status,
-    this.quantity
+    this.quantity,
   });
 
   String id;
