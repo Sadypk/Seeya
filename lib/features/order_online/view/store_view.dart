@@ -2,12 +2,15 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:seeya/features/order_online/model/get_chat_orderList.dart';
+import 'package:seeya/features/order_online/repo/get_chat_orderList_repo.dart';
 import 'package:seeya/features/order_online/repo/get_store_products.dart';
 import 'package:seeya/features/order_online/view/order_details.dart';
 import 'package:seeya/features/scan_receipt/view/purchased_products_screen.dart';
 import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 import 'package:seeya/main_app/models/productModel.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
+import 'package:seeya/main_app/util/keyboardVisibility.dart';
 
 import '../../../newMainAPIs.dart';
 
@@ -27,9 +30,11 @@ class _StoreViewState extends State<StoreView> {
   List<Catalog> catalog = [];
   List<Tab> tabs = [];
   StoreData storeData;
-
+  GetChatOrderAutocompleteData getChatOrderAutocompleteData;
+  bool keyboard = false;
   List<List<String>> selectedTab = [];
-
+  RxList<String> rawText = <String>[].obs;
+  List<String> searchResult = [];
   @override
   void initState() {
     super.initState();
@@ -37,6 +42,8 @@ class _StoreViewState extends State<StoreView> {
   }
 
   getData() async {
+    getChatOrderAutocompleteData = await GetChatOrderListRepo.getCharOrder(widget.data.id);
+    onSearchTextChanged('');
     storeData = await GetStoreProducts.getStoreProducts(widget.data.id);
     products.addAll(storeData.products);
 
@@ -60,6 +67,26 @@ class _StoreViewState extends State<StoreView> {
     setState(() {
       dataLoad = false;
     });
+  }
+
+  onSearchTextChanged(String text) async {
+    print(text);
+    searchResult.clear();
+    if (text.isEmpty) {
+      getChatOrderAutocompleteData.data.forEach((element) {
+        searchResult.add(element.name);
+      });
+      setState(() {});
+      return;
+    }
+
+    getChatOrderAutocompleteData.data.forEach((element) {
+      if (element.name.contains(text.toLowerCase()))
+        searchResult.add(element.name);
+      print('here');
+    });
+
+    setState(() {});
   }
 
   @override
@@ -188,6 +215,7 @@ class _StoreViewState extends State<StoreView> {
                               Flexible(
                                   child: TextFormField(
                                     controller: searchController,
+                                    onChanged: onSearchTextChanged,
                                     decoration: InputDecoration.collapsed(
                                         hintText: 'Enter any product name here',
                                         hintStyle: TextStyle(
@@ -200,95 +228,172 @@ class _StoreViewState extends State<StoreView> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Text('Add',
-                              style: TextStyle(
-                                  color: AppConst.themePurple, fontSize: 14)),
+                        GestureDetector(
+                          onTap: (){
+                            rawText.add(searchController.text);
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Text('Add',
+                                style: TextStyle(
+                                    color: AppConst.themePurple, fontSize: 14)),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 18, bottom: 10),
-                    child: DefaultTabController(
-                      length: tabs.length,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ButtonsTabBar(
-                            physics: AlwaysScrollableScrollPhysics(),
-                            backgroundColor: Color(0xff252525),
-                            unselectedBackgroundColor: Colors.white,
-                            unselectedLabelStyle:
-                            TextStyle(color: Color(0xff252525)),
-                            radius: 20,
-                            borderColor: Color(0xff707070),
-                            unselectedBorderColor: Color(0xff707070),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                            borderWidth: 1,
-                            labelStyle: TextStyle(
-                                color: Colors.white, fontWeight: FontWeight.bold),
-                            tabs: tabs,
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Container(
-                            height: 450,
-                            child: TabBarView(
+                  KeyboardVisibilityBuilder(
+                    builder: (context, child, isKeyboardVisible) {
+                      keyboard = isKeyboardVisible;
+                      if (isKeyboardVisible) {
+                        return Padding(
+                          padding: EdgeInsets.only(left: 18, bottom: 10),
+                          child: SingleChildScrollView(
+                            child: Obx(()=>Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                products.length > 0
-                                    ? Expanded(
-                                  child: GridView.builder(
-                                    shrinkWrap: true,
-                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      mainAxisSpacing: 10,
-                                      crossAxisSpacing: 10,
-                                      childAspectRatio:
-                                      ((MediaQuery
-                                          .of(context)
-                                          .size
-                                          .width / 2) / 195),
-                                    ),
-                                    itemCount: products.length,
-                                    itemBuilder: (BuildContext context,
-                                        int index) {
-                                      return Obx(() {
-                                        bool isSelected = PurchasedProductsScreen
-                                            .products
-                                            .contains(products[index]);
+                                rawText.isEmpty ?SizedBox():Text(
+                                  'Added List',
+                                  style: AppConst.titleText1,
+                                ),
+                                rawText.isEmpty ?SizedBox():Container(
+                                  child: ListView.builder(
+                                      primary: false,
+                                      shrinkWrap: true,
+                                      itemCount: rawText.length,
+                                      itemBuilder: (_,index){
                                         return GestureDetector(
-                                            onTap: () {
-                                              if (isSelected) {
-                                                PurchasedProductsScreen.products
-                                                    .remove(products[index]);
-                                              } else {
-                                                PurchasedProductsScreen.products
-                                                    .add(products[index]);
-                                              }
-                                            },
-                                            child: ProductCardWidget(
-                                                data: products[index],
-                                                isSelected: isSelected));
-                                      });
-                                    },
-                                  ),
-                                )
-                                    : Expanded(
-                                  child: Center(
-                                    child: Text('No Product Found'),
+                                          onTap: (){
+                                            rawText.remove(rawText[index]);
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                            child: Text(
+                                              rawText[index],
+                                              style: AppConst.titleText1Purple,
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                ),
+                                SizedBox(height: 10,),
+                                Text(
+                                  'Quick replies',
+                                  style: AppConst.titleText1,
+                                ),
+                                searchResult.length != 0 ?Container(
+                                  child: ListView.builder(
+                                      padding: EdgeInsets.only(bottom: 20),
+                                      primary: false,
+                                      shrinkWrap: true,
+                                      itemCount: searchResult.length,
+                                      itemBuilder: (_,index){
+                                        return GestureDetector(
+                                          onTap: (){
+                                            setState(() {
+                                              rawText.add(searchResult[index]);
+                                            });
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                            child: Text(
+                                              searchResult[index],
+                                              style: AppConst.titleText1Purple,
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                ):SizedBox()
+                              ],
+                            )),
+                          ),
+                        );
+                      }
+                      else {
+                        return Padding(
+                          padding: EdgeInsets.only(left: 18, bottom: 10),
+                          child: DefaultTabController(
+                            length: tabs.length,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ButtonsTabBar(
+                                  physics: AlwaysScrollableScrollPhysics(),
+                                  backgroundColor: Color(0xff252525),
+                                  unselectedBackgroundColor: Colors.white,
+                                  unselectedLabelStyle:
+                                  TextStyle(color: Color(0xff252525)),
+                                  radius: 20,
+                                  borderColor: Color(0xff707070),
+                                  unselectedBorderColor: Color(0xff707070),
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                  borderWidth: 1,
+                                  labelStyle: TextStyle(
+                                      color: Colors.white, fontWeight: FontWeight.bold),
+                                  tabs: tabs,
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Container(
+                                  height: 450,
+                                  child: TabBarView(
+                                    children: [
+                                      products.length > 0
+                                          ? Expanded(
+                                        child: GridView.builder(
+                                          shrinkWrap: true,
+                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            mainAxisSpacing: 10,
+                                            crossAxisSpacing: 10,
+                                            childAspectRatio:
+                                            ((MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width / 2) / 195),
+                                          ),
+                                          itemCount: products.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Obx(() {
+                                              bool isSelected = PurchasedProductsScreen
+                                                  .products
+                                                  .contains(products[index]);
+                                              return GestureDetector(
+                                                  onTap: () {
+                                                    if (isSelected) {
+                                                      PurchasedProductsScreen.products
+                                                          .remove(products[index]);
+                                                    } else {
+                                                      PurchasedProductsScreen.products
+                                                          .add(products[index]);
+                                                    }
+                                                  },
+                                                  child: ProductCardWidget(
+                                                      data: products[index],
+                                                      isSelected: isSelected));
+                                            });
+                                          },
+                                        ),
+                                      )
+                                          : Expanded(
+                                        child: Center(
+                                          child: Text('No Product Found'),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  )
+                        );
+                      }
+                    },
+                    child: Container(), // this widget goes to the builder's child property. Made for better performance.
+                  ),
                 ],
               ),
             ),
@@ -320,9 +425,10 @@ class _StoreViewState extends State<StoreView> {
                 ),
               ),
             ),
-          ),
+          )
         ],
-      ),
+      )
+
     );
   }
 }
