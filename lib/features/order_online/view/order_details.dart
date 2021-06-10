@@ -2,7 +2,9 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/near_you/view/71_near_you.dart';
+import 'package:seeya/features/scan_receipt/view/purchased_products_screen.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
+import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 import 'package:seeya/main_app/view/widgets/custom_outline_button.dart';
 import 'package:seeya/main_app/view/widgets/gradient_button.dart';
 import 'package:seeya/newMainAPIs.dart';
@@ -126,7 +128,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Pickup from: ', style: TextStyle(color: AppConst.black, fontSize: 10, fontWeight: FontWeight.bold),),
-                    Flexible(child: Text('Postmaster, Bangalore City S.O, Bengaluru, Karnataka, India.', style: TextStyle(color: AppConst.black, fontSize: 10)))
+                    Flexible(child: Text('${UserViewModel.user.value.addresses[UserViewModel.locationIndex.value].address}', style: TextStyle(color: AppConst.black, fontSize: 10)))
                   ],
                 )
               ],
@@ -239,7 +241,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 borderRadius: BorderRadius.circular(4)
             ),
             child: ExpansionTileCard(
-              title: Text('Your Orders (8 Items)', style: TextStyle(fontSize: 14, fontFamily: 'Stag', color: AppConst.black),),
+              title: Text('Your Orders ${PurchasedProductsScreen.rawItem.length+PurchasedProductsScreen.products.length}', style: TextStyle(fontSize: 14, fontFamily: 'Stag', color: AppConst.black),),
               elevation: 0.1,
               borderRadius: BorderRadius.circular(4),
               children: [

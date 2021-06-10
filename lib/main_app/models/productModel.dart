@@ -42,6 +42,17 @@ class StoreData {
   };
 }
 
+
+class RawProduct{
+  String name;
+  int quantity;
+
+  RawProduct({this.name,this.quantity = 1});
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    'quantity' : quantity ?? 1
+  };
+}
 class ProductModel {
   ProductModel({
     this.id,
@@ -54,7 +65,7 @@ class ProductModel {
     this.cashbackPercentage,
     this.details,
     this.status,
-    this.quantity,
+    this.quantity = 1,
   });
 
   String id;

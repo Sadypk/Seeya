@@ -25,6 +25,7 @@ class StoreView extends StatefulWidget {
 }
 
 class _StoreViewState extends State<StoreView> {
+
   TextEditingController searchController = TextEditingController();
   bool dataLoad = true;
   List<ProductModel> products = [];
@@ -34,7 +35,7 @@ class _StoreViewState extends State<StoreView> {
   GetChatOrderAutocompleteData getChatOrderAutocompleteData;
   bool keyboard = false;
   List<List<String>> selectedTab = [];
-  RxList<String> rawText = <String>[].obs;
+
   List<String> searchResult = [];
   @override
   void initState() {
@@ -231,7 +232,7 @@ class _StoreViewState extends State<StoreView> {
                         ),
                         GestureDetector(
                           onTap: (){
-                            rawText.add(searchController.text);
+                            PurchasedProductsScreen.rawItem.add(RawProduct(name:searchController.text ,quantity: 1));
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -253,24 +254,24 @@ class _StoreViewState extends State<StoreView> {
                             child: Obx(()=>Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                rawText.isEmpty ?SizedBox():Text(
+                                PurchasedProductsScreen.rawItem.isEmpty ?SizedBox():Text(
                                   'Added List',
                                   style: AppConst.titleText1,
                                 ),
-                                rawText.isEmpty ?SizedBox():Container(
+                                PurchasedProductsScreen.rawItem.isEmpty ?SizedBox():Container(
                                   child: ListView.builder(
                                       primary: false,
                                       shrinkWrap: true,
-                                      itemCount: rawText.length,
+                                      itemCount: PurchasedProductsScreen.rawItem.length,
                                       itemBuilder: (_,index){
                                         return GestureDetector(
                                           onTap: (){
-                                            rawText.remove(rawText[index]);
+                                            PurchasedProductsScreen.rawItem.remove(PurchasedProductsScreen.rawItem[index]);
                                           },
                                           child: Padding(
                                             padding: const EdgeInsets.symmetric(vertical: 4.0),
                                             child: Text(
-                                              rawText[index],
+                                              PurchasedProductsScreen.rawItem[index].name,
                                               style: AppConst.titleText1Purple,
                                             ),
                                           ),
@@ -292,7 +293,7 @@ class _StoreViewState extends State<StoreView> {
                                         return GestureDetector(
                                           onTap: (){
                                             setState(() {
-                                              rawText.add(searchResult[index]);
+                                              PurchasedProductsScreen.rawItem.add(RawProduct(name:searchResult[index] ,quantity: 1));
                                             });
                                           },
                                           child: Padding(
@@ -402,7 +403,7 @@ class _StoreViewState extends State<StoreView> {
 
           GestureDetector(
             onTap: (){
-              Get.to(()=>CartPage(data: widget.data,));
+              Get.to(()=>CartPage(data: widget.data,storeData: storeData,));
             },
             child: Container(
               decoration: BoxDecoration(
@@ -415,7 +416,7 @@ class _StoreViewState extends State<StoreView> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Added to Cart(0 items)',
+                    Text('Added to Cart (${PurchasedProductsScreen.rawItem.length+PurchasedProductsScreen.products.length} items)',
                         style: TextStyle(color: Colors.white, fontSize: 14)),
                     Text('View Cart',
                         style: TextStyle(
