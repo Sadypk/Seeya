@@ -66,13 +66,17 @@ class _NearestStoresMainPageState extends State<NearestStoresMainPage> {
     );
   }
 
-  List<BusinessType> topData = [];
+  List<BusinessType> topData;
+
+
 
   bool dataLoad = true;
 
   ///top data
   getData() async{
-    topData = await NewApi.scanReceiptCategoryCountData();
+    topData = await NewApi.getSpecialOfferViewAllPageCategoryWithProductCountData();
+
+    print(topData);
 
     setState(() {
       dataLoad = false;
@@ -108,25 +112,25 @@ class _NearestStoresMainPageState extends State<NearestStoresMainPage> {
                 onTap: (){
                   Get.to(()=>NearestStoresGroceryReceipts(type: topData[0]));
                 },
-                child: customTile(topData[0].name, topData[0].count)),
+                child: customTile(topData[0].name, topData[0].productCount)),
               Divider(color: Colors.grey[200], thickness: 1, height: 20,),
               InkWell(
                   onTap: (){
                     Get.to(()=>NearestStoresGroceryReceipts(type: topData[1]));
                   },
-                  child: customTile(topData[1].name, topData[1].count)),
+                  child: customTile(topData[1].name, topData[1].productCount)),
               Divider(color: Colors.grey[200], thickness: 1, height: 20,),
               InkWell(
                   onTap: (){
                     Get.to(()=>NearestStoresGroceryReceipts(type: topData[2]));
                   },
-                  child: customTile(topData[2].name, topData[2].count)),
+                  child: customTile(topData[2].name, topData[2].productCount)),
               Divider(color: Colors.grey[200], thickness: 1, height: 20,),
               InkWell(
                   onTap: (){
                     Get.to(()=>NearestStoresGroceryReceipts(type: topData[3]));
                   },
-                  child: customTile(topData[3].name, topData[3].count)),
+                  child: customTile(topData[3].name, topData[3].productCount)),
               Divider(color: Colors.grey[200], thickness: 1, height: 20,),
               SizedBox(height: 15,),
               Column(

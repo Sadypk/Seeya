@@ -60,18 +60,22 @@ class SpecialOfferTile extends StatelessWidget {
   }
 }
 
+enum DataType {STORE,PRODUCT}
+
 class SpecialOfferTileData{
   String image;
   String title;
   String subtitle1;
   String subtitle2;
   String label;
+  DataType type;
   SpecialOfferTileData({
     @required this.title,
     @required this.image,
     @required this.subtitle1,
     @required this.subtitle2,
     @required this.label,
+    @required this.type
 });
 
   static SpecialOfferTileData convertData(data){
@@ -83,6 +87,7 @@ class SpecialOfferTileData{
     final date = new DateTime.now();
 
     if(data['__typename'] == 'ProductData'){
+
       title = data['name'];
       subTitle1 = 'Cash back amount with selling price';
       subTitle2 = 'From ${data['store']['name']}';
@@ -109,7 +114,7 @@ class SpecialOfferTileData{
 
 
 
-    return SpecialOfferTileData(title: title, image: image, subtitle1: subTitle1, subtitle2: subTitle2, label: label);
+    return SpecialOfferTileData(title: title, image: image, subtitle1: subTitle1, subtitle2: subTitle2, label: label, type: data['__typename'] == 'ProductData' ? DataType.PRODUCT : DataType.STORE);
   }
 
   static List<SpecialOfferTileData> parsedList(data){
@@ -152,7 +157,8 @@ class SpecialOfferTileData{
           title: title,
           subtitle1: subTitle1,
           subtitle2: subTitle2,
-          label: label
+          label: label,
+          type: data['__typename'] == 'ProductData' ? DataType.PRODUCT : DataType.STORE
       );
       finalData.add(temp);
     });

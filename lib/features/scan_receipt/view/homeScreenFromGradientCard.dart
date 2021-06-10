@@ -33,6 +33,7 @@ class _HomeScreenFromGradientCardState extends State<HomeScreenFromGradientCard>
   getData() async{
 
     topData = await topStores(widget.data.id);
+    topData = topData.where((element) => element['products'].length > 0).toList();
     bottomData = await bottomStores(widget.data.id);
     setState(() {
       dataLoad = false;
