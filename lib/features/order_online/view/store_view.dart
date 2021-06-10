@@ -72,7 +72,6 @@ class _StoreViewState extends State<StoreView> {
   }
 
   onSearchTextChanged(String text) async {
-    print(text);
     searchResult.clear();
     if (text.isEmpty) {
       getChatOrderAutocompleteData.data.forEach((element) {
@@ -85,7 +84,6 @@ class _StoreViewState extends State<StoreView> {
     getChatOrderAutocompleteData.data.forEach((element) {
       if (element.name.contains(text.toLowerCase()))
         searchResult.add(element.name);
-      print('here');
     });
 
     setState(() {});
@@ -232,7 +230,10 @@ class _StoreViewState extends State<StoreView> {
                         ),
                         GestureDetector(
                           onTap: (){
-                            PurchasedProductsScreen.rawItem.add(RawProduct(name:searchController.text ,quantity: 1));
+                            if(searchController.text.isNotEmpty){
+                              PurchasedProductsScreen.rawItem.add(RawProduct(name:searchController.text ,quantity: 1));
+                            }
+
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 10),

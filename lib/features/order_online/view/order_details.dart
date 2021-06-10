@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/near_you/view/71_near_you.dart';
 import 'package:seeya/features/scan_receipt/view/purchased_products_screen.dart';
+import 'package:seeya/home.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 import 'package:seeya/main_app/view/widgets/custom_outline_button.dart';
@@ -21,6 +22,13 @@ class _OrderDetailsState extends State<OrderDetails> {
   bool customerLocations = false;
   @override
   Widget build(BuildContext context) {
+    int totalItems = 0;
+    PurchasedProductsScreen.rawItem.forEach((element) {
+      totalItems += element.quantity;
+    });
+    PurchasedProductsScreen.products.forEach((element) {
+      totalItems += element.quantity;
+    });
     return Scaffold(
       appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -30,7 +38,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                 constraints: BoxConstraints(),
                 padding: EdgeInsets.only(right: 10),
                 onPressed: () {
-                  Get.back();
+                  PurchasedProductsScreen.rawItem.clear();
+                  PurchasedProductsScreen.products.clear();
+                  Get.offAll(()=>Home());
                 },
                 icon: Icon(Icons.arrow_back),
                 color: Colors.white,
@@ -241,26 +251,46 @@ class _OrderDetailsState extends State<OrderDetails> {
                 borderRadius: BorderRadius.circular(4)
             ),
             child: ExpansionTileCard(
-              title: Text('Your Orders ${PurchasedProductsScreen.rawItem.length+PurchasedProductsScreen.products.length}', style: TextStyle(fontSize: 14, fontFamily: 'Stag', color: AppConst.black),),
+              title: Text('Your Orders $totalItems items', style: TextStyle(fontSize: 14, fontFamily: 'Stag', color: AppConst.black),),
               elevation: 0.1,
               borderRadius: BorderRadius.circular(4),
               children: [
                 Divider(height: 1, color: Color(0xff707070).withOpacity(0.25),thickness: 1,),
                 Container(
                   child: ListView.builder(
-                    shrinkWrap: true,
-                      itemCount: 4,
+                      shrinkWrap: true,
+                      itemCount: PurchasedProductsScreen.rawItem.length,
                       itemBuilder: (BuildContext context, int index){
                         return Container(
-
                           height: 25,
                           padding: EdgeInsets.symmetric(horizontal: 12),
                           color: index%2!=0?Color(0xffC4C4C4).withOpacity(0.2):Colors.white,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Bread', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, fontFamily: 'Stag', color: AppConst.black),),
-                              Text('X2', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, fontFamily: 'Stag', color: AppConst.black),)
+                              Text(PurchasedProductsScreen.rawItem[index].name, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, fontFamily: 'Stag', color: AppConst.black),),
+                              Text('x${PurchasedProductsScreen.rawItem[index].quantity}', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, fontFamily: 'Stag', color: AppConst.black),)
+                            ],
+                          ),
+                        );
+                      }
+                  ),
+                ),
+                Divider(height: 1, color: Color(0xff707070).withOpacity(0.25),thickness: 1,),
+                Container(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                      itemCount: PurchasedProductsScreen.products.length,
+                      itemBuilder: (BuildContext context, int index){
+                        return Container(
+                          height: 25,
+                          padding: EdgeInsets.symmetric(horizontal: 12),
+                          color: index%2!=0?Color(0xffC4C4C4).withOpacity(0.2):Colors.white,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(PurchasedProductsScreen.products[index].name, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, fontFamily: 'Stag', color: AppConst.black),),
+                              Text('x${PurchasedProductsScreen.products[index].quantity}', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, fontFamily: 'Stag', color: AppConst.black),)
                             ],
                           ),
                         );

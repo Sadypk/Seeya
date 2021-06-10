@@ -49,7 +49,7 @@ class RawProduct{
 
   RawProduct({this.name,this.quantity = 1});
   Map<String, dynamic> toJson() => {
-    "name": name,
+    "item": name,
     'quantity' : quantity ?? 1
   };
 }

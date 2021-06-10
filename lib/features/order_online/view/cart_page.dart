@@ -9,6 +9,7 @@ import 'package:seeya/features/settings/view/21_manage_address.dart';
 import 'package:seeya/main_app/models/productModel.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
+import 'package:seeya/main_app/util/custom_dialog.dart';
 import 'package:seeya/main_app/util/snack.dart';
 import 'package:seeya/newMainAPIs.dart';
 
@@ -126,8 +127,10 @@ class _CartPageState extends State<CartPage> {
               ),
               Checkbox(
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                checkColor: Colors.white,
-                activeColor: AppConst.themePurple,
+                checkColor: AppConst.themePurple,
+                activeColor: Colors.white,
+                focusColor: AppConst.themePurple,
+                hoverColor: AppConst.themePurple,
                 value: checkBoxValue.value,
                 onChanged: (bool value) {
                   setState(() {
@@ -183,8 +186,24 @@ class _CartPageState extends State<CartPage> {
                                   GestureDetector(
                                     onTap: () {
                                       setState(() {
-                                        if (item.quantity != 0) {
+                                        if (item.quantity != 1) {
                                           item.quantity--;
+                                        }else{
+                                          var dialog = CustomAlertDialog(
+                                              title: "Remove Item",
+                                              message: "Are you sure, do you remove this item?",
+                                              onPostivePressed: () {
+                                                setState(() {
+                                                  PurchasedProductsScreen.rawItem.remove(item);
+                                                  Get.back();
+                                                });
+                                              },
+                                              positiveBtnText: 'Yes',
+                                              negativeBtnText: 'No');
+
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) => dialog);
                                         }
                                       });
                                     },
@@ -233,7 +252,7 @@ class _CartPageState extends State<CartPage> {
               Container(
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 2),
                   child: Text(
-                    'Amount',
+                    PurchasedProductsScreen.products.length == 0 && PurchasedProductsScreen.products.length == 0?'Cart is empty':'Amount',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   )),
               ListView.builder(
@@ -274,9 +293,29 @@ class _CartPageState extends State<CartPage> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    if (item.quantity != 0) {
-                                      item.quantity--;
-                                    }
+                                   setState(() {
+                                     if (item.quantity != 1) {
+                                       item.quantity--;
+                                     }
+                                     else{
+                                       var dialog = CustomAlertDialog(
+                                           title: "Remove Item",
+                                           message: "Are you sure, do you remove this item?",
+                                           onPostivePressed: () {
+                                             setState(() {
+                                               PurchasedProductsScreen.products.remove(item);
+                                               Get.back();
+                                             });
+
+                                           },
+                                           positiveBtnText: 'Yes',
+                                           negativeBtnText: 'No');
+
+                                       showDialog(
+                                           context: context,
+                                           builder: (BuildContext context) => dialog);
+                                     }
+                                   });
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -422,21 +461,30 @@ class _CartPageState extends State<CartPage> {
                       style: TextStyle(color: Colors.white, fontSize: 14)),
                   GestureDetector(
                     onTap: () async {
-                      bool error = await ConfirmOrderRepo.placeOrder(
-                        images: null,
-                        total: 100,
-                        store: widget.data,
-                        products: PurchasedProductsScreen.products,
-                        rawItem: PurchasedProductsScreen.rawItem,
-                        order_type: widget.data.store_type,
-                      );
-                      if (error) {
-                        Snack.bottom('Error', 'Failed to send order');
-                      } else {
-                        Get.offAll(() => OrderDetails(
-                              data: widget.data,
-                            ));
-                        Snack.top('Success', 'Order Sent Successfully');
+                      if(PurchasedProductsScreen.products.length != 0 || PurchasedProductsScreen.products.length != 0){
+                        double total = 0;
+                        PurchasedProductsScreen.products.forEach((element) {
+                          total += element.sellingPrice*element.quantity;
+                        });
+                        bool error = await ConfirmOrderRepo.placeOrder(
+                          images: null,
+                          total: double.parse(total.toStringAsFixed(2)),
+                          store: widget.data,
+                          products: PurchasedProductsScreen.products,
+                          rawItem: PurchasedProductsScreen.rawItem,
+                          order_type: widget.data.store_type,
+                        );
+                        if (error) {
+                          Snack.bottom('Error', 'Failed to send order');
+                        } else {
+
+                          Get.offAll(() => OrderDetails(
+                            data: widget.data,
+                          ));
+                          Snack.top('Confirmed', 'Order Sent Successfully');
+                        }
+                      }else{
+                        Snack.bottom('Empty Cart', 'No item to order');
                       }
                     },
                     child: Text('Confirm Order',
