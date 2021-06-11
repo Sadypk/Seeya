@@ -465,7 +465,9 @@ class _CartPageState extends State<CartPage> {
                         double total = 0;
                         PurchasedProductsScreen.products.forEach((element) {
                           total += element.sellingPrice*element.quantity;
+
                         });
+
                         bool error = await ConfirmOrderRepo.placeOrder(
                           images: null,
                           total: double.parse(total.toStringAsFixed(2)),
@@ -473,6 +475,7 @@ class _CartPageState extends State<CartPage> {
                           products: PurchasedProductsScreen.products,
                           rawItem: PurchasedProductsScreen.rawItem,
                           order_type: widget.data.store_type,
+                          wallet_amount: checkBoxValue.value? widget.storeData.walletAmount : 0
                         );
                         if (error) {
                           Snack.bottom('Error', 'Failed to send order');

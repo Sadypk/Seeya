@@ -24,7 +24,7 @@ class SpecialOffer extends StatelessWidget {
               Get.to(() => StoreView(data: data[index]));
             },
             child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
+
                 child: Column(
                   children: [
                     StoreShopNowTile2(label: 'Something', boomModel: data[index]),

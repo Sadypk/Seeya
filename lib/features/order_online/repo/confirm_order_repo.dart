@@ -7,7 +7,7 @@ import 'package:seeya/main_app/util/imagePicker.dart';
 import 'package:seeya/newMainAPIs.dart';
 
 class ConfirmOrderRepo{
-  static Future<bool> placeOrder({List<File> images, BoomModel store,var rawItem, var products, double total, String order_type}) async{
+  static Future<bool> placeOrder({List<File> images, BoomModel store,var rawItem, var products, double total, String order_type, int wallet_amount}) async{
     final mutation = r'''
        mutation(
       $image: String 
@@ -19,7 +19,8 @@ class ConfirmOrderRepo{
       $lat: Float 
       $lng: Float 
       $order_type: String 
-      $address: String){
+      $address: String
+      $wallet_amount: Float){
       placeOrder(orderInput:{
         order_type: $order_type
         receipt: $image
@@ -28,6 +29,7 @@ class ConfirmOrderRepo{
         raw_items: $raw_items
         total: $total
         cashback_percentage: $cashback
+        wallet_amount: $wallet_amount
         address: $address
         lat: $lat
         lng: $lng
@@ -66,6 +68,7 @@ class ConfirmOrderRepo{
         'storeId' : store.id,
         'total' : total,
         'cashback' : cashBack,
+        'wallet_amount': wallet_amount,
         'address': UserViewModel.user.value.addresses[UserViewModel.locationIndex.value].address,
         'lat': UserViewModel.user.value.addresses[UserViewModel.locationIndex.value].location.lat,
         'lng': UserViewModel.user.value.addresses[UserViewModel.locationIndex.value].location.lng,
@@ -74,7 +77,7 @@ class ConfirmOrderRepo{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(document: gql(mutation),variables: variables));
 
-      print(result.data);
+      print(variables);
 
       return result.data['placeOrder']['error'];
     }catch(e){

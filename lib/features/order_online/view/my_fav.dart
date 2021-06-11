@@ -1,23 +1,20 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:seeya/features/order_online/repo/get_all_business_type_repo.dart';
-import 'package:seeya/features/order_online/repo/my_fav_repo.dart';
-import 'package:seeya/features/order_online/repo/my_special_offers.dart';
 import 'package:seeya/features/order_online/view_model/recent_places.dart';
 import 'package:seeya/features/order_online/view_model/special_offer.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/newMainAPIs.dart';
 
 class MyFav extends StatefulWidget {
+  final List<BoomModel> specialOffers;
+  final List<BoomModel> favStores;
+  MyFav({@required this.favStores,@required this.specialOffers});
   @override
   _MyFavState createState() => _MyFavState();
 }
 
 class _MyFavState extends State<MyFav> {
-  List<BoomModel> specialOffers = [];
-  List<BoomModel> favStores = [];
 
   List<BoomModel> allStores = [];
   List<BoomModel> groceries = [];
@@ -25,17 +22,9 @@ class _MyFavState extends State<MyFav> {
   List<BoomModel> pharmacy = [];
   List<BoomModel> restaurant = [];
 
-  List<GetBusinessType> businessTypes = [];
-
-  bool dataLoad = true;
 
   getData() async {
-   // businessTypes = await GetBusinessType.getBusinessTypes();
-
-    favStores = await MyFavRepo.getMyFav();
-    specialOffers = await MySpecialOffers.getMySpecialOffers();
-
-    allStores.addAll(specialOffers);
+    allStores.addAll(widget.specialOffers);
 
     groceries.addAll(allStores.where(
         (element) => element.businesstypeId == '5fde415692cc6c13f9e879fd'));
@@ -45,11 +34,6 @@ class _MyFavState extends State<MyFav> {
         (element) => element.businesstypeId == '5fe0bfef4657be045655cf4a'));
     pharmacy.addAll(allStores.where(
         (element) => element.businesstypeId == '5fe22e111df87913f06a4cc9'));
-
-
-    setState(() {
-      dataLoad = false;
-    });
   }
 
   @override
@@ -60,9 +44,7 @@ class _MyFavState extends State<MyFav> {
 
   @override
   Widget build(BuildContext context) {
-    return dataLoad
-        ? SpinKitDualRing(color: AppConst.themePurple)
-        : SingleChildScrollView(
+    return SingleChildScrollView(
             primary: false,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -84,7 +66,7 @@ class _MyFavState extends State<MyFav> {
                 ),
                 SizedBox(
                   height: Get.height * .31,
-                  child: RecentVisits(data: favStores),
+                  child: RecentVisits(data: widget.favStores),
                 ),
                 SizedBox(
                   height: 25,
