@@ -3,7 +3,9 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart';
+import 'package:seeya/features/scan_receipt/theBoss/view/cameraView.dart';
 import 'package:seeya/features/scan_receipt/view/41_scan_specific_receipts.dart';
+import 'package:seeya/features/settings/view/21_manage_address.dart';
 import 'package:seeya/main_app/models/businessTypes.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
@@ -86,7 +88,7 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
   }
 
 
-  String filterValue;
+  String filterValue = 'distance';
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +100,11 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
         actions: [
           Icon(Icons.search, size: 20,),
           SizedBox(width: 20,),
-          Icon(FeatherIcons.mapPin, size: 16,),
+          GestureDetector(
+            onTap: (){
+              Get.to(()=> ManageAddressScreen(switchLocation: true));
+            },
+            child: Icon(FeatherIcons.mapPin, size: 16,)),
           SizedBox(width: 20,),
         ],
       ),
@@ -140,38 +146,122 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Stores offering cashback', style: AppConst.header2,),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        isDense: true,
-                        hint: Text('Sort by', style: AppConst.descriptionText,),
-                        value: filterValue,
-                        onChanged: (String value){
-                          setState(() {
-                            filterValue = value;
-                          });
-                          if(filterValue == 'lowToHigh'){
-                            setState(() {
-                              favStores.sort((a,b) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
-                              nearStores.sort((a,b) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
-                            });
-                          }else if(filterValue == 'highToLow'){
-                            setState(() {
-                              favStores.sort((b,a) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
-                              nearStores.sort((b,a) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
-                            });
-                          }
-                        },
-                        items: [
-                          DropdownMenuItem(
-                            value: 'lowToHigh',
-                            child: Text('Low to High',style: AppConst.descriptionText),
-                          ),
-                          DropdownMenuItem(
-                            value: 'highToLow',
-                            child: Text('High to Low',style: AppConst.descriptionText),
-                          ),
-                        ],
-                      ),
+                    DropDownIcon(
+                      onPress: (){
+                        Get.bottomSheet(Stack(
+                          children: [
+                            Container(
+                              height: Get.height * .35,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12)
+                                  )
+                              ),
+                              child: StatefulBuilder(builder: (BuildContext context, void Function(void Function()) _setState) {
+
+                                onChanged(value){
+                                  _setState((){
+                                    filterValue = value;
+                                  });
+                                }
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 20,left: 20,right: 20),
+                                      child: Text(
+                                          'Sort by',
+                                          style: AppConst.titleText2
+                                      ),
+                                    ),
+                                    SizedBox(height: 12),
+
+                                    SizedBox(
+                                      height: 40,
+                                      child: RadioListTile(
+                                        value: 'distance',
+                                        groupValue: filterValue,
+                                        onChanged: onChanged,
+                                        contentPadding: EdgeInsets.only(left: 8),
+                                        activeColor: AppConst.themePurple,
+                                        title: Text(
+                                          'Distance'
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 40,
+                                      child: RadioListTile(
+                                        value: 'cashback',
+                                        groupValue: filterValue,
+                                        onChanged: onChanged,
+                                        contentPadding: EdgeInsets.only(left: 8),
+                                        activeColor: AppConst.themePurple,
+                                        title: Text(
+                                          'Cashback'
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 40,
+                                      child: RadioListTile(
+                                        value: 'az',
+                                        groupValue: filterValue,
+                                        onChanged: onChanged,
+                                        contentPadding: EdgeInsets.only(left: 8),
+                                        activeColor: AppConst.themePurple,
+                                        title: Text(
+                                          'A-Z'
+                                        ),
+                                      ),
+                                    ),
+
+                                    Spacer(),
+                                    Center(
+                                      child: GradientButton(
+                                        height: 45,
+                                        width: Get.width * .9,
+                                        onTap: (){
+
+                                          setState(() {
+                                            if(filterValue == 'distance'){
+                                              favStores.sort((a,b) => a.calculated_distance.compareTo(b.calculated_distance));
+                                              nearStores.sort((a,b) => a.calculated_distance.compareTo(b.calculated_distance));
+                                            }else if(filterValue == 'cashback'){
+                                              favStores.sort((a,b) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                                              nearStores.sort((a,b) => a.defaultCashbackOffer.compareTo(b.defaultCashbackOffer));
+                                            }else if(filterValue == 'az'){
+                                              favStores.sort((a,b) => a.name.compareTo(b.name));
+                                              nearStores.sort((a,b) => a.name.compareTo(b.name));
+                                            }
+                                          });
+
+                                          Get.back();
+
+                                        },
+                                        label: 'Done',
+                                        fontStyle: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 12),
+                                  ],
+                                );
+                              },),
+                            ),
+
+                            Positioned(
+                              right: 0,
+                              child: CloseButton(),
+                            )
+                          ],
+                        ));
+                      },
                     )
                   ],
                 ),
@@ -210,6 +300,7 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
       ),
     );
   }
+
 }
 
 class BauBau extends StatelessWidget {
@@ -223,14 +314,42 @@ class BauBau extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20),
         itemBuilder: (BuildContext context, int index){
           BoomModel _store = data[index];
-          return Column(
-            children: [
-              StoreShopNowTile(title: _store.name, image: _store.logo),
-              Divider(color: Colors.grey[200], thickness: 1, height: 20,),
-            ],
+          return GestureDetector(
+            onTap: (){
+              Get.to(() => TheBossCameraScreen(storeModel: _store));
+            },
+            child: Column(
+              children: [
+                StoreShopNowTile(title: _store.name, image: _store.logo),
+                Divider(color: Colors.grey[200], thickness: 1, height: 20,),
+              ],
+            ),
           );
         }
     ) : Center(child: Text('None available'));
   }
 }
 
+class DropDownIcon extends StatelessWidget {
+
+  final onPress;
+
+  const DropDownIcon({Key key, this.onPress}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPress,
+      child: Container(
+        child: Row(
+          children: [
+            Text('Sort by', style: AppConst.descriptionText,),
+            Icon(
+              Icons.arrow_drop_down
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

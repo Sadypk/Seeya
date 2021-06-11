@@ -67,11 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
             pagination: PaginationParams(limit: 20),
 
             /// making sure the chats only the user is in is shown
-            // filter: {
-            //   'members': {
-            //     '\$in': [UserViewModel.user.value.id]
-            //   }
-            // },
+
             /// when there is no chat builds this
             emptyBuilder: (_)=> Center(
               child: Text(

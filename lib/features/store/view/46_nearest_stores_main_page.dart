@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart';
 import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
 import 'package:seeya/features/scan_receipt/view/41_scan_specific_receipts.dart';
+import 'package:seeya/features/settings/view/21_manage_address.dart';
 import 'package:seeya/features/store/view/47_nearest_stores_grocery_receipts.dart';
 import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
@@ -97,8 +98,14 @@ class _NearestStoresMainPageState extends State<NearestStoresMainPage> {
         title: Text('Nearest shops', style: AppConst.appbarTextStyle,),
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
-          IconButton(icon: Icon(Icons.search, size: 20,), onPressed: (){}),
-          IconButton(icon: Icon(FeatherIcons.mapPin, size: 16,), onPressed: (){}),
+          Icon(Icons.search, size: 20,),
+          SizedBox(width: 20),
+          GestureDetector(
+              onTap: (){
+                Get.to(()=> ManageAddressScreen(switchLocation: true));
+              },
+              child: Icon(FeatherIcons.mapPin, size: 16,)),
+          SizedBox(width: 20)
         ],
       ),
       body: dataLoad ? Loader() : DefaultTabController(

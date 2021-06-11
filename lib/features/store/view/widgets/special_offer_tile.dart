@@ -158,7 +158,7 @@ class SpecialOfferTileData{
           subtitle1: subTitle1,
           subtitle2: subTitle2,
           label: label,
-          type: data['__typename'] == 'ProductData' ? DataType.PRODUCT : DataType.STORE
+          type: element.runtimeType == ProductDamnModel ? DataType.PRODUCT : DataType.STORE
       );
       finalData.add(temp);
     });
