@@ -270,10 +270,16 @@ class _StoreViewState extends State<StoreView> {
                                             PurchasedProductsScreen.rawItem.remove(PurchasedProductsScreen.rawItem[index]);
                                           },
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                            child: Text(
-                                              PurchasedProductsScreen.rawItem[index].name,
-                                              style: AppConst.titleText1Purple,
+                                            padding: const EdgeInsets.only(top: 4.0,bottom: 2.0,right:20),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(
+                                                  PurchasedProductsScreen.rawItem[index].name,
+                                                  style: AppConst.titleText1Purple,
+                                                ),
+                                                Icon(Icons.remove_circle_outline,size: 20,)
+                                              ],
                                             ),
                                           ),
                                         );
