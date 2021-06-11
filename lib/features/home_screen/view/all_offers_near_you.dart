@@ -31,6 +31,7 @@ class _AllOffersNearYouState extends State<AllOffersNearYou> {
   @override
   void initState() {
     // TODO: implement initState
+    offersNearYouStores.clear();
     super.initState();
     getData();
   }

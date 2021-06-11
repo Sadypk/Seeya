@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             height: 100,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: NewDataViewModel.homeFavStores.length > 3 ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
               children: NewDataViewModel.homeFavStores.map((e) => Container(
                 margin: EdgeInsets.only(right: 15),
                 child: Column(
@@ -151,111 +151,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
-    // var topPicks = Container(
-    //   padding: EdgeInsets.all(5),
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       Row(
-    //         mainAxisSize: MainAxisSize.max,
-    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //         crossAxisAlignment: CrossAxisAlignment.start,
-    //         children: [
-    //           Row(
-    //             mainAxisSize: MainAxisSize.min,
-    //             children: [
-    //               Icon(Icons.thumb_up_alt_outlined),
-    //               SizedBox(width: 5,),
-    //               Text('Top Picks for you', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-    //             ],
-    //           ),
-    //           InkWell(
-    //               onTap: (){Get.to(AllStoresScreen());},
-    //               child: Text('View All', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),)
-    //           ),
-    //         ],
-    //       ),
-    //       SizedBox(height: 15,),
-    //       Container(
-    //         height: 130,
-    //         child: ListView.builder(
-    //             itemCount: 6,
-    //             scrollDirection: Axis.horizontal,
-    //             itemBuilder: (BuildContext context, int index){
-    //               return TopPicksCardWidget(storeModel: storeList[0],);
-    //             }),
-    //       )
-    //     ],
-    //   ),
-    // );
-
-    // var nearestStore = FutureBuilder(
-    //   future: MainRepo.getAllNearestStore(),
-    //   builder: (_, AsyncSnapshot<List<StoreModel>>snapshot){
-    //     if(snapshot.hasData && snapshot.data != null){
-    //       if(snapshot.data == null){
-    //         return Text('something went wrong');
-    //       }else if(snapshot.data.length == 0){
-    //
-    //         return Container(
-    //           padding: EdgeInsets.all(5),
-    //           child: Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: [
-    //               Row(
-    //                 mainAxisSize: MainAxisSize.max,
-    //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                 crossAxisAlignment: CrossAxisAlignment.start,
-    //                 children: [
-    //                   Text('Online & in stores', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-    //                   InkWell(
-    //                       onTap: (){Get.to(AllStoresScreen());},
-    //                       child: Text('See All', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),)
-    //                   ),
-    //                 ],
-    //               ),
-    //               Text('No stores found', style: TextStyle(fontSize: 12, color: Colors.grey),),
-    //               SizedBox(height: 15,),
-    //             ],
-    //           ),
-    //         );
-    //       }else{
-    //         return Container(
-    //           padding: EdgeInsets.all(5),
-    //           child: Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: [
-    //               Row(
-    //                 mainAxisSize: MainAxisSize.max,
-    //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                 crossAxisAlignment: CrossAxisAlignment.start,
-    //                 children: [
-    //                   Text('Online & in stores', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-    //                   InkWell(
-    //                       onTap: (){Get.to(AllStoresScreen());},
-    //                       child: Text('See All', style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),)
-    //                   ),
-    //                 ],
-    //               ),
-    //               Text('Last-minute gifts with Double Cash Back', style: TextStyle(fontSize: 12, color: Colors.grey),),
-    //               SizedBox(height: 15,),
-    //               ListView.builder(
-    //                 shrinkWrap: true,
-    //                 itemCount: snapshot.data.length,
-    //                 itemBuilder: (context, i) {
-    //                   return StoreTileWidget(storeModel: snapshot.data[i], isClaimable: true, onTap: (){Get.to(StoreScreen(storeModel: snapshot.data[i],));},);
-    //                 },
-    //               ),
-    //             ],
-    //           ),
-    //         );
-    //       }
-    //     }else{
-    //       return SpinKitWave(color: Theme.of(context).primaryColor);
-    //     }
-    //   },
-    // );
-
     var gradientCards = Container(
       height: 90,
       padding: EdgeInsets.only(left: 20),
@@ -274,43 +169,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
-
-    var productList1 = TopProductsViewModel().productList;
-    // var topProducts = Column(
-    //   children: [
-    //     Row(
-    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //       children: [
-    //         Padding(
-    //           padding: EdgeInsets.only(left: 15),
-    //           child: Text('Top Products',
-    //             style: TextStyle(fontWeight: FontWeight.bold),
-    //           ),
-    //         ),
-    //         RawMaterialButton(
-    //           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-    //           // onPressed: widget.onTapViewAll,
-    //           onPressed: (){},
-    //           child: InkWell(
-    //               onTap: (){Get.to(TopProductsScreen());},
-    //               child: Text('View All', style: TextStyle(color: Colors.blue),)
-    //           ),
-    //         )
-    //       ],),
-    //
-    //     Container(
-    //       height: 210,
-    //       child: ListView.builder(
-    //         padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-    //         itemCount: productList1.length,
-    //         scrollDirection: Axis.horizontal,
-    //         itemBuilder: (context, index) {
-    //           return ProductsTileWidget(productModel: productList1[index], );
-    //         },
-    //       ),
-    //     ),
-    //   ],
-    // );
 
     meowList(List<dynamic> datas) => datas.length > 0 ? ListView.builder(
         itemCount: datas.length,

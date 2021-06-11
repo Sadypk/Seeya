@@ -48,9 +48,7 @@ class AuthRepo{
       GraphQLClient client = GqlConfig.getClient();
       QueryResult result = await client.mutate(MutationOptions(
         document: gql(mutationAuth),
-        variables: {
-          'mobile' : '88'+mobile
-        }
+        variables: {'mobile' : '88'+mobile}
       ));
 
       print(result);
@@ -63,10 +61,10 @@ class AuthRepo{
         UserViewModel.setToken(result.data['customerLoginOrSignUp']['token']);
         UserViewModel.setUser(UserModel.fromJson(result.data['customerLoginOrSignUp']['data']));
         UserViewModel.changeUserStatus(UserStatus.LOGGED_IN);
+        print('adding fcm token');
         await NewApi.addFirebaseToken(FCMHandler.fcmToken);
 
-        // TODO turned of chat for faster login
-        /*try{
+        try{
           print('set user');
           await SConfig.client.connectUser(
               User(
@@ -103,7 +101,7 @@ class AuthRepo{
           print(e.toString());
           print('stream update user failed');
           return true;
-        }*/
+        }
 
       }
       return loginError;

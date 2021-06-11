@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:seeya/features/settings/view/21_manage_address.dart';
 import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
@@ -87,7 +88,11 @@ class _FavStoresMainPageState extends State<FavStoresMainPage> {
         actions: [
           Icon(Icons.search, size: 20,),
           SizedBox(width: 20),
-          Icon(FeatherIcons.mapPin, size: 16,),
+          GestureDetector(
+              onTap: (){
+                Get.to(()=> ManageAddressScreen(switchLocation: true));
+              },
+              child: Icon(FeatherIcons.mapPin, size: 16,)),
           SizedBox(width: 20)
         ],
       ),
@@ -246,13 +251,13 @@ class MehMowh extends StatelessWidget {
   const MehMowh({Key key, this.data}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return data.length > 0 ? ListView.builder(
         itemCount: data.length,
         itemBuilder: (BuildContext context, int index){
           return SpecialOfferTile(
               data: data[index]
           );
         }
-    );
+    ) : Center(child: Text('Nothing Found'));
   }
 }

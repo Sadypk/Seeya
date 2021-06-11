@@ -3,8 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart';
+import 'package:seeya/features/settings/view/21_manage_address.dart';
 import 'package:seeya/main_app/config/gqlConfig.dart';
 import 'package:seeya/main_app/models/45_model.dart';
 import 'package:seeya/main_app/models/businessTypes.dart';
@@ -12,6 +14,9 @@ import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
 import 'package:seeya/main_app/view/widgets/custom_outline_button.dart';
+import 'package:seeya/main_app/view/widgets/gradient_button.dart';
+
+import '40_scan_your_receipt.dart';
 
 class HomeScreenFromGradientCard extends StatefulWidget {
   final BusinessType data;
@@ -59,7 +64,11 @@ class _HomeScreenFromGradientCardState extends State<HomeScreenFromGradientCard>
         actions: [
           Icon(Icons.search, size: 20,),
           SizedBox(width: 20),
-          Icon(FeatherIcons.mapPin, size: 16,),
+          GestureDetector(
+              onTap: (){
+                Get.to(()=> ManageAddressScreen(switchLocation: true));
+              },
+              child: Icon(FeatherIcons.mapPin, size: 16,)),
           SizedBox(width: 20)
         ],
       ),
@@ -183,36 +192,120 @@ class _HomeScreenFromGradientCardState extends State<HomeScreenFromGradientCard>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('All restaurants near you', style: AppConst.header2,),
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          isDense: true,
-                          hint: Text('Sort by', style: AppConst.descriptionText,),
-                          value: filterValue,
-                          onChanged: (String value){
-                            setState(() {
-                              filterValue = value;
-                            });
-                            if(filterValue == 'lowToHigh'){
-                              setState(() {
-                                bottomData.sort((a,b) => a.calculated_distance.compareTo(b.calculated_distance));
-                              });
-                            }else if(filterValue == 'highToLow'){
-                              setState(() {
-                                bottomData.sort((b,a) => a.calculated_distance.compareTo(b.calculated_distance));
-                              });
-                            }
-                          },
-                          items: [
-                            DropdownMenuItem(
-                              value: 'lowToHigh',
-                              child: Text('Low to High',style: AppConst.descriptionText),
-                            ),
-                            DropdownMenuItem(
-                              value: 'highToLow',
-                              child: Text('High to Low',style: AppConst.descriptionText),
-                            ),
-                          ],
-                        ))
+                      DropDownIcon(
+                        onPress: (){
+                          Get.bottomSheet(Stack(
+                            children: [
+                              Container(
+                                height: Get.height * .35,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(12),
+                                        topRight: Radius.circular(12)
+                                    )
+                                ),
+                                child: StatefulBuilder(builder: (BuildContext context, void Function(void Function()) _setState) {
+
+                                  onChanged(value){
+                                    _setState((){
+                                      filterValue = value;
+                                    });
+                                  }
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 20,left: 20,right: 20),
+                                        child: Text(
+                                            'Sort by',
+                                            style: AppConst.titleText2
+                                        ),
+                                      ),
+                                      SizedBox(height: 12),
+
+                                      SizedBox(
+                                        height: 40,
+                                        child: RadioListTile(
+                                          value: 'distance',
+                                          groupValue: filterValue,
+                                          onChanged: onChanged,
+                                          contentPadding: EdgeInsets.only(left: 8),
+                                          activeColor: AppConst.themePurple,
+                                          title: Text(
+                                              'Distance'
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 40,
+                                        child: RadioListTile(
+                                          value: 'cashback',
+                                          groupValue: filterValue,
+                                          onChanged: onChanged,
+                                          contentPadding: EdgeInsets.only(left: 8),
+                                          activeColor: AppConst.themePurple,
+                                          title: Text(
+                                              'Cashback'
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 40,
+                                        child: RadioListTile(
+                                          value: 'az',
+                                          groupValue: filterValue,
+                                          onChanged: onChanged,
+                                          contentPadding: EdgeInsets.only(left: 8),
+                                          activeColor: AppConst.themePurple,
+                                          title: Text(
+                                              'A-Z'
+                                          ),
+                                        ),
+                                      ),
+
+                                      Spacer(),
+                                      Center(
+                                        child: GradientButton(
+                                          height: 45,
+                                          width: Get.width * .9,
+                                          onTap: (){
+
+                                            setState(() {
+                                              if(filterValue == 'distance'){
+                                                bottomData.sort((a,b) => a.calculated_distance.compareTo(b.calculated_distance));
+                                              }else if(filterValue == 'cashback'){
+                                                bottomData.sort((a,b) => a.defaultCashback.compareTo(b.defaultCashback));
+                                              }else if(filterValue == 'az'){
+                                                bottomData.sort((a,b) => a.name.compareTo(b.name));
+                                              }
+                                            });
+
+                                            Get.back();
+
+                                          },
+                                          label: 'Done',
+                                          fontStyle: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 12),
+                                    ],
+                                  );
+                                },),
+                              ),
+
+                              Positioned(
+                                right: 0,
+                                child: CloseButton(),
+                              )
+                            ],
+                          ));
+                        },
+                      )
                     ],
                   ),
                 ),

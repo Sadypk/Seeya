@@ -381,7 +381,7 @@ class NewApi{
 
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
-      // logger.i(result.data);
+      logger.i(result.data);
       if(!result.data['getFavoritePageData']['error']){
         NewDataViewModel.grocery = FavPageDataModel.fromJson(result.data['getFavoritePageData']['data']['Grocery']);
         NewDataViewModel.fresh = FavPageDataModel.fromJson(result.data['getFavoritePageData']['data']['Fresh']);
@@ -405,7 +405,7 @@ class NewApi{
         name
         logo
         flag
-        distance
+        calculated_distance
         default_welcome_offer
         promotion_welcome_offer_status
         promotion_welcome_offer
@@ -466,12 +466,14 @@ class NewApi{
           }
         }
 
-        data.add({
-          'store' : element.id,
-          'balance' : offer,
-          'lat' : UserViewModel.currentLocation.value.latitude,
-          'lng' : UserViewModel.currentLocation.value.longitude,
-        });
+        if(element.flag == 'true'){
+          data.add({
+            'store' : element.id,
+            'balance' : offer,
+            'lat' : UserViewModel.currentLocation.value.latitude,
+            'lng' : UserViewModel.currentLocation.value.longitude,
+          });
+        }
       });
 
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
@@ -610,6 +612,7 @@ class NewApi{
       name
       logo
       _id
+      calculated_distance
       default_cashback
       default_welcome_offer
       promotion_cashback
@@ -668,6 +671,7 @@ class NewApi{
       name
       logo
       _id
+      calculated_distance
       default_cashback
       default_welcome_offer
       promotion_cashback
@@ -1126,7 +1130,7 @@ class BoomModel {
     name: json["name"],
     logo: json["logo"],
     flag: json["flag"],
-    distance: json["distance"],
+    distance: json["calculated_distance"],
     defaultWelcomeOffer: json["default_welcome_offer"],
     promotionWelcomeOfferStatus: json["promotion_welcome_offer_status"],
     promotionWelcomeOffer: json["promotion_welcome_offer"],
