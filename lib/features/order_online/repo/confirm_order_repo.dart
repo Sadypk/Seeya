@@ -61,7 +61,7 @@ class ConfirmOrderRepo{
       // TODO sending only one image
 
       final variables = {
-        'order_type' : order_type,
+        'order_type' : 'online',
         'image' : imageLinks[0],
         'products' : List.from(products.map((e) => e.toJson())),
         'raw_items' : List.from(rawItem.map((e) => e.toJson())),

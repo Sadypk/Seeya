@@ -467,58 +467,56 @@ class _StoreViewState extends State<StoreView> {
                                                     .toList();
 
                                             return categoryProducts.length > 0
-                                                ? Expanded(
-                                                    child: GridView.builder(
-                                                      shrinkWrap: true,
-                                                      gridDelegate:
-                                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                                        crossAxisCount: 2,
-                                                        mainAxisSpacing: 10,
-                                                        crossAxisSpacing: 10,
-                                                        childAspectRatio:
-                                                            ((MediaQuery.of(context)
-                                                                        .size
-                                                                        .width /
-                                                                    2) /
-                                                                195),
-                                                      ),
-                                                      itemCount:
-                                                          categoryProducts
-                                                              .length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        return Obx(() {
-                                                          bool isSelected =
+                                                ? GridView.builder(
+                                                  shrinkWrap: true,
+                                                  gridDelegate:
+                                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 2,
+                                                    mainAxisSpacing: 10,
+                                                    crossAxisSpacing: 10,
+                                                    childAspectRatio:
+                                                        ((MediaQuery.of(context)
+                                                                    .size
+                                                                    .width /
+                                                                2) /
+                                                            195),
+                                                  ),
+                                                  itemCount:
+                                                      categoryProducts
+                                                          .length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return Obx(() {
+                                                      bool isSelected =
+                                                          PurchasedProductsScreen
+                                                              .products
+                                                              .contains(
+                                                                  categoryProducts[
+                                                                      index]);
+                                                      return GestureDetector(
+                                                          onTap: () {
+                                                            if (isSelected) {
                                                               PurchasedProductsScreen
                                                                   .products
-                                                                  .contains(
-                                                                      categoryProducts[
-                                                                          index]);
-                                                          return GestureDetector(
-                                                              onTap: () {
-                                                                if (isSelected) {
-                                                                  PurchasedProductsScreen
-                                                                      .products
-                                                                      .remove(categoryProducts[
-                                                                          index]);
-                                                                } else {
-                                                                  PurchasedProductsScreen
-                                                                      .products
-                                                                      .add(categoryProducts[
-                                                                          index]);
-                                                                }
-                                                              },
-                                                              child: ProductCardWidget(
-                                                                  data:
-                                                                      categoryProducts[
-                                                                          index],
-                                                                  isSelected:
-                                                                      isSelected));
-                                                        });
-                                                      },
-                                                    ),
-                                                  )
+                                                                  .remove(categoryProducts[
+                                                                      index]);
+                                                            } else {
+                                                              PurchasedProductsScreen
+                                                                  .products
+                                                                  .add(categoryProducts[
+                                                                      index]);
+                                                            }
+                                                          },
+                                                          child: ProductCardWidget(
+                                                              data:
+                                                                  categoryProducts[
+                                                                      index],
+                                                              isSelected:
+                                                                  isSelected));
+                                                    });
+                                                  },
+                                                )
                                                 : Expanded(
                                                     child: Center(
                                                       child: Text(

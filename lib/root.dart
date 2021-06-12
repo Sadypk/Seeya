@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:seeya/features/authentication/repository/authRepo.dart';
 import 'package:seeya/features/authentication/view/phone_verification_screen.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/settings/view/21_manage_address.dart';
+import 'package:seeya/home.dart';
 // import 'package:seeya/features/scan_receipt/camera_awesome_files/camerawesome_plugin.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 import 'package:seeya/features/authentication/view/location_picker_screen.dart';
@@ -42,8 +44,23 @@ class _RootState extends State<Root> with TickerProviderStateMixin{
           Get.to(()=>SignInScreen());
         }else{
           if(UserViewModel.user.value.addresses.length > 0){
-            Get.offAll(()=>ManageAddressScreen());
-            // Get.offAll(()=>Home());
+            bool hasActiveAddress = false;
+            int index = 0;
+            LatLng latLng;
+            UserViewModel.user.value.addresses.forEach((element) {
+              if(!hasActiveAddress){
+                index = UserViewModel.user.value.addresses.indexOf(element);
+                latLng = LatLng(element.location.lat, element.location.lng);
+                hasActiveAddress = element.status;
+              }
+            });
+            if(hasActiveAddress){
+              UserViewModel.setLocationIndex(index);
+              UserViewModel.setLocation(latLng);
+              Get.offAll(()=>Home());
+            }else{
+              Get.offAll(()=>ManageAddressScreen());
+            }
           }else{
             Get.offAll(()=>LocationPickerScreen());
           }

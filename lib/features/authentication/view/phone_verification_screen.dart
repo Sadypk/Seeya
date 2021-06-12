@@ -4,9 +4,11 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:seeya/features/authentication/repository/authRepo.dart';
 import 'package:seeya/features/authentication/view/location_picker_screen.dart';
 import 'package:seeya/features/settings/view/21_manage_address.dart';
+import 'package:seeya/home.dart';
 import 'package:seeya/main_app/util/customButton.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
@@ -252,7 +254,23 @@ class _SignInScreenState extends State<SignInScreen>
               GetStorage().write('userInfo', {'mobile' : mobile.text});
               GetStorage().write('backup', {'user' : mobile.text});
               if(UserViewModel.user.value.addresses.length > 0){
-                Get.offAll(()=>ManageAddressScreen());
+                bool hasActiveAddress = false;
+                int index = 0;
+                LatLng latLng;
+                UserViewModel.user.value.addresses.forEach((element) {
+                  if(!hasActiveAddress){
+                    index = UserViewModel.user.value.addresses.indexOf(element);
+                    latLng = LatLng(element.location.lat, element.location.lng);
+                    hasActiveAddress = element.status;
+                  }
+                });
+                if(hasActiveAddress){
+                  UserViewModel.setLocationIndex(index);
+                  UserViewModel.setLocation(latLng);
+                  Get.offAll(()=>Home());
+                }else{
+                  Get.offAll(()=>ManageAddressScreen());
+                }
               }else{
                 Get.offAll(()=>LocationPickerScreen());
               }
