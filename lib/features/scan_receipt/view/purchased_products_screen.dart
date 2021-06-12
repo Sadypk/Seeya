@@ -75,9 +75,9 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
           ),
         ),
         body: ListView.builder(
-          itemCount: 100,
+          itemCount: images.length,
           shrinkWrap: true,
-          itemBuilder: (_, index) => Image.file(images[0]),
+          itemBuilder: (_, index) => Image.file(images[index]),
           // itemBuilder: (_, index) => AssetThumb(asset: assets[index],height: (Get.height * .7).toInt(), width: (Get.width).toInt()),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
