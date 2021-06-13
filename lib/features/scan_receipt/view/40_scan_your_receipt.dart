@@ -20,8 +20,8 @@ class ScanYourReceipt extends StatefulWidget {
 }
 
 class _ScanYourReceiptState extends State<ScanYourReceipt> {
-  List<BoomModel> favStores = [];
-  List<BoomModel> nearStores = [];
+  List<StoreData> favStores = [];
+  List<StoreData> nearStores = [];
   List<BusinessType> typesData = [];
   Widget customTile(BusinessType bType){
     return InkWell(
@@ -304,7 +304,7 @@ class _ScanYourReceiptState extends State<ScanYourReceipt> {
 }
 
 class BauBau extends StatelessWidget {
-  final List<BoomModel> data;
+  final List<StoreData> data;
   const BauBau({Key key, @required this.data}) : super(key: key);
 
   @override
@@ -313,7 +313,7 @@ class BauBau extends StatelessWidget {
         itemCount: data.length,
         padding: EdgeInsets.symmetric(horizontal: 20),
         itemBuilder: (BuildContext context, int index){
-          BoomModel _store = data[index];
+          StoreData _store = data[index];
           return GestureDetector(
             onTap: (){
               Get.to(() => TheBossCameraScreen(storeModel: _store));

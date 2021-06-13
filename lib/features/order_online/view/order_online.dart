@@ -19,10 +19,10 @@ class OrderOnline extends StatefulWidget {
 class _OrderOnlineState extends State<OrderOnline>
     with SingleTickerProviderStateMixin {
   bool dataLoad = true;
-  List<BoomModel> specialOffers;
-  List<BoomModel> favStores;
-  List<BoomModel> allNearStores;
-  List<BoomModel> allStores = [];
+  List<StoreData> specialOffers;
+  List<StoreData> favStores;
+  List<StoreData> allNearStores;
+  List<StoreData> allStores = [];
   bool matcher = false;
 
   @override

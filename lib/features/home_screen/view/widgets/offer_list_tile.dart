@@ -8,7 +8,7 @@ import 'package:seeya/newMainAPIs.dart';
 import '../all_offers_near_you.dart';
 
 class OfferListTile extends StatefulWidget {
-  final BoomModel data;
+  final StoreData data;
 
   const OfferListTile({Key key, this.data}) : super(key: key);
   @override

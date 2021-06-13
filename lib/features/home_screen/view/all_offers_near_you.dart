@@ -11,7 +11,7 @@ import 'package:seeya/main_app/view/widgets/gradient_button.dart';
 import 'package:seeya/newMainAPIs.dart';
 import 'package:get/get.dart';
 
-var offersNearYouStores = <BoomModel>[].obs;
+var offersNearYouStores = <StoreData>[].obs;
 
 class AllOffersNearYou extends StatefulWidget {
   @override

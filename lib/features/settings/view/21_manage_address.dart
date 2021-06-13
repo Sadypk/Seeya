@@ -66,7 +66,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                         return GestureDetector(
                           onTap: () async {
                             UserViewModel.setLocationIndex(index);
-                            UserViewModel.setLocation(LatLng(data.location.lat, data.location.lng));
+                            UserViewModel.setLocation(LatLng(data.location.lat, data.location.lng), data.id);
                             if (widget.switchLocation) {
                               Get.back(result: true);
                             } else {

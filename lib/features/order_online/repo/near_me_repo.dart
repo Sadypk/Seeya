@@ -62,9 +62,9 @@ query($lat:Float,$lng:Float){
         Snack.top('Error',
             result.data['getOrderOnlinePageNearMeStoresData']['msg']);
       } else {
-        return List<BoomModel>.from(result
+        return List<StoreData>.from(result
             .data['getOrderOnlinePageNearMeStoresData']['data']
-            .map((type) => BoomModel.fromJson(type)));
+            .map((type) => StoreData.fromJson(type)));
       }
       return loginError;
     } catch (e) {

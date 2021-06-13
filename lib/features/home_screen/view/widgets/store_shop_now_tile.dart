@@ -66,7 +66,7 @@ class StoreShopNowTile extends StatelessWidget {
 
 class StoreShopNowTile2 extends StatelessWidget {
   final String label;
-  final BoomModel boomModel;
+  final StoreData boomModel;
 
   StoreShopNowTile2({this.label, this.boomModel});
 

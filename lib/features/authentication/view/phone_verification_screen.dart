@@ -266,7 +266,8 @@ class _SignInScreenState extends State<SignInScreen>
                 });
                 if(hasActiveAddress){
                   UserViewModel.setLocationIndex(index);
-                  UserViewModel.setLocation(latLng);
+                  UserViewModel.setLocation(latLng, UserViewModel.user.value.addresses[index].id);
+
                   Get.offAll(()=>Home());
                 }else{
                   Get.offAll(()=>ManageAddressScreen());

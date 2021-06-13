@@ -359,7 +359,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                               if(error){
                                 Snack.top('Sorry', 'Something went wrong');
                               }else{
-                                UserViewModel.setLocation(LatLng(currentPosition.latitude, currentPosition.longitude));
+                                UserViewModel.setLocation(LatLng(currentPosition.latitude, currentPosition.longitude),);
                                 if(LocalStorage.checkFirstTime()){
                                   Get.offAll(()=> AllOffersNearYou());
                                 }else{

@@ -41,7 +41,7 @@ class GetStoreProducts{
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
 
       if(!result.data['getOrderOnlinePageProductsData']['error']){
-        return StoreData.fromJson(result.data['getOrderOnlinePageProductsData']['data']);
+        return ProductData.fromJson(result.data['getOrderOnlinePageProductsData']['data']);
       }else{
         return null;
       }

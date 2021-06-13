@@ -4,35 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:seeya/features/chat/view/chatScreen.dart';
-import 'package:seeya/features/home_screen/view_models/nearest_store_view_model.dart';
-import 'package:seeya/features/home_screen/view_models/top_products_view_model.dart';
-import 'package:seeya/features/products/view/top_products_screen.dart';
+import 'package:seeya/features/order_online/view/cart_page.dart';
 import 'package:seeya/features/scan_receipt/view/40_scan_your_receipt.dart';
 import 'package:seeya/features/scan_receipt/view/45_fav_stores_main_page.dart';
-import 'package:seeya/features/scan_receipt/view/homeScreenFromGradientCard.dart';
 import 'package:seeya/features/settings/view/21_manage_address.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/46_nearest_stores_main_page.dart';
-import 'package:seeya/features/store/view/all_stores_screen.dart';
-import 'package:seeya/features/home_screen/models/banner_model.dart';
-import 'package:seeya/features/home_screen/view/widgets/banner_card_widget.dart';
-import 'package:seeya/features/store/view/store_screen.dart';
 import 'package:seeya/features/store/view/widgets/offer_cards_gradient.dart';
 import 'package:seeya/features/store/view/widgets/special_offer_tile.dart';
-import 'package:seeya/features/store/view/widgets/store_tile_widget.dart';
-import 'package:seeya/features/home_screen/view/widgets/products_tile_widget.dart';
-import 'package:seeya/features/store/view/widgets/top_picks_card_widget.dart';
-import 'package:seeya/mainRepoWithAllApi.dart';
-import 'package:get/get.dart';
+import 'package:seeya/main_app/models/addressModel.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
-import 'package:seeya/main_app/resources/string_resources.dart';
 import 'package:seeya/main_app/user/viewModel/userViewModel.dart';
 import 'package:seeya/main_app/view/widgets/circle_image_widget.dart';
-
-
-import 'package:seeya/newMainAPIs.dart';
 import 'package:seeya/newDataViewModel.dart';
+import 'package:seeya/newMainAPIs.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -47,50 +35,73 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     getNearestStore();
+    getAddresses();
     super.initState();
   }
 
   bool loading = true;
-  getNearestStore()async{
+
+  getNearestStore() async {
     await NewApi.getAllCategories();
     await NewApi.getHomeFavShops();
-    NewDataViewModel.homeSpecialDataRecent.addAll(await NewApi.getHomePageSpecialOfferAndCategoryData(''));
-    NewDataViewModel.homeSpecialDataGrocery.addAll(await NewApi.getHomePageSpecialOfferAndCategoryData('5fde415692cc6c13f9e879fd'));
-    NewDataViewModel.homeSpecialDataFresh.addAll(await NewApi.getHomePageSpecialOfferAndCategoryData('5fdf434058a42e05d4bc2044'));
-    NewDataViewModel.homeSpecialDataRestaurant.addAll(await NewApi.getHomePageSpecialOfferAndCategoryData('5fe0bfef4657be045655cf4a'));
-    NewDataViewModel.homeSpecialDataPharmacy.addAll(await NewApi.getHomePageSpecialOfferAndCategoryData('5fe22e111df87913f06a4cc9'));
+    NewDataViewModel.homeSpecialDataRecent
+        .addAll(await NewApi.getHomePageSpecialOfferAndCategoryData(''));
+    NewDataViewModel.homeSpecialDataGrocery.addAll(
+        await NewApi.getHomePageSpecialOfferAndCategoryData(
+            '5fde415692cc6c13f9e879fd'));
+    NewDataViewModel.homeSpecialDataFresh.addAll(
+        await NewApi.getHomePageSpecialOfferAndCategoryData(
+            '5fdf434058a42e05d4bc2044'));
+    NewDataViewModel.homeSpecialDataRestaurant.addAll(
+        await NewApi.getHomePageSpecialOfferAndCategoryData(
+            '5fe0bfef4657be045655cf4a'));
+    NewDataViewModel.homeSpecialDataPharmacy.addAll(
+        await NewApi.getHomePageSpecialOfferAndCategoryData(
+            '5fe22e111df87913f06a4cc9'));
     setState(() {
       loading = false;
     });
   }
 
+  List<PopupMenuItem<AddressModel>> popup = [];
+
+  getAddresses() {
+    UserViewModel.user.value.addresses.forEach((element) {
+      popup.add(
+        PopupMenuItem<AddressModel>(
+            child: GestureDetector(onTap: () {
+              Get.back();
+              print(element.id);
+            }, child: Text(element.address)),
+            value: element),
+      );
+    });
+  }
+
+  AddressModel selectedAddress = UserViewModel.user.value.addresses[UserViewModel.locationIndex.value];
+
   @override
   Widget build(BuildContext context) {
     var bannerWidget = InkWell(
       child: AspectRatio(
-        aspectRatio: 375/112,
+        aspectRatio: 375 / 112,
         child: Container(
           // padding: EdgeInsets.symmetric(horizontal: padding),
           decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(color: Colors.grey,width: .5)
-            ),
-            image: DecorationImage(
-                image: AssetImage('assets/images/banner.png'),
-                fit: BoxFit.cover
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.shade200,
-                offset: Offset(0,-1),
-                spreadRadius: 3,
-                blurRadius: 3
-              )
-            ]
-          ),
+              border: Border(top: BorderSide(color: Colors.grey, width: .5)),
+              image: DecorationImage(
+                  image: AssetImage('assets/images/banner.png'),
+                  fit: BoxFit.cover),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.shade200,
+                    offset: Offset(0, -1),
+                    spreadRadius: 3,
+                    blurRadius: 3)
+              ]),
         ),
       ),
-      onTap: (){
+      onTap: () {
         Get.to(ScanYourReceipt());
       },
     );
@@ -109,42 +120,54 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.favorite_border_rounded),
-                  SizedBox(width: 5,),
-                  Text('You favorite stores', style: AppConst.header2,),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    'You favorite stores',
+                    style: AppConst.header2,
+                  ),
                 ],
               ),
               InkWell(
-                  onTap: () async{
+                  onTap: () async {
                     // await NewApi.get45_FavStoreMainScreenData();
                     //
                     Get.to(FavStoresMainPage());
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 20),
-                    child: Text('View All', style: AppConst.descriptionTextPurple,),
-                  )
-              ),
+                    child: Text(
+                      'View All',
+                      style: AppConst.descriptionTextPurple,
+                    ),
+                  )),
             ],
           ),
           SizedBox(height: 6),
           Container(
             height: 100,
             child: Row(
-              mainAxisAlignment: NewDataViewModel.homeFavStores.length > 3 ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
-              children: NewDataViewModel.homeFavStores.map((e) => Container(
-                margin: EdgeInsets.only(right: 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleImageWidget(image: e.logo),
-                    SizedBox(height: 12),
-                    Text(
-                      '${e.name.length > 10 ? e.name.substring(0,9)+'...' : e.name}',
-                      style: AppConst.descriptionText2),
-                    Text('${e.defaultCashback}% cashback', style: AppConst.descriptionTextPurple),
-                  ],
-                ),
-              )).toList(),
+              mainAxisAlignment: NewDataViewModel.homeFavStores.length > 3
+                  ? MainAxisAlignment.spaceBetween
+                  : MainAxisAlignment.start,
+              children: NewDataViewModel.homeFavStores
+                  .map((e) => Container(
+                        margin: EdgeInsets.only(right: 15),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircleImageWidget(image: e.logo),
+                            SizedBox(height: 12),
+                            Text(
+                                '${e.name.length > 10 ? e.name.substring(0, 9) + '...' : e.name}',
+                                style: AppConst.descriptionText2),
+                            Text('${e.defaultCashback}% cashback',
+                                style: AppConst.descriptionTextPurple),
+                          ],
+                        ),
+                      ))
+                  .toList(),
             ),
           )
         ],
@@ -155,30 +178,31 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 90,
       padding: EdgeInsets.only(left: 20),
       child: ListView.builder(
-        shrinkWrap: true,
-      padding: EdgeInsets.zero,
-      scrollDirection: Axis.horizontal,
-       itemCount: NewDataViewModel.businessTypes.length,
-       itemBuilder:(_, index)=> OfferCardsGradient(
-         title: NewDataViewModel.businessTypes[index].name,
-         description: 'Get all offer now',
-         begin: gradients[index]['begin'],
-         end: gradients[index]['end'],
-         data: NewDataViewModel.businessTypes[index],
-       )
-      ),
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          scrollDirection: Axis.horizontal,
+          itemCount: NewDataViewModel.businessTypes.length,
+          itemBuilder: (_, index) => OfferCardsGradient(
+                title: NewDataViewModel.businessTypes[index].name,
+                description: 'Get all offer now',
+                begin: gradients[index]['begin'],
+                end: gradients[index]['end'],
+                data: NewDataViewModel.businessTypes[index],
+              )),
     );
 
-
-    meowList(List<dynamic> datas) => datas.length > 0 ? ListView.builder(
-        itemCount: datas.length,
-        primary: false,
-        padding: EdgeInsets.only(bottom: 50),
-        itemBuilder: (BuildContext context, int index){
-          SpecialOfferTileData data = SpecialOfferTileData.convertData(datas[index]);
-          return SpecialOfferTile(data: data);
-        }
-    ) : Align(alignment: Alignment.topCenter,child: Text('Nothing available'));
+    meowList(List<dynamic> datas) => datas.length > 0
+        ? ListView.builder(
+            itemCount: datas.length,
+            primary: false,
+            padding: EdgeInsets.only(bottom: 50),
+            itemBuilder: (BuildContext context, int index) {
+              SpecialOfferTileData data =
+                  SpecialOfferTileData.convertData(datas[index]);
+              return SpecialOfferTile(data: data);
+            })
+        : Align(
+            alignment: Alignment.topCenter, child: Text('Nothing available'));
 
     var specialOffers = DefaultTabController(
         length: 5,
@@ -190,18 +214,26 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Special offers made for you', style: AppConst.titleText1,),
+                  Text(
+                    'Special offers made for you',
+                    style: AppConst.titleText1,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           Get.to(NearestStoresMainPage());
                         },
-                        child: Text('View All', style: AppConst.descriptionTextPurple,)),
+                        child: Text(
+                          'View All',
+                          style: AppConst.descriptionTextPurple,
+                        )),
                   ),
                 ],
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               ButtonsTabBar(
                 physics: AlwaysScrollableScrollPhysics(),
                 backgroundColor: Color(0xff252525),
@@ -212,7 +244,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 unselectedBorderColor: Color(0xff707070),
                 contentPadding: EdgeInsets.symmetric(horizontal: 10),
                 borderWidth: 1,
-                labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                labelStyle:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                 tabs: [
                   Tab(
                     text: "Recent",
@@ -231,7 +264,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Container(
                 height: 500,
                 child: TabBarView(
@@ -246,66 +281,106 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ],
           ),
-        )
-    );
-
-
+        ));
 
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('Home', style: TextStyle(color: Color(0xff252525), fontSize: 14),),
+        title: DropdownButtonHideUnderline(
+          child: DropdownButton<AddressModel>(
+            value:  selectedAddress,
+            onChanged: (address){
+              print(address.address);
+              setState(() {
+                selectedAddress = address;
+              });
+              UserViewModel.setLocationIndex(UserViewModel.user.value.addresses.indexOf(address));
+              UserViewModel.setLocation(LatLng(address.location.lat, address.location.lng), address.id);
+            },
+            items: UserViewModel.user.value.addresses.map((addr) => DropdownMenuItem(
+              child: Container(
+                width: Get.width*.3,
+                child: Text(
+                  addr.address,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Color(0xff252525), fontSize: 14),
+                ),
+              ),
+              value: addr,
+            )).toList(),
+          ),
+        ),
         backgroundColor: Colors.transparent,
         actions: [
-          IconButton(icon: Icon(FeatherIcons.bell, size: 18,), onPressed: () async{
-            await NewApi.getHomePageSpecialOfferAndCategoryData('');
-          }),
-          IconButton(icon: Icon(FeatherIcons.messageSquare, size: 18,), onPressed: () async{
-            if(UserViewModel.userStatus.value == UserStatus.LOGGED_IN){
-              Get.to(()=>ChatScreen());
-            }else{
-              /// do what you want when user is not logged in
-              Get.snackbar('Nope', 'not logged in');
-            }
-          }),
-          IconButton(icon: Icon(FeatherIcons.shoppingCart, size: 18), onPressed: (){
-            Get.to(ManageAddressScreen());
-          }),
+          IconButton(
+              icon: Icon(
+                FeatherIcons.bell,
+                size: 18,
+              ),
+              onPressed: () async {
+                await NewApi.getHomePageSpecialOfferAndCategoryData('');
+              }),
+          IconButton(
+              icon: Icon(
+                FeatherIcons.messageSquare,
+                size: 18,
+              ),
+              onPressed: () async {
+                if (UserViewModel.userStatus.value == UserStatus.LOGGED_IN) {
+                  Get.to(() => ChatScreen());
+                } else {
+                  /// do what you want when user is not logged in
+                  Get.snackbar('Nope', 'not logged in');
+                }
+              }),
+          IconButton(
+              icon: Icon(FeatherIcons.shoppingCart, size: 18),
+              onPressed: () {
+                Get.to(() => CartPage());
+              }),
           SizedBox(width: 8)
         ],
       ),
-      body: loading ? SpinKitDualRing(color: AppConst.themePurple) : SafeArea(
-        child: ListView(
-          children: [
-            bannerWidget,
-            SizedBox(height: 20,),
-            favoriteShops,
-            SizedBox(height: 25,),
-            gradientCards,
-            SizedBox(height: 25,),
-            specialOffers,
-          ],
-        ),
-      ),
+      body: loading
+          ? SpinKitDualRing(color: AppConst.themePurple)
+          : SafeArea(
+              child: ListView(
+                children: [
+                  bannerWidget,
+                  SizedBox(
+                    height: 20,
+                  ),
+                  favoriteShops,
+                  SizedBox(
+                    height: 25,
+                  ),
+                  gradientCards,
+                  SizedBox(
+                    height: 25,
+                  ),
+                  specialOffers,
+                ],
+              ),
+            ),
     );
   }
 }
 
 final gradients = [
   {
-    'begin' : Color(0xff664FB0),
-    'end' : Color(0xffDA58D7),
+    'begin': Color(0xff664FB0),
+    'end': Color(0xffDA58D7),
   },
   {
-    'begin' : Color(0xff8D67E5),
-    'end' : Color(0xffD590C1),
+    'begin': Color(0xff8D67E5),
+    'end': Color(0xffD590C1),
   },
   {
-    'begin' : Color(0xffEF6DA0),
-    'end' : Color(0xffEE8E6B),
+    'begin': Color(0xffEF6DA0),
+    'end': Color(0xffEE8E6B),
   },
   {
-    'begin' : Color(0xff83EAF1),
-    'end' : Color(0xff63A4FF),
+    'begin': Color(0xff83EAF1),
+    'end': Color(0xff63A4FF),
   },
 ];

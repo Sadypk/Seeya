@@ -61,7 +61,7 @@ query($lat:Float,$lng:Float){
         Snack.top('Error',
             result.data['getOrderOnlinePageMyFavoriteStoresData']['msg']);
       } else {
-        return List<BoomModel>.from(result.data['getOrderOnlinePageMyFavoriteStoresData']['data'].map((type) => BoomModel.fromJson(type)));
+        return List<StoreData>.from(result.data['getOrderOnlinePageMyFavoriteStoresData']['data'].map((type) => StoreData.fromJson(type)));
       }
       return loginError;
     } catch (e) {

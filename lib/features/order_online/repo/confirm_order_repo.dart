@@ -7,7 +7,7 @@ import 'package:seeya/main_app/util/imagePicker.dart';
 import 'package:seeya/newMainAPIs.dart';
 
 class ConfirmOrderRepo{
-  static Future<bool> placeOrder({List<File> images, BoomModel store,var rawItem, var products, double total, String order_type, int wallet_amount}) async{
+  static Future<bool> placeOrder({List<File> images, StoreData store,var rawItem, var products, double total, String order_type, int wallet_amount}) async{
     final mutation = r'''
        mutation(
       $image: String 

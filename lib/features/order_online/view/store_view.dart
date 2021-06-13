@@ -6,18 +6,19 @@ import 'package:seeya/features/order_online/model/get_chat_orderList.dart';
 import 'package:seeya/features/order_online/repo/get_chat_orderList_repo.dart';
 import 'package:seeya/features/order_online/repo/get_store_products.dart';
 import 'package:seeya/features/order_online/view/cart_page.dart';
-import 'package:seeya/features/scan_receipt/view/purchased_products_screen.dart';
 import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 import 'package:seeya/main_app/models/productModel.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
+import 'package:seeya/main_app/user/viewModel/cartModel.dart';
 import 'package:seeya/main_app/util/keyboardVisibility.dart';
+import 'package:seeya/main_app/util/snack.dart';
 
 import '../../../newMainAPIs.dart';
 
 class StoreView extends StatefulWidget {
-  final BoomModel data;
+  final StoreData storeData;
 
-  const StoreView({Key key, this.data}) : super(key: key);
+  const StoreView({Key key, this.storeData}) : super(key: key);
 
   @override
   _StoreViewState createState() => _StoreViewState();
@@ -29,7 +30,7 @@ class _StoreViewState extends State<StoreView> {
   List<ProductModel> products = [];
   List<Catalog> catalog = [];
   List<Tab> tabs = [];
-  StoreData storeData;
+  ProductData productData;
   GetChatOrderAutocompleteData getChatOrderAutocompleteData;
   bool keyboard = false;
   List<List<String>> selectedTab = [];
@@ -44,14 +45,13 @@ class _StoreViewState extends State<StoreView> {
   }
 
   getData() async {
-    getChatOrderAutocompleteData =
-        await GetChatOrderListRepo.getCharOrder(widget.data.id);
+    getChatOrderAutocompleteData = await GetChatOrderListRepo.getCharOrder(widget.storeData.id);
     onSearchTextChanged('');
-    storeData = await GetStoreProducts.getStoreProducts(widget.data.id);
-    products.addAll(storeData.products);
+    productData = await GetStoreProducts.getStoreProducts(widget.storeData.id);
+    products.addAll(productData.products);
 
-    storeData.products.forEach((element) {
-      getChatOrderAutocompleteData.data.add(ChatOrderList(id: element.id,name: element.name));
+    productData.products.forEach((element) {
+      getChatOrderAutocompleteData.data.add(ChatOrderList(id: element.id, name: element.name));
 
       if (catalog.length == 0) {
         catalog.add(element.catalog);
@@ -120,21 +120,12 @@ class _StoreViewState extends State<StoreView> {
                       children: [
                         Row(
                           children: [
-                            Text('${widget.data.name}',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
-                            Text(
-                                '(${widget.data.defaultCashbackOffer}% cashback)',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 11)),
+                            Text('${widget.storeData.name}', style: TextStyle(color: Colors.white, fontSize: 16)),
+                            Text('(${widget.storeData.defaultCashbackOffer}% cashback)', style: TextStyle(color: Colors.white, fontSize: 11)),
                           ],
                         ),
-                        Text(
-                            dataLoad
-                                ? ''
-                                : 'Wallet balance: ${storeData.walletAmount == 0 ? widget.data.defaultCashbackOffer : storeData.walletAmount}',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 14)),
+                        Text(dataLoad ? '' : 'Wallet balance: ${productData.walletAmount == 0 ? widget.storeData.defaultCashbackOffer : productData.walletAmount}',
+                            style: TextStyle(color: Colors.white, fontSize: 14)),
                       ],
                     ),
                   ],
@@ -144,8 +135,7 @@ class _StoreViewState extends State<StoreView> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 2),
                       child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white, shape: BoxShape.circle),
+                        decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                         child: Center(
                             child: Padding(
                           padding: const EdgeInsets.all(2),
@@ -159,8 +149,7 @@ class _StoreViewState extends State<StoreView> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 2),
                       child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white, shape: BoxShape.circle),
+                        decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                         child: Center(
                             child: Padding(
                           padding: const EdgeInsets.all(2),
@@ -174,8 +163,7 @@ class _StoreViewState extends State<StoreView> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 2),
                       child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white, shape: BoxShape.circle),
+                        decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                         child: Center(
                             child: Padding(
                           padding: const EdgeInsets.all(2),
@@ -203,13 +191,8 @@ class _StoreViewState extends State<StoreView> {
                         children: [
                           Container(
                             height: 40,
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                    color: Color(0xff252525).withOpacity(0.4)),
-                                color: Colors.white),
+                            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), border: Border.all(color: Color(0xff252525).withOpacity(0.4)), color: Colors.white),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -217,26 +200,18 @@ class _StoreViewState extends State<StoreView> {
                                   child: Row(
                                     children: [
                                       Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 3),
+                                          padding: EdgeInsets.symmetric(horizontal: 3),
                                           child: Icon(
                                             Icons.search,
-                                            color:
-                                                AppConst.black.withOpacity(0.7),
+                                            color: AppConst.black.withOpacity(0.7),
                                           )),
                                       Flexible(
                                           child: TextFormField(
                                         controller: searchController,
                                         onChanged: onSearchTextChanged,
                                         decoration: InputDecoration.collapsed(
-                                            hintText:
-                                                'Enter any product name here',
-                                            hintStyle: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: 'open',
-                                                color: AppConst.black
-                                                    .withOpacity(0.7))),
+                                            hintText: 'Enter any product name here',
+                                            hintStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'open', color: AppConst.black.withOpacity(0.7))),
                                       ))
                                     ],
                                   ),
@@ -244,36 +219,35 @@ class _StoreViewState extends State<StoreView> {
                                 GestureDetector(
                                   onTap: () {
                                     if (searchController.text.isNotEmpty) {
-                                      if (PurchasedProductsScreen.rawItem.isEmpty) {
-                                        PurchasedProductsScreen.rawItem.add(
-                                            RawProduct(
-                                                name: searchController.text,
-                                                quantity: 1));
+                                      if (CartItemModel.rawItem.isEmpty) {
+                                        CartItemModel.rawItem.add(RawProduct(name: searchController.text, quantity: 1));
+                                        if (CartItemModel.selectedStore.isEmpty) {
+                                          CartItemModel.selectedStore.add(widget.storeData);
+                                          CartItemModel.rawItem.add(RawProduct(name: searchController.text, quantity: 1));
+                                          CartItemModel.walletAmount.value = productData.walletAmount;
+                                        } else if (CartItemModel.selectedStore.contains(widget.storeData.id)) {
+                                          CartItemModel.rawItem.add(RawProduct(name: searchController.text, quantity: 1));
+                                        } else {
+                                          Snack.top('Alert!', 'Item from another store is in cart.');
+                                        }
                                       } else {
-                                      bool sameItem = true;
-                                        for(var x in PurchasedProductsScreen.rawItem){
+                                        bool sameItem = true;
+                                        for (var x in CartItemModel.rawItem) {
                                           if (x.name.toLowerCase() != searchController.text.toLowerCase()) {
                                             sameItem = false;
-                                          }else{
+                                          } else {
                                             sameItem = true;
                                           }
-                                       }
-                                        if(!sameItem){
-                                          PurchasedProductsScreen.rawItem.add(
-                                              RawProduct(
-                                                  name: searchController.text,
-                                                  quantity: 1));
+                                        }
+                                        if (!sameItem) {
+                                          CartItemModel.rawItem.add(RawProduct(name: searchController.text, quantity: 1));
                                         }
                                       }
                                     }
                                   },
                                   child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    child: Text('Add',
-                                        style: TextStyle(
-                                            color: AppConst.themePurple,
-                                            fontSize: 14)),
+                                    padding: EdgeInsets.symmetric(horizontal: 10),
+                                    child: Text('Add', style: TextStyle(color: AppConst.themePurple, fontSize: 14)),
                                   ),
                                 ),
                               ],
@@ -284,65 +258,40 @@ class _StoreViewState extends State<StoreView> {
                               keyboard = isKeyboardVisible;
                               if (isKeyboardVisible) {
                                 return Padding(
-                                  padding:
-                                      EdgeInsets.only(left: 18, bottom: 10),
+                                  padding: EdgeInsets.only(left: 18, bottom: 10),
                                   child: SingleChildScrollView(
                                     child: Obx(() => Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            PurchasedProductsScreen
-                                                    .rawItem.isEmpty
+                                            CartItemModel.rawItem.isEmpty
                                                 ? SizedBox()
                                                 : Text(
                                                     'Added List',
                                                     style: AppConst.titleText1,
                                                   ),
-                                            PurchasedProductsScreen
-                                                    .rawItem.isEmpty
+                                            CartItemModel.rawItem.isEmpty
                                                 ? SizedBox()
                                                 : Container(
                                                     child: ListView.builder(
                                                         primary: false,
                                                         shrinkWrap: true,
-                                                        itemCount:
-                                                            PurchasedProductsScreen
-                                                                .rawItem.length,
-                                                        itemBuilder:
-                                                            (_, index) {
+                                                        itemCount: CartItemModel.rawItem.length,
+                                                        itemBuilder: (_, index) {
                                                           return GestureDetector(
                                                             onTap: () {
-                                                              PurchasedProductsScreen
-                                                                  .rawItem
-                                                                  .remove(PurchasedProductsScreen
-                                                                          .rawItem[
-                                                                      index]);
+                                                              CartItemModel.rawItem.remove(CartItemModel.rawItem[index]);
                                                             },
                                                             child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      top: 4.0,
-                                                                      bottom:
-                                                                          2.0,
-                                                                      right:
-                                                                          20),
+                                                              padding: const EdgeInsets.only(top: 4.0, bottom: 2.0, right: 20),
                                                               child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                 children: [
                                                                   Text(
-                                                                    PurchasedProductsScreen
-                                                                        .rawItem[
-                                                                            index]
-                                                                        .name,
-                                                                    style: AppConst
-                                                                        .titleText1Purple,
+                                                                    CartItemModel.rawItem[index].name,
+                                                                    style: AppConst.titleText1Purple,
                                                                   ),
                                                                   Icon(
-                                                                    Icons
-                                                                        .remove_circle_outline,
+                                                                    Icons.remove_circle_outline,
                                                                     size: 20,
                                                                   )
                                                                 ],
@@ -363,54 +312,44 @@ class _StoreViewState extends State<StoreView> {
                                             matchFound
                                                 ? Container(
                                                     child: ListView.builder(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                bottom: 20),
+                                                        padding: EdgeInsets.only(bottom: 20),
                                                         primary: false,
                                                         shrinkWrap: true,
-                                                        itemCount:
-                                                            searchResult.length,
-                                                        itemBuilder:
-                                                            (_, index) {
+                                                        itemCount: searchResult.length,
+                                                        itemBuilder: (_, index) {
                                                           return GestureDetector(
                                                             onTap: () {
-
                                                               setState(() {
-                                                                if (PurchasedProductsScreen.rawItem.isEmpty) {
-                                                                  PurchasedProductsScreen.rawItem.add(RawProduct(
-                                                                      name: searchResult[index],
-                                                                      quantity: 1),
-                                                                  );
+                                                                if (CartItemModel.rawItem.isEmpty) {
+                                                                  if (CartItemModel.selectedStore.isEmpty) {
+                                                                    CartItemModel.selectedStore.add(widget.storeData);
+                                                                    CartItemModel.rawItem.add(RawProduct(name: searchResult[index], quantity: 1));
+                                                                    CartItemModel.walletAmount.value = productData.walletAmount;
+                                                                  } else if (CartItemModel.selectedStore.contains(widget.storeData.id)) {
+                                                                    CartItemModel.rawItem.add(RawProduct(name: searchResult[index], quantity: 1));
+                                                                  } else {
+                                                                    Snack.top('Alert!', 'Item from another store is in cart.');
+                                                                  }
                                                                 } else {
                                                                   bool sameItem = true;
-                                                                  for(var x in PurchasedProductsScreen.rawItem){
+                                                                  for (var x in CartItemModel.rawItem) {
                                                                     if (x.name.toLowerCase() != searchResult[index].toLowerCase()) {
                                                                       sameItem = false;
-                                                                    }else{
+                                                                    } else {
                                                                       sameItem = true;
                                                                     }
                                                                   }
-                                                                  if(!sameItem){
-                                                                    PurchasedProductsScreen.rawItem.add(RawProduct(
-                                                                        name: searchResult[index],
-                                                                        quantity: 1),
-                                                                    );
+                                                                  if (!sameItem) {
+                                                                    CartItemModel.rawItem.add(RawProduct(name: searchResult[index], quantity: 1));
                                                                   }
                                                                 }
                                                               });
-
                                                             },
                                                             child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .symmetric(
-                                                                      vertical:
-                                                                          4.0),
+                                                              padding: const EdgeInsets.symmetric(vertical: 4.0),
                                                               child: Text(
-                                                                searchResult[
-                                                                    index],
-                                                                style: AppConst
-                                                                    .titleText1Purple,
+                                                                searchResult[index],
+                                                                style: AppConst.titleText1Purple,
                                                               ),
                                                             ),
                                                           );
@@ -423,33 +362,24 @@ class _StoreViewState extends State<StoreView> {
                                 );
                               } else {
                                 return Padding(
-                                  padding:
-                                      EdgeInsets.only(left: 18, bottom: 10),
+                                  padding: EdgeInsets.only(left: 18, bottom: 10),
                                   child: DefaultTabController(
                                     length: tabs.length,
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         ButtonsTabBar(
-                                          physics:
-                                              AlwaysScrollableScrollPhysics(),
+                                          physics: AlwaysScrollableScrollPhysics(),
                                           backgroundColor: Color(0xff252525),
-                                          unselectedBackgroundColor:
-                                              Colors.white,
-                                          unselectedLabelStyle: TextStyle(
-                                              color: Color(0xff252525)),
+                                          unselectedBackgroundColor: Colors.white,
+                                          unselectedLabelStyle: TextStyle(color: Color(0xff252525)),
                                           radius: 20,
                                           borderColor: Color(0xff707070),
-                                          unselectedBorderColor:
-                                              Color(0xff707070),
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 10),
+                                          unselectedBorderColor: Color(0xff707070),
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                           borderWidth: 1,
-                                          labelStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
+                                          labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                           tabs: tabs,
                                         ),
                                         SizedBox(
@@ -459,68 +389,44 @@ class _StoreViewState extends State<StoreView> {
                                           height: 450,
                                           child: TabBarView(
                                               children: catalog.map((cat) {
-                                            List<ProductModel>
-                                                categoryProducts = products
-                                                    .where((element) =>
-                                                        element.catalog.id ==
-                                                        cat.id)
-                                                    .toList();
+                                            List<ProductModel> categoryProducts = products.where((element) => element.catalog.id == cat.id).toList();
 
                                             return categoryProducts.length > 0
                                                 ? GridView.builder(
-                                                  shrinkWrap: true,
-                                                  gridDelegate:
-                                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount: 2,
-                                                    mainAxisSpacing: 10,
-                                                    crossAxisSpacing: 10,
-                                                    childAspectRatio:
-                                                        ((MediaQuery.of(context)
-                                                                    .size
-                                                                    .width /
-                                                                2) /
-                                                            195),
-                                                  ),
-                                                  itemCount:
-                                                      categoryProducts
-                                                          .length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return Obx(() {
-                                                      bool isSelected =
-                                                          PurchasedProductsScreen
-                                                              .products
-                                                              .contains(
-                                                                  categoryProducts[
-                                                                      index]);
-                                                      return GestureDetector(
-                                                          onTap: () {
-                                                            if (isSelected) {
-                                                              PurchasedProductsScreen
-                                                                  .products
-                                                                  .remove(categoryProducts[
-                                                                      index]);
-                                                            } else {
-                                                              PurchasedProductsScreen
-                                                                  .products
-                                                                  .add(categoryProducts[
-                                                                      index]);
-                                                            }
-                                                          },
-                                                          child: ProductCardWidget(
-                                                              data:
-                                                                  categoryProducts[
-                                                                      index],
-                                                              isSelected:
-                                                                  isSelected));
-                                                    });
-                                                  },
-                                                )
+                                                    shrinkWrap: true,
+                                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                      crossAxisCount: 2,
+                                                      mainAxisSpacing: 10,
+                                                      crossAxisSpacing: 10,
+                                                      childAspectRatio: ((MediaQuery.of(context).size.width / 2) / 195),
+                                                    ),
+                                                    itemCount: categoryProducts.length,
+                                                    itemBuilder: (BuildContext context, int index) {
+                                                      return Obx(() {
+                                                        bool isSelected = CartItemModel.products.contains(categoryProducts[index]);
+                                                        return GestureDetector(
+                                                            onTap: () {
+                                                              if (isSelected) {
+                                                                CartItemModel.products.remove(categoryProducts[index]);
+                                                              } else {
+                                                                if (CartItemModel.selectedStore.isEmpty) {
+                                                                  CartItemModel.selectedStore.add(widget.storeData);
+                                                                  CartItemModel.products.add(categoryProducts[index]);
+                                                                  CartItemModel.walletAmount.value = productData.walletAmount;
+                                                                } else if (CartItemModel.selectedStore.contains(widget.storeData.id)) {
+                                                                  CartItemModel.products.add(categoryProducts[index]);
+                                                                } else {
+                                                                  Snack.top('Alert!', 'Item from another store is in cart.');
+                                                                }
+                                                              }
+                                                            },
+                                                            child: ProductCardWidget(data: categoryProducts[index], isSelected: isSelected));
+                                                      });
+                                                    },
+                                                  )
                                                 : Expanded(
                                                     child: Center(
-                                                      child: Text(
-                                                          'No Product Found'),
+                                                      child: Text('No Product Found'),
                                                     ),
                                                   );
                                           }).toList()),
@@ -531,8 +437,7 @@ class _StoreViewState extends State<StoreView> {
                                 );
                               }
                             },
-                            child:
-                                Container(), // this widget goes to the builder's child property. Made for better performance.
+                            child: Container(), // this widget goes to the builder's child property. Made for better performance.
                           ),
                         ],
                       ),
@@ -540,27 +445,17 @@ class _StoreViewState extends State<StoreView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.to(() => CartPage(
-                            data: widget.data,
-                            storeData: storeData,
-                          ));
+                      Get.to(() => CartPage());
                     },
                     child: Container(
-                      decoration: BoxDecoration(
-                          color: AppConst.themePurple,
-                          borderRadius: BorderRadius.circular(4)),
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      decoration: BoxDecoration(color: AppConst.themePurple, borderRadius: BorderRadius.circular(4)),
+                      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 12),
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                                'Added to Cart (${PurchasedProductsScreen.rawItem.length + PurchasedProductsScreen.products.length} items)',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14)),
+                            Text('Added to Cart (${CartItemModel.rawItem.length + CartItemModel.products.length} items)', style: TextStyle(color: Colors.white, fontSize: 14)),
                             Text('View Cart',
                                 style: TextStyle(
                                   color: Colors.white,

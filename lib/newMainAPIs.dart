@@ -394,7 +394,7 @@ class NewApi{
     }
   }
 
-  static Future<List<BoomModel>> get39_AllOffersNearYouData() async{
+  static Future<List<StoreData>> get39_AllOffersNearYouData() async{
     final _query = r'''query($lat: Float $lng: Float){
   getClaimRewardsPageData(lat: $lat lng: $lng){
     error
@@ -433,7 +433,7 @@ class NewApi{
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
       if(!result.data['getClaimRewardsPageData']['error']){
-        return List<BoomModel>.from(result.data['getClaimRewardsPageData']['data']['stores'].map((type) => BoomModel.fromJson(type)));
+        return List<StoreData>.from(result.data['getClaimRewardsPageData']['data']['stores'].map((type) => StoreData.fromJson(type)));
 
       }else{
         return null;
@@ -488,7 +488,7 @@ class NewApi{
     }
   }
 
-  static Future<List<BoomModel>> scanReceiptsFavStores() async{
+  static Future<List<StoreData>> scanReceiptsFavStores() async{
     final _query = r'''query($lat : Float $lng: Float){
   getScanReceiptPageMyFavoriteStoresData(
     lat: $lat
@@ -533,7 +533,7 @@ class NewApi{
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
 
       if(!result.data['getScanReceiptPageMyFavoriteStoresData']['error']){
-        return List<BoomModel>.from(result.data['getScanReceiptPageMyFavoriteStoresData']['data'].map((type) => BoomModel.fromJson(type)));
+        return List<StoreData>.from(result.data['getScanReceiptPageMyFavoriteStoresData']['data'].map((type) => StoreData.fromJson(type)));
       }else{
         return null;
       }
@@ -543,7 +543,7 @@ class NewApi{
     }
   }
 
-  static Future<List<BoomModel>> scanReceiptNearMeStoreData() async{
+  static Future<List<StoreData>> scanReceiptNearMeStoreData() async{
     final _query = r'''query($lat : Float $lng: Float){
   getScanReceiptPageNearMeStoresData(
     lat: $lat
@@ -588,7 +588,7 @@ class NewApi{
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
 
       if(!result.data['getScanReceiptPageNearMeStoresData']['error']){
-        return List<BoomModel>.from(result.data['getScanReceiptPageNearMeStoresData']['data'].map((type) => BoomModel.fromJson(type)));
+        return List<StoreData>.from(result.data['getScanReceiptPageNearMeStoresData']['data'].map((type) => StoreData.fromJson(type)));
       }else{
         return null;
       }
@@ -598,7 +598,7 @@ class NewApi{
     }
   }
 
-  static Future<List<BoomModel>> scanReceiptsBannerFavStores({String bType, String cType}) async{
+  static Future<List<StoreData>> scanReceiptsBannerFavStores({String bType, String cType}) async{
     final _query = r'''query($lat : Float $lng: Float $bType: ID $cType: ID){
   getScanReceiptBannerPageMyFavoriteStoresData(
     lat: $lat
@@ -647,7 +647,7 @@ class NewApi{
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
 
       if(!result.data['getScanReceiptBannerPageMyFavoriteStoresData']['error']){
-        return List<BoomModel>.from(result.data['getScanReceiptBannerPageMyFavoriteStoresData']['data'].map((type) => BoomModel.fromJson(type)));
+        return List<StoreData>.from(result.data['getScanReceiptBannerPageMyFavoriteStoresData']['data'].map((type) => StoreData.fromJson(type)));
       }else{
         return null;
       }
@@ -657,7 +657,7 @@ class NewApi{
     }
   }
 
-  static Future<List<BoomModel>> scanReceiptBannerNearMeStoreData({String bType, String cType}) async{
+  static Future<List<StoreData>> scanReceiptBannerNearMeStoreData({String bType, String cType}) async{
     final _query = r'''query($lat : Float $lng: Float $bType: ID $cType: ID){
   getScanReceiptBannerPageNearMeStoresData(
     lat: $lat
@@ -706,7 +706,7 @@ class NewApi{
       QueryResult result = await client.query(QueryOptions(document: gql(_query),variables: variables));
 
       if(!result.data['getScanReceiptBannerPageNearMeStoresData']['error']){
-        return List<BoomModel>.from(result.data['getScanReceiptBannerPageNearMeStoresData']['data'].map((type) => BoomModel.fromJson(type)));
+        return List<StoreData>.from(result.data['getScanReceiptBannerPageNearMeStoresData']['data'].map((type) => StoreData.fromJson(type)));
       }else{
         return null;
       }
@@ -871,7 +871,7 @@ class NewApi{
 
   }
 
-  static Future<bool> placeOrder({List<File> images, BoomModel store, var products, double total}) async{
+  static Future<bool> placeOrder({List<File> images, StoreData store, var products, double total}) async{
     final mutation = r'''
     mutation($image: String $storeId: ID $products: [OrderProduct] $total: Float $cashback: Float){
       placeOrder(orderInput:{
@@ -1034,7 +1034,7 @@ class NewApi{
     }
   }
 
-  static Future<List<BoomModel>> getScanReceiptPageSpecialOffersStoresData() async{
+  static Future<List<StoreData>> getScanReceiptPageSpecialOffersStoresData() async{
     try{
 
       final query = r'''
@@ -1079,7 +1079,7 @@ query($lat: Float $lng: Float){
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.query(QueryOptions(document: gql(query),variables: variables));
 
-      return List.from(result.data['getScanReceiptPageSpecialOffersStoresData']['data'].map((data) => BoomModel.fromJson(data)));
+      return List.from(result.data['getScanReceiptPageSpecialOffersStoresData']['data'].map((data) => StoreData.fromJson(data)));
     }catch(e){
       print(e.toString());
       return [];
@@ -1088,8 +1088,8 @@ query($lat: Float $lng: Float){
 
 }
 
-class BoomModel {
-  BoomModel({
+class StoreData {
+  StoreData({
     this.id,
     this.name,
     this.logo,
@@ -1125,7 +1125,7 @@ class BoomModel {
   double calculated_distance;
   String store_type;
 
-  factory BoomModel.fromJson(Map<String, dynamic> json) => BoomModel(
+  factory StoreData.fromJson(Map<String, dynamic> json) => StoreData(
     id: json["_id"],
     name: json["name"],
     logo: json["logo"],

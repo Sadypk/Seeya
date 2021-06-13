@@ -4,7 +4,7 @@ import 'package:seeya/features/order_online/view_model/special_offer.dart';
 import 'package:seeya/newMainAPIs.dart';
 
 class NearMe extends StatefulWidget {
-  final List<BoomModel> allNearStores ;
+  final List<StoreData> allNearStores ;
   NearMe({@required this.allNearStores});
   @override
   _NearMeState createState() => _NearMeState();
@@ -12,11 +12,11 @@ class NearMe extends StatefulWidget {
 
 class _NearMeState extends State<NearMe> {
 
-  List<BoomModel> allNearStores = [];
-  List<BoomModel> groceries = [];
-  List<BoomModel> fresh = [];
-  List<BoomModel> pharmacy = [];
-  List<BoomModel> restaurant = [];
+  List<StoreData> allNearStores = [];
+  List<StoreData> groceries = [];
+  List<StoreData> fresh = [];
+  List<StoreData> pharmacy = [];
+  List<StoreData> restaurant = [];
 
   getData() async{
 

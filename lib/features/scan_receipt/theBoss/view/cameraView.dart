@@ -18,7 +18,7 @@ RxList images = <File>[].obs;
 
 
 class TheBossCameraScreen extends StatefulWidget {
-  final BoomModel storeModel;
+  final StoreData storeModel;
   TheBossCameraScreen({this.storeModel});
   static List<CameraDescription> cameras;
   @override

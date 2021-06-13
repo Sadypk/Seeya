@@ -7,8 +7,8 @@ import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/newMainAPIs.dart';
 
 class MyFav extends StatefulWidget {
-  final List<BoomModel> specialOffers;
-  final List<BoomModel> favStores;
+  final List<StoreData> specialOffers;
+  final List<StoreData> favStores;
   MyFav({@required this.favStores,@required this.specialOffers});
   @override
   _MyFavState createState() => _MyFavState();
@@ -16,11 +16,11 @@ class MyFav extends StatefulWidget {
 
 class _MyFavState extends State<MyFav> {
 
-  List<BoomModel> allStores = [];
-  List<BoomModel> groceries = [];
-  List<BoomModel> fresh = [];
-  List<BoomModel> pharmacy = [];
-  List<BoomModel> restaurant = [];
+  List<StoreData> allStores = [];
+  List<StoreData> groceries = [];
+  List<StoreData> fresh = [];
+  List<StoreData> pharmacy = [];
+  List<StoreData> restaurant = [];
 
 
   getData() async {

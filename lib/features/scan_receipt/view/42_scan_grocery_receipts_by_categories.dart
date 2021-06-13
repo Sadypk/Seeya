@@ -21,8 +21,8 @@ class ScanGroceryReceiptsByCategories extends StatefulWidget {
 class _ScanGroceryReceiptsByCategoriesState extends State<ScanGroceryReceiptsByCategories> {
 
   bool dataLoading = true;
-  List<BoomModel> favStores = [];
-  List<BoomModel> nearStores = [];
+  List<StoreData> favStores = [];
+  List<StoreData> nearStores = [];
   getData() async{
     favStores = await NewApi.scanReceiptsBannerFavStores(cType: widget.cType.id);
     nearStores = await NewApi.scanReceiptBannerNearMeStoreData(cType: widget.cType.id);

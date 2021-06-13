@@ -18,19 +18,19 @@ class ScanReceipts extends StatefulWidget {
 
 class _ScanReceiptsState extends State<ScanReceipts> with SingleTickerProviderStateMixin{
 
-  List<BoomModel> nearStores = [];
-  List<BoomModel> favStores = [];
-  List<BoomModel> allStores = [];
+  List<StoreData> nearStores = [];
+  List<StoreData> favStores = [];
+  List<StoreData> allStores = [];
 
-  List<BoomModel> favGroceries = [];
-  List<BoomModel> favFresh = [];
-  List<BoomModel> favPharmacy = [];
-  List<BoomModel> favRestaurant = [];
+  List<StoreData> favGroceries = [];
+  List<StoreData> favFresh = [];
+  List<StoreData> favPharmacy = [];
+  List<StoreData> favRestaurant = [];
 
-  List<BoomModel> nearGroceries = [];
-  List<BoomModel> nearFresh = [];
-  List<BoomModel> nearPharmacy = [];
-  List<BoomModel> nearRestaurant = [];
+  List<StoreData> nearGroceries = [];
+  List<StoreData> nearFresh = [];
+  List<StoreData> nearPharmacy = [];
+  List<StoreData> nearRestaurant = [];
 
   bool dataLoad = true;
 
@@ -268,7 +268,7 @@ class _ScanReceiptsState extends State<ScanReceipts> with SingleTickerProviderSt
 }
 
 class KhauKhau extends StatelessWidget {
-  final List<BoomModel> data;
+  final List<StoreData> data;
 
   const KhauKhau({Key key, this.data}) : super(key: key);
 
@@ -298,7 +298,7 @@ class KhauKhau extends StatelessWidget {
 
 
 class LauLau extends StatelessWidget {
-  final List<BoomModel> data;
+  final List<StoreData> data;
 
   const LauLau({Key key, this.data}) : super(key: key);
   @override

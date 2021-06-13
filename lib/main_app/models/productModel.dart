@@ -7,12 +7,12 @@ class GetOrderOnlinePageProductsData {
 
   bool error;
   String msg;
-  StoreData data;
+  ProductData data;
 
   factory GetOrderOnlinePageProductsData.fromJson(Map<String, dynamic> json) => GetOrderOnlinePageProductsData(
     error: json["error"],
     msg: json["msg"],
-    data: StoreData.fromJson(json["data"]),
+    data: ProductData.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -22,8 +22,8 @@ class GetOrderOnlinePageProductsData {
   };
 }
 
-class StoreData {
-  StoreData({
+class ProductData {
+  ProductData({
     this.products,
     this.walletAmount,
   });
@@ -31,7 +31,7 @@ class StoreData {
   List<ProductModel> products;
   int walletAmount;
 
-  factory StoreData.fromJson(Map<String, dynamic> json) => StoreData(
+  factory ProductData.fromJson(Map<String, dynamic> json) => ProductData(
     products: List<ProductModel>.from(json["products"].map((x) => ProductModel.fromJson(x))),
     walletAmount: json["wallet_amount"],
   );

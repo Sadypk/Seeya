@@ -11,17 +11,16 @@ import 'package:seeya/features/store/view/widgets/product_card_widget.dart';
 import 'package:seeya/home.dart';
 import 'package:seeya/main_app/models/productModel.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
+import 'package:seeya/main_app/user/viewModel/cartModel.dart';
 import 'package:seeya/main_app/util/screenLoader.dart';
 import 'package:seeya/main_app/util/size_config.dart';
 import 'package:seeya/main_app/util/snack.dart';
 import 'package:seeya/newMainAPIs.dart';
 
 class PurchasedProductsScreen extends StatefulWidget {
-  static RxList<ProductModel> products = <ProductModel>[].obs;
-  static RxList<RawProduct> rawItem = <RawProduct>[].obs;
 
 
-  final BoomModel storeModel;
+  final StoreData storeModel;
   PurchasedProductsScreen({this.storeModel});
   @override
   _PurchasedProductsScreenState createState() => _PurchasedProductsScreenState();
@@ -39,7 +38,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
   PurchasedProductViewModel vm;
   @override
   void initState() {
-    PurchasedProductsScreen.products.clear();
+    CartItemModel.products.clear();
     Get.put(PurchasedProductViewModel());
     vm = Get.find();
     Get.put(TopProductsViewModel());
@@ -143,7 +142,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
                             images: images,
                             total: double.parse(amountController.text),
                             store: widget.storeModel,
-                            products: PurchasedProductsScreen.products
+                            products: CartItemModel.products
                           );
                           if(error){
                             Snack.bottom('Error', 'Failed to send receipt');
@@ -322,13 +321,13 @@ class _GridListWidgetState extends State<GridListWidget> {
         itemCount: products.length,
         itemBuilder: (BuildContext context, int index){
           return Obx(() {
-            bool isSelected = PurchasedProductsScreen.products.contains(products[index]);
+            bool isSelected = CartItemModel.products.contains(products[index]);
             return GestureDetector(
                 onTap: (){
                   if(isSelected){
-                    PurchasedProductsScreen.products.remove(products[index]);
+                    CartItemModel.products.remove(products[index]);
                   }else{
-                    PurchasedProductsScreen.products.add(products[index]);
+                    CartItemModel.products.add(products[index]);
                   }
 
                 },

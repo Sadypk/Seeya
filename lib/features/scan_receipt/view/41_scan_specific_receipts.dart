@@ -26,8 +26,8 @@ class ScanSpecificReceipt extends StatefulWidget {
 
 class _ScanSpecificReceiptState extends State<ScanSpecificReceipt> {
   List<CatalogModel> catalogs = [];
-  List<BoomModel> favStores = [];
-  List<BoomModel> nearStores = [];
+  List<StoreData> favStores = [];
+  List<StoreData> nearStores = [];
   getData() async{
     catalogs = await NewApi.getCatalogByBusinessID(widget.bType.id);
     favStores = await NewApi.scanReceiptsBannerFavStores(bType: widget.bType.id);

@@ -6,7 +6,7 @@ import 'package:seeya/main_app/resources/app_const.dart';
 import 'package:seeya/newMainAPIs.dart';
 
 class SearchStore extends StatefulWidget {
-  final List<BoomModel> allStores;
+  final List<StoreData> allStores;
 
   SearchStore({@required this.allStores});
 
@@ -16,7 +16,7 @@ class SearchStore extends StatefulWidget {
 
 class _SearchStoreState extends State<SearchStore> {
   TextEditingController searchController = TextEditingController();
-  List<BoomModel> searchResult = [];
+  List<StoreData> searchResult = [];
   bool matchFound = false;
 
   @override
@@ -113,7 +113,7 @@ class _SearchStoreState extends State<SearchStore> {
                   itemBuilder: (_, index) {
                     return GestureDetector(
                       onTap: () {
-                        Get.to(() => StoreView(data: searchResult[index]));
+                        Get.to(() => StoreView(storeData: searchResult[index]));
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),

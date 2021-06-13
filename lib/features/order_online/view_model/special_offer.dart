@@ -8,7 +8,7 @@ import 'package:seeya/features/scan_receipt/theBoss/view/cameraView.dart';
 import '../../../newMainAPIs.dart';
 
 class SpecialOffer extends StatelessWidget {
-  final List<BoomModel> data;
+  final List<StoreData> data;
 
   const SpecialOffer({Key key, this.data}) : super(key: key);
 
@@ -21,7 +21,7 @@ class SpecialOffer extends StatelessWidget {
         itemBuilder: (BuildContext context, int index){
           return GestureDetector(
             onTap: (){
-              Get.to(() => StoreView(data: data[index]));
+              Get.to(() => StoreView(storeData: data[index]));
             },
             child: Container(
 

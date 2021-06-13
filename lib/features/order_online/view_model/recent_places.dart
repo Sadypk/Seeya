@@ -10,7 +10,7 @@ import 'package:seeya/main_app/resources/app_const.dart';
 import '../../../newMainAPIs.dart';
 
 class RecentVisits extends StatelessWidget {
-  final List<BoomModel> data;
+  final List<StoreData> data;
 
   const RecentVisits({Key key, this.data}) : super(key: key);
   @override
@@ -23,7 +23,7 @@ class RecentVisits extends StatelessWidget {
         itemCount: data.length,
         itemBuilder: (_, index) => GestureDetector(
           onTap: (){
-           Get.to(() => StoreView(data: data[index]));
+           Get.to(() => StoreView(storeData: data[index]));
           },
           child: Column(
             children: [
