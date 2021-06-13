@@ -280,6 +280,10 @@ class _StoreViewState extends State<StoreView> {
                                                           return GestureDetector(
                                                             onTap: () {
                                                               CartItemModel.rawItem.remove(CartItemModel.rawItem[index]);
+                                                              if(CartItemModel.rawItem.isEmpty){
+                                                                CartItemModel.selectedStore.clear();
+                                                                CartItemModel.walletAmount.value = 0;
+                                                              }
                                                             },
                                                             child: Padding(
                                                               padding: const EdgeInsets.only(top: 4.0, bottom: 2.0, right: 20),
@@ -408,6 +412,10 @@ class _StoreViewState extends State<StoreView> {
                                                             onTap: () {
                                                               if (isSelected) {
                                                                 CartItemModel.products.remove(categoryProducts[index]);
+                                                                if(CartItemModel.products.isEmpty){
+                                                                  CartItemModel.selectedStore.clear();
+                                                                  CartItemModel.walletAmount.value = 0;
+                                                                }
                                                               } else {
                                                                 if (CartItemModel.selectedStore.isEmpty) {
                                                                   CartItemModel.selectedStore.add(widget.storeData);

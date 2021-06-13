@@ -35,6 +35,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 CartItemModel.rawItem.clear();
                 CartItemModel.products.clear();
                 CartItemModel.selectedStore.clear();
+                CartItemModel.walletAmount.value = 0;
                 Get.offAll(() => Home());
               },
               icon: Icon(Icons.arrow_back),

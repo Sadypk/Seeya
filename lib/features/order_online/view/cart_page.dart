@@ -213,6 +213,10 @@ class _CartPageState extends State<CartPage> {
                                               onPostivePressed: () {
                                                 setState(() {
                                                   CartItemModel.rawItem.remove(item);
+                                                  if(CartItemModel.rawItem.isEmpty){
+                                                    CartItemModel.selectedStore.clear();
+                                                    CartItemModel.walletAmount.value = 0;
+                                                  }
                                                   Get.back();
                                                 });
                                               },
@@ -322,6 +326,10 @@ class _CartPageState extends State<CartPage> {
                                             onPostivePressed: () {
                                               setState(() {
                                                 CartItemModel.products.remove(item);
+                                                if(CartItemModel.products.isEmpty){
+                                                  CartItemModel.selectedStore.clear();
+                                                  CartItemModel.walletAmount.value = 0;
+                                                }
                                                 Get.back();
                                               });
                                             },
