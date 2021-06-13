@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/home_screen/view/widgets/store_shop_now_tile.dart';
+import 'package:seeya/features/order_online/view/search_store.dart';
 import 'package:seeya/features/scan_receipt/theBoss/view/cameraView.dart';
 import 'package:seeya/features/store/models/storeModel.dart';
 import 'package:seeya/features/store/view/widgets/top_picks_card_widget.dart';
@@ -21,6 +22,8 @@ class _ScanReceiptsState extends State<ScanReceipts> with SingleTickerProviderSt
   List<StoreData> nearStores = [];
   List<StoreData> favStores = [];
   List<StoreData> allStores = [];
+
+  List<StoreData> mergedData = [];
 
   List<StoreData> favGroceries = [];
   List<StoreData> favFresh = [];
@@ -42,6 +45,9 @@ class _ScanReceiptsState extends State<ScanReceipts> with SingleTickerProviderSt
     nearStores = await NewApi.scanReceiptNearMeStoreData();
     allStores = await NewApi.getScanReceiptPageSpecialOffersStoresData();
 
+
+    mergedData.addAll(nearStores);
+    mergedData.addAll(favStores);
 
     favGroceries.addAll(allStores.where((element) => element.businesstypeId == '5fde415692cc6c13f9e879fd'));
     favFresh.addAll(allStores.where((element) => element.businesstypeId == '5fdf434058a42e05d4bc2044'));
@@ -83,7 +89,11 @@ class _ScanReceiptsState extends State<ScanReceipts> with SingleTickerProviderSt
         title: Text('Scan Receipts', style: AppConst.appbarTextStyle,),
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
-          Icon(CupertinoIcons.search, color: Colors.white),
+          GestureDetector(
+            onTap: (){
+              Get.to(() => SearchStore(allStores: mergedData, showButton: true));
+            },
+            child: Icon(CupertinoIcons.search, color: Colors.white)),
           SizedBox(width: 20,)
         ],
       ),

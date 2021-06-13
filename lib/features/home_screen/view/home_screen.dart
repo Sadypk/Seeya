@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:seeya/features/chat/view/chatScreen.dart';
+import 'package:seeya/features/home_screen/repo/change_address.dart';
 import 'package:seeya/features/order_online/view/cart_page.dart';
 import 'package:seeya/features/scan_receipt/view/40_scan_your_receipt.dart';
 import 'package:seeya/features/scan_receipt/view/45_fav_stores_main_page.dart';
@@ -42,22 +43,21 @@ class _HomeScreenState extends State<HomeScreen> {
   bool loading = true;
 
   getNearestStore() async {
+
+    setState(() {
+      loading = true;
+    });
+
+    print('DATA LOADING');
+
     await NewApi.getAllCategories();
     await NewApi.getHomeFavShops();
-    NewDataViewModel.homeSpecialDataRecent
-        .addAll(await NewApi.getHomePageSpecialOfferAndCategoryData(''));
-    NewDataViewModel.homeSpecialDataGrocery.addAll(
-        await NewApi.getHomePageSpecialOfferAndCategoryData(
-            '5fde415692cc6c13f9e879fd'));
-    NewDataViewModel.homeSpecialDataFresh.addAll(
-        await NewApi.getHomePageSpecialOfferAndCategoryData(
-            '5fdf434058a42e05d4bc2044'));
-    NewDataViewModel.homeSpecialDataRestaurant.addAll(
-        await NewApi.getHomePageSpecialOfferAndCategoryData(
-            '5fe0bfef4657be045655cf4a'));
-    NewDataViewModel.homeSpecialDataPharmacy.addAll(
-        await NewApi.getHomePageSpecialOfferAndCategoryData(
-            '5fe22e111df87913f06a4cc9'));
+    NewDataViewModel.homeSpecialDataRecent = await NewApi.getHomePageSpecialOfferAndCategoryData('');
+    NewDataViewModel.homeSpecialDataGrocery = await NewApi.getHomePageSpecialOfferAndCategoryData('5fde415692cc6c13f9e879fd');
+    NewDataViewModel.homeSpecialDataFresh = await NewApi.getHomePageSpecialOfferAndCategoryData('5fdf434058a42e05d4bc2044');
+    NewDataViewModel.homeSpecialDataRestaurant = await NewApi.getHomePageSpecialOfferAndCategoryData('5fe0bfef4657be045655cf4a');
+    NewDataViewModel.homeSpecialDataPharmacy = await NewApi.getHomePageSpecialOfferAndCategoryData('5fe22e111df87913f06a4cc9');
+    print('DATA LOADING FINISHED');
     setState(() {
       loading = false;
     });
@@ -69,9 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
     UserViewModel.user.value.addresses.forEach((element) {
       popup.add(
         PopupMenuItem<AddressModel>(
-            child: GestureDetector(onTap: () {
-              Get.back();
-              print(element.id);
+            child: GestureDetector(onTap: () async{
+
             }, child: Text(element.address)),
             value: element),
       );
@@ -289,13 +288,13 @@ class _HomeScreenState extends State<HomeScreen> {
         title: DropdownButtonHideUnderline(
           child: DropdownButton<AddressModel>(
             value:  selectedAddress,
-            onChanged: (address){
-              print(address.address);
+            onChanged: (address) async{
               setState(() {
                 selectedAddress = address;
               });
               UserViewModel.setLocationIndex(UserViewModel.user.value.addresses.indexOf(address));
               UserViewModel.setLocation(LatLng(address.location.lat, address.location.lng), address.id);
+              await getNearestStore();
             },
             items: UserViewModel.user.value.addresses.map((addr) => DropdownMenuItem(
               child: Container(

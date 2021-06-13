@@ -80,7 +80,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
           // itemBuilder: (_, index) => AssetThumb(asset: assets[index],height: (Get.height * .7).toInt(), width: (Get.width).toInt()),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: widget.storeModel!=null  ? _buildBottomDrawer() : SizedBox(),
+        floatingActionButton: _buildBottomDrawer()
       ),
     );
   }
@@ -104,7 +104,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          bottomDrawerIsOpen ? GridListWidget(storeID: widget.storeModel.id) : SizedBox(height: 8,),
+          if(widget.storeModel != null) bottomDrawerIsOpen ? GridListWidget(storeID: widget.storeModel.id) : SizedBox(height: 8,),
           if(bottomDrawerIsOpen)SizedBox(height: 8,),
           Obx((){
             print(canSubmit);
@@ -138,18 +138,33 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
                         FocusScope.of(context).unfocus();
                         if(amountController.text.isNotEmpty){
                           loadScreen();
-                          bool error = await NewApi.placeOrder(
-                            images: images,
-                            total: double.parse(amountController.text),
-                            store: widget.storeModel,
-                            products: CartItemModel.products
-                          );
-                          if(error){
-                            Snack.bottom('Error', 'Failed to send receipt');
+
+                          if(widget.storeModel == null ){
+                            bool error = await NewApi.placeOrderWithoutStore(
+                              images: images,
+                              total: double.parse(amountController.text),
+                            );
+                            if(error){
+                              Snack.bottom('Error', 'Failed to send receipt');
+                            }else{
+                              Get.offAll(() => Home());
+                              Snack.top('Success', 'Receipt Sent Successfully');
+                            }
                           }else{
-                            Get.offAll(() => Home());
-                            Snack.top('Success', 'Receipt Sent Successfully');
+                            bool error = await NewApi.placeOrder(
+                                images: images,
+                                total: double.parse(amountController.text),
+                                store: widget.storeModel,
+                                products: CartItemModel.products
+                            );
+                            if(error){
+                              Snack.bottom('Error', 'Failed to send receipt');
+                            }else{
+                              Get.offAll(() => Home());
+                              Snack.top('Success', 'Receipt Sent Successfully');
+                            }
                           }
+
                           loadScreen();
                         }else{
                           Snack.top('Wait', 'Please Enter amount');
@@ -169,7 +184,7 @@ class _PurchasedProductsScreenState extends State<PurchasedProductsScreen> {
             );
           }),
           SizedBox(height: 8,),
-          Padding(
+          if(widget.storeModel != null) Padding(
             padding: const EdgeInsets.only(left: 10,bottom: 12),
             child: InkWell(
                 onTap: (){

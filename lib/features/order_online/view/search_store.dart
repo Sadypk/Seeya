@@ -2,13 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/order_online/view/store_view.dart';
+import 'package:seeya/features/scan_receipt/theBoss/view/cameraView.dart';
 import 'package:seeya/main_app/resources/app_const.dart';
+import 'package:seeya/main_app/view/widgets/gradient_button.dart';
 import 'package:seeya/newMainAPIs.dart';
 
 class SearchStore extends StatefulWidget {
   final List<StoreData> allStores;
+  final bool showButton;
 
-  SearchStore({@required this.allStores});
+  SearchStore({@required this.allStores, this.showButton = false});
 
   @override
   _SearchStoreState createState() => _SearchStoreState();
@@ -201,6 +204,24 @@ class _SearchStoreState extends State<SearchStore> {
           ),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: widget.showButton ? Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: GradientButton(
+          onTap: (){
+            print('123');
+            Get.to(() => TheBossCameraScreen());
+          },
+          height: 45,
+          width: Get.width * .8,
+          label: 'Scan Receipt without store',
+          fontStyle: TextStyle(
+            fontSize: 18,
+            color: Colors.white,
+            fontWeight: FontWeight.bold
+          ),
+        ),
+      ) : null,
     );
   }
 }

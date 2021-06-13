@@ -21,7 +21,7 @@ class ChattingScreen extends StatelessWidget {
             onPressed: ()=> Get.back(),
             icon: Icon(
               Icons.arrow_back,
-              color: AppConst.blue,
+              color: Colors.white
             ),
           ),
           centerTitle: true,
@@ -42,7 +42,7 @@ class ChattingScreen extends StatelessWidget {
               return Text(
                 title.trim().capitalize,
                 style: TextStyle(
-                    color: AppConst.blue
+                  color: Colors.white
                 ),
               );
             },
@@ -51,7 +51,7 @@ class ChattingScreen extends StatelessWidget {
             PopupMenuButton(
               icon: Icon(
                 Icons.more_vert,
-                color: Colors.grey,
+                color: Colors.white
               ),
               itemBuilder: (_) => [
                 PopupMenuItem(
