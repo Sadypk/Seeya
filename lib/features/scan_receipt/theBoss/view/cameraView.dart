@@ -261,7 +261,7 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
                   }else{
                     images.add(file);
                     camLoading.value = !camLoading.value;
-                    Get.off(PurchasedProductsScreen(storeModel: widget.storeModel,), arguments: images);
+                    Get.off(PurchasedProductsScreen(storeModel: widget.storeModel), arguments: images);
                   }
                 },
                 child: Container(
@@ -289,7 +289,7 @@ class _TheBossCameraScreenState extends State<TheBossCameraScreen> {
 
             Obx(()=>longReceipt.value?InkWell(
               onTap: (){
-                Get.off(PurchasedProductsScreen(storeModel: widget.storeModel,), arguments: images);
+                Get.off(PurchasedProductsScreen(storeModel: widget.storeModel), arguments: images);
               },
               borderRadius: BorderRadius.circular(6),
               child: Container(

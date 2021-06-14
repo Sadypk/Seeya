@@ -19,8 +19,6 @@ class ChangeAddressRepo {
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client
           .query(QueryOptions(document: gql(_mutation), variables: variables));
-      print(variables);
-      print('change address error: ${result.data['changeCustomerAddress']['error']}');
     } catch (e) {
       print(e.toString());
       return null;

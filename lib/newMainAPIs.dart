@@ -60,6 +60,7 @@ class NewApi{
         NewDataViewModel.businessTypes = List.from(result.data['getAllBusinessTypes']['data'].map((type)=>BusinessType.fromJson(type)));
       }
     }catch(e){
+      print('getAllCategories');
       print(e.toString());
     }
   }
@@ -96,6 +97,7 @@ class NewApi{
         return 0;
       }
     }catch(e){
+      print('getHomeFavShops');
       print(e.toString());
       return 0;
     }
@@ -185,6 +187,7 @@ class NewApi{
         return [];
       }
     }catch(e){
+      print(bType);
       print(e.toString());
       return [];
     }
@@ -959,7 +962,7 @@ class NewApi{
 
   static Future<bool> placeOrder({List<File> images, StoreData store, var products, double total}) async{
     final mutation = r'''
-    mutation($image: String $storeId: ID $products: [OrderProduct] $total: Float $cashback: Float){
+    mutation($image: String $storeId: ID $products: [OrderProduct] $total: Float $cashback: Float $lat: Float $lng: Float){
       placeOrder(orderInput:{
         order_type: "receipt"
         receipt: $image
@@ -967,8 +970,8 @@ class NewApi{
         products: $products
         total: $total
         cashback_percentage: $cashback
-        lat: 22.22
-        lng: 22.21
+        lat: $lat
+        lng: $lng
       }){
         error
         msg
@@ -997,7 +1000,9 @@ class NewApi{
         'products' : List.from(products.map((e) => e.toJson())),
         'storeId' : store.id,
         'total' : total,
-        'cashback' : cashBack
+        'cashback' : cashBack,
+        'lat' : UserViewModel.currentLocation.value.latitude,
+        'lng' : UserViewModel.currentLocation.value.longitude
       };
 
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
@@ -1011,6 +1016,56 @@ class NewApi{
       return true;
     }
   }
+
+  static Future<bool> placeOrderWithoutStore({List<File> images, double total}) async{
+    final mutation = r'''
+    mutation($image: String $total: Float $lat: Float $lng: Float $address: String){
+      placeOrder(orderInput:{
+        order_type: "receipt"
+        receipt: $image
+        total: $total
+        lat: $lat
+        lng: $lng
+        address: $address
+      }){
+        error
+        msg
+      }
+    }
+    ''';
+
+    try{
+
+      List<String> imageLinks = [];
+
+      for (File image in images) {
+        imageLinks.add(await ImageHelper.uploadImage(image));
+      }
+
+      // TODO sending only one image
+
+      final address = UserViewModel.user.value.addresses.firstWhere((element) => element.status);
+
+      final variables = {
+        'image' : imageLinks[0],
+        'total' : total,
+        'lat' : UserViewModel.currentLocation.value.latitude,
+        'lng' : UserViewModel.currentLocation.value.longitude,
+        'address' : address.address
+      };
+
+      GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
+      QueryResult result = await client.query(QueryOptions(document: gql(mutation),variables: variables));
+
+      print(result.data);
+
+      return result.data['placeOrder']['error'];
+    }catch(e){
+      print(e.toString());
+      return true;
+    }
+  }
+
 
   static Future<List<ProductModel>> getProducts({String bType, String catId, int pageNo}) async{
     try{
