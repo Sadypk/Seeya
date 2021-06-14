@@ -5,20 +5,20 @@ import 'package:seeya/main_app/util/snack.dart';
 
 import '../../../newMainAPIs.dart';
 
-class MyFavRepo {
-  static getMyFav() async {
-    final myFavQuery = r'''
+class MyRedeemBalanceRepo {
+  static getMyRedeem() async {
+    final myRedeemQuery = r'''
 query($lat:Float,$lng:Float){
-  getOrderOnlinePageMyFavoriteStoresData(lat: $lat lng: $lng){
+  getRedeemCashPageData(lat: $lat lng: $lng){
     error
     msg
-     data{
-     _id
+    data{
+      _id
       name
-      online
-      customer_wallet_amount
       store_type
       calculated_distance
+      online
+      customer_wallet_amount
       logo
       flag
       distance
@@ -54,7 +54,7 @@ query($lat:Float,$lng:Float){
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
       QueryResult result = await client.mutate(
         MutationOptions(
-          document: gql(myFavQuery),
+          document: gql(myRedeemQuery),
           variables: {
             "lat": UserViewModel.currentLocation.value.latitude,
             "lng": UserViewModel.currentLocation.value.longitude
@@ -63,14 +63,13 @@ query($lat:Float,$lng:Float){
           },
         ),
       );
-      bool loginError =
-          result.data['getOrderOnlinePageMyFavoriteStoresData']['error'];
+      bool loginError = result.data['getRedeemCashPageData']['error'];
 
       if (loginError) {
         Snack.top('Error',
-            result.data['getOrderOnlinePageMyFavoriteStoresData']['msg']);
+            result.data['getRedeemCashPageData']['msg']);
       } else {
-        return List<StoreData>.from(result.data['getOrderOnlinePageMyFavoriteStoresData']['data'].map((type) => StoreData.fromJson(type)));
+        return List<StoreData>.from(result.data['getRedeemCashPageData']['data'].map((type) => StoreData.fromJson(type)));
       }
       return loginError;
     } catch (e) {

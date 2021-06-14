@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:seeya/features/online_orders/view/online_orders_screen.dart';
 import 'package:seeya/features/order_online/view/order_online.dart';
+import 'package:seeya/features/redeem_balance/view/redeem_Balance_page.dart';
 import 'package:seeya/features/redeem_balance/view/redeem_balance.dart';
 import 'package:seeya/features/scan_receipt/view/55_scan_receipts.dart';
 import 'package:seeya/features/near_you/view/71_near_you.dart';
@@ -202,7 +203,7 @@ class _HomeState extends State<Home> {
                                 ListTile(
                                   onTap: (){
                                     Get.back();
-                                    Get.to(RedeemBalanceScreen());
+                                    Get.to(MyRedeemBalance());
                                   },
                                   title: Text('Redeem Cash', style: TextStyle(fontFamily: 'open', fontSize: 14, fontWeight: FontWeight.w600),),
                                   leading: Container(

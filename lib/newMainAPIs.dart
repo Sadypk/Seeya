@@ -127,16 +127,38 @@ class NewApi{
       }
       stores{
         _id
-        name
-        logo
-        promotion_cashback_status
-        promotion_cashback
-        default_cashback
-        default_welcome_offer
-        promotion_cashback_date{
-          start_date
-          end_date
-        }
+          name
+          online
+          customer_wallet_amount
+          store_type
+          calculated_distance
+          logo
+          flag
+          distance
+          default_welcome_offer
+          promotion_welcome_offer_status
+          promotion_welcome_offer
+          promotion_welcome_offer_date{
+            start_date
+            end_date
+          }
+          default_cashback
+          promotion_cashback_status
+          promotion_cashback
+          promotion_cashback_date{
+            start_date
+            end_date
+          }
+          businesstype{
+            _id
+          }
+          address{
+            address
+            location{
+              lat
+              lng
+            }
+          }
       }
     }
   }
@@ -403,9 +425,13 @@ class NewApi{
       stores{
         _id
         name
+        online
+        customer_wallet_amount
+        store_type
+        calculated_distance
         logo
         flag
-        calculated_distance
+        distance
         default_welcome_offer
         promotion_welcome_offer_status
         promotion_welcome_offer
@@ -413,10 +439,22 @@ class NewApi{
           start_date
           end_date
         }
+        default_cashback
+        promotion_cashback_status
+        promotion_cashback
+        promotion_cashback_date{
+          start_date
+          end_date
+        }
         businesstype{
           _id
-          name
-          image
+        }
+        address{
+          address
+          location{
+            lat
+            lng
+          }
         }
       }
     }
@@ -497,27 +535,39 @@ class NewApi{
     error
     msg
     data{
-      name
-      logo
       _id
-      calculated_distance
-      default_cashback
-      default_welcome_offer
-      promotion_cashback
-      promotion_welcome_offer
-      promotion_cashback_status
-      promotion_welcome_offer_status
-      promotion_cashback_date{
-        start_date
-        end_date
-      }
-      promotion_welcome_offer_date{
-        start_date
-        end_date
-      }
-      businesstype{
-        _id
-      }
+        name
+        online
+        customer_wallet_amount
+        store_type
+        calculated_distance
+        logo
+        flag
+        distance
+        default_welcome_offer
+        promotion_welcome_offer_status
+        promotion_welcome_offer
+        promotion_welcome_offer_date{
+          start_date
+          end_date
+        }
+        default_cashback
+        promotion_cashback_status
+        promotion_cashback
+        promotion_cashback_date{
+          start_date
+          end_date
+        }
+        businesstype{
+          _id
+        }
+        address{
+          address
+          location{
+            lat
+            lng
+          }
+        }
     }
   }
 }''';
@@ -552,27 +602,39 @@ class NewApi{
     error
     msg
     data{
-      name
-      logo
       _id
-      calculated_distance
-      default_cashback
-      default_welcome_offer
-      promotion_cashback
-      promotion_welcome_offer
-      promotion_cashback_status
-      promotion_welcome_offer_status
-      promotion_cashback_date{
-        start_date
-        end_date
-      }
-      promotion_welcome_offer_date{
-        start_date
-        end_date
-      }
-      businesstype{
-        _id
-      }
+        name
+        online
+        customer_wallet_amount
+        store_type
+        calculated_distance
+        logo
+        flag
+        distance
+        default_welcome_offer
+        promotion_welcome_offer_status
+        promotion_welcome_offer
+        promotion_welcome_offer_date{
+          start_date
+          end_date
+        }
+        default_cashback
+        promotion_cashback_status
+        promotion_cashback
+        promotion_cashback_date{
+          start_date
+          end_date
+        }
+        businesstype{
+          _id
+        }
+        address{
+          address
+          location{
+            lat
+            lng
+          }
+        }
     }
   }
 }''';
@@ -609,27 +671,39 @@ class NewApi{
     error
     msg
     data{
-      name
-      logo
-      _id
-      calculated_distance
-      default_cashback
-      default_welcome_offer
-      promotion_cashback
-      promotion_welcome_offer
-      promotion_cashback_status
-      promotion_welcome_offer_status
-      promotion_cashback_date{
-        start_date
-        end_date
-      }
-      promotion_welcome_offer_date{
-        start_date
-        end_date
-      }
-      businesstype{
-        _id
-      }
+     _id
+        name
+        online
+        customer_wallet_amount
+        store_type
+        calculated_distance
+        logo
+        flag
+        distance
+        default_welcome_offer
+        promotion_welcome_offer_status
+        promotion_welcome_offer
+        promotion_welcome_offer_date{
+          start_date
+          end_date
+        }
+        default_cashback
+        promotion_cashback_status
+        promotion_cashback
+        promotion_cashback_date{
+          start_date
+          end_date
+        }
+        businesstype{
+          _id
+        }
+        address{
+          address
+          location{
+            lat
+            lng
+          }
+        }
     }
   }
 }''';
@@ -668,27 +742,39 @@ class NewApi{
     error
     msg
     data{
-      name
-      logo
       _id
-      calculated_distance
-      default_cashback
-      default_welcome_offer
-      promotion_cashback
-      promotion_welcome_offer
-      promotion_cashback_status
-      promotion_welcome_offer_status
-      promotion_cashback_date{
-        start_date
-        end_date
-      }
-      promotion_welcome_offer_date{
-        start_date
-        end_date
-      }
-      businesstype{
-        _id
-      }
+        name
+        online
+        customer_wallet_amount
+        store_type
+        calculated_distance
+        logo
+        flag
+        distance
+        default_welcome_offer
+        promotion_welcome_offer_status
+        promotion_welcome_offer
+        promotion_welcome_offer_date{
+          start_date
+          end_date
+        }
+        default_cashback
+        promotion_cashback_status
+        promotion_cashback
+        promotion_cashback_date{
+          start_date
+          end_date
+        }
+        businesstype{
+          _id
+        }
+        address{
+          address
+          location{
+            lat
+            lng
+          }
+        }
     }
   }
 }''';
@@ -1043,27 +1129,40 @@ query($lat: Float $lng: Float){
     error
     msg
     data{
-      name
-      logo
-      _id
-      calculated_distance
-      default_cashback
-      default_welcome_offer
-      promotion_cashback
-      promotion_welcome_offer
-      promotion_cashback_status
-      promotion_welcome_offer_status
-      promotion_cashback_date{
-        start_date
-        end_date
-      }
-      promotion_welcome_offer_date{
-        start_date
-        end_date
-      }
-      businesstype{
-        _id
-      }
+ _id
+        name
+        online
+        customer_wallet_amount
+        store_type
+        calculated_distance
+        logo
+        flag
+        distance
+        default_welcome_offer
+        promotion_welcome_offer_status
+        promotion_welcome_offer
+        promotion_welcome_offer_date{
+          start_date
+          end_date
+        }
+        default_cashback
+        promotion_cashback_status
+        promotion_cashback
+        promotion_cashback_date{
+          start_date
+          end_date
+        }
+        businesstype{
+          _id
+        }
+        address{
+          address
+          location{
+            lat
+            lng
+          }
+        }
+      
     }
   }
 }
@@ -1105,7 +1204,10 @@ class StoreData {
     this.promotionCashbackOffer,
     this.promotionCashbackOfferDate,
     this.calculated_distance,
-    this.store_type
+    this.store_type,
+    this.online,
+    this.customer_wallet_amount,
+    this.address
   });
 
   String id;
@@ -1124,6 +1226,9 @@ class StoreData {
   String businesstypeId;
   double calculated_distance;
   String store_type;
+  int customer_wallet_amount;
+  bool online;
+  StoreAddress address;
 
   factory StoreData.fromJson(Map<String, dynamic> json) => StoreData(
     id: json["_id"],
@@ -1142,7 +1247,51 @@ class StoreData {
     businesstypeId: json["businesstype"]['_id'],
     calculated_distance: json["calculated_distance"] == null ? null : json["calculated_distance"],
     store_type: json["store_type"] == null ? null : json["store_type"],
+    customer_wallet_amount: json["customer_wallet_amount"] == null ? null : json["customer_wallet_amount"],
+    online: json["online"] == null ? null : json["online"],
+    address: json["address"] == null ? null : StoreAddress.fromJson(json["address"]),
   );
+}
+
+
+class StoreAddress {
+  StoreAddress({
+    this.address,
+    this.location,
+  });
+
+  String address;
+  StoreLocation location;
+
+  factory StoreAddress.fromJson(Map<String, dynamic> json) => StoreAddress(
+    address: json["address"],
+    location: StoreLocation.fromJson(json["location"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "address": address,
+    "location": location.toJson(),
+  };
+}
+
+class StoreLocation {
+  StoreLocation({
+    this.lat,
+    this.lng,
+  });
+
+  double lat;
+  double lng;
+
+  factory StoreLocation.fromJson(Map<String, dynamic> json) => StoreLocation(
+    lat: json["lat"].toDouble(),
+    lng: json["lng"].toDouble(),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "lat": lat,
+    "lng": lng,
+  };
 }
 
 class ReceiptOrderModel {
