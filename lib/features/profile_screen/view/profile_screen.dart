@@ -243,7 +243,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
 
         SizedBox(height: 20,),
-        GestureDetector(
+        if(orders.length > 0)GestureDetector(
           onTap: () => Get.to(()=> ViewAllReceiptOrders(data: orders)),
           child: Container(
             // height: 28,

@@ -139,7 +139,7 @@ class _RedeemInStoreState extends State<RedeemInStore> {
                                     products: [],
                                     rawItem: [],
                                     order_type: "redeem_cash",
-                                    wallet_amount: 20);
+                                    wallet_amount: selectedRedeemValue);
                                 if (error) {
                                   Snack.bottom('Error', 'Failed to send order');
                                 } else {

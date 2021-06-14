@@ -609,7 +609,9 @@ class _CartPageState extends State<CartPage> {
                                 SizedBox(height: 5,),
                                 GestureDetector(
                                   onTap: () async {
-                                    if (CartItemModel.rawItem.length == 0 && CartItemModel.products.length == 0) {
+                                    print(CartItemModel.rawItem.length);
+                                    print(CartItemModel.products.length);
+                                    if (CartItemModel.rawItem.length != 0 || CartItemModel.products.length != 0) {
                                       double total = 0;
                                       CartItemModel.products.forEach((element) {
                                         total += element.sellingPrice * element.quantity;
