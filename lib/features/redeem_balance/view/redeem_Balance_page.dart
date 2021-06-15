@@ -83,7 +83,7 @@ class _MyRedeemBalanceState extends State<MyRedeemBalance>
               child: TabBarView(
                 children: [
                   RedeemInStore(
-                    redeemInStores: redeemOnline,
+                    redeemInStores: redeemInStore,
                   ),
                   RedeemOnline(
                     redeemOnlineStores: redeemOnline,

@@ -21,8 +21,8 @@ class GetChatOrderListRepo{
     try{
 
       final variables = {
-        'store': '60843ff9cc453f7be2e4471a'
-        // 'store': id
+        // 'store': '60843ff9cc453f7be2e4471a'
+        'store': id
       };
 
       GraphQLClient client = GqlConfig.getClient(UserViewModel.token.value);
